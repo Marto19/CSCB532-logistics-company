@@ -1,40 +1,81 @@
 package com.logistics.logisticsCompany.entities.users;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "employee")
 public class Employee {
-    private String FirstName;
-    private String SecondName;
-    private int UserID;
-    private int CurrentOfficeID;
-
-    public String getFirstname(){
-        return this.FirstName;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int employeeID;
+    
+    @Column(name = "firstname", nullable = false, length = 50)
+    private String firstName;
+    
+    @Column(name = "secondname", nullable = false, length = 50)
+    private String secondName;
+    
+    @Column(name = "userid", nullable = true, unique = true)
+    private Integer userID;
+    
+    @Column(name = "currentofficeid", nullable = true)
+    private Integer currentOfficeID;
+    
+    //Constructors
+    public Employee(){
+    }
+    
+    public Employee(String firstName, String secondName, Integer userID, Integer currentOfficeID){
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.userID = userID;
+        this.currentOfficeID = currentOfficeID;
+    }
+    
+    //Getters and setters
+    public String getFirstName(){
+        return this.firstName;
     }
 
-    public void setFirstname(String FirstName){
-        this.FirstName = FirstName;
+    public void setFirstName(String firstName){
+        this.firstName = firstName;
     }
 
-    public String getSecondname(){
-        return this.SecondName;
+    public String getSecondName(){
+        return this.secondName;
     }
 
-    public void setSecondname(String SecondName){
-        this.SecondName = SecondName;
+    public void setSecondName(String secondName){
+        this.secondName = secondName;
     }
-
-    public int getUserid(){
-        return this.UserID;
+    
+    public Integer getUserID() {
+        return this.userID;
     }
-
-    public void setUserid(int UserID){
-        this.UserID = UserID;
+    
+    public void setUserID(Integer userID) {
+        this.userID = userID;
     }
-
-    public int getCurrentofficeid(){
-        return this.CurrentOfficeID;
+    
+    public Integer getCurrentOfficeID() {
+        return this.currentOfficeID;
     }
-
-    public void setCurrentofficeid(int CurrentOfficeID){
-        this.CurrentOfficeID = CurrentOfficeID;
+    
+    public void setCurrentOfficeID(Integer currentOfficeID) {
+        this.currentOfficeID = currentOfficeID;
+    }
+    
+    //toString method
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeId=" + employeeID +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", userID='" + userID + '\'' +
+                ", currentOfficeID='" + currentOfficeID + '\'' +
+                '}';
     }
 }

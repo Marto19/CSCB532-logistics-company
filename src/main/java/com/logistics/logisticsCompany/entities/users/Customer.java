@@ -1,49 +1,99 @@
 package com.logistics.logisticsCompany.entities.users;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "customer")
 public class Customer {
-    private String FirstName;
-    private String SecondName;
-    private String Phone;
-    private int UserID;
-    private int LastOfficeID;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(name = "firstname", nullable = false, length = 25)
+    private String firstName;
+    @Column(name = "secondname", nullable = false, length = 25)
+    private String secondName;
+    @Column(name = "phone", nullable = false, length = 13)
+    private String phone;
+    @Column(name = "userid", nullable = true, unique = true, length = 20)
+    private Integer userID;
+    @Column(name = "lastofficeid", nullable = true, length = 20)
+    private Integer lastOfficeID;
 
+    
+    //Constructors
+    public Customer(){
+    }
+    
+    public Customer(String firstName, String secondName, String phone, Integer userID, Integer lastOfficeID){
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.phone = phone;
+        this.userID = userID;
+        this.lastOfficeID = lastOfficeID;
+    }
+    
+    
+    //Getters and setters
+    public int getId(){
+        return this.id;
+    }
+    
+    public void setId(int id){
+        this.id = id;
+    }
+    
     public String getFirstname(){
-        return this.FirstName;
+        return this.firstName;
     }
 
-    public void setFirstname(String FirstName){
-        this.FirstName = FirstName;
+    public void setFirstname(String firstName){
+        this.firstName = firstName;
     }
 
-    public String getSecondname(){
-        return this.SecondName;
+    public String getSecondName(){
+        return this.secondName;
     }
 
-    public void setSecondname(String SecondName){
-        this.SecondName = SecondName;
+    public void setSecondName(String secondName){
+        this.secondName = secondName;
     }
 
     public String getPhone(){
-        return this.Phone;
+        return this.phone;
     }
 
-    public void setPhone(String Phone){
-        this.Phone = Phone;
+    public void setPhone(String phone){
+        this.phone = phone;
     }
 
-    public int getUserid(){
-        return this.UserID;
+    public Integer getUserID(){
+        return this.userID;
     }
 
-    public void setUserid(int UserID){
-        this.UserID = UserID;
+    public void setUserID(Integer userID){
+        this.userID = userID;
     }
 
-    public int getLastofficeid(){
-        return this.LastOfficeID;
+    public Integer getLastOfficeID(){
+        return this.lastOfficeID;
     }
 
-    public void setLastofficeid(int LastOfficeID){
-        this.LastOfficeID = LastOfficeID;
+    public void setLastOfficeID(Integer lastOfficeID){
+        this.lastOfficeID = lastOfficeID;
+    }
+    
+    //toString method
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", userID=" + userID +
+                ", lastOfficeID=" + lastOfficeID +
+                '}';
     }
 }

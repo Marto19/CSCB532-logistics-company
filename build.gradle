@@ -16,8 +16,13 @@ repositories {
 }
 
 dependencies {
+	/*Starter for building web, including RESTful, applications using Spring MVC. Uses Tomcat as the default embedded container*/
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	/*JUnit 5 Jupiter API and TestEngine implementation for testing Spring Boot applications*/
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	/*JPA 2.2 API*/
+	implementation 'javax.persistence:javax.persistence-api:2.2'
+
 }
 
 tasks.named('test') {
