@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "orderhistory")
+@Table(name = "order_history")
 public class OrderHistory {
 	
 	@Id
@@ -24,7 +24,13 @@ public class OrderHistory {
 	
 	@Column(name = "notes", nullable = true)
 	private String notes;
-	
+
+	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
+	//relationship order_history/shipment - n:1
+	@ManyToOne
+	@JoinColumn(name = "shipment_id")
+	private Shipment shipment;
+
 	//Constructors
 	public OrderHistory(){
 	}

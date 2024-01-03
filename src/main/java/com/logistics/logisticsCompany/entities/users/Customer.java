@@ -1,6 +1,8 @@
 package com.logistics.logisticsCompany.entities.users;
 
 
+import com.logistics.logisticsCompany.entities.offices.Office;
+
 import javax.persistence.*;
 
 @Entity
@@ -21,7 +23,17 @@ public class Customer {
     @Column(name = "lastofficeid", nullable = true, length = 20)
     private Integer lastOfficeID;
 
-    
+    ////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
+    //relationship office/customer - 1:n
+    @ManyToOne
+    @JoinColumn(name = "last_office_id")
+    private Office office;
+
+    //relationship customer/user - n:1
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     //Constructors
     public Customer(){
     }

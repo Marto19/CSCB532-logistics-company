@@ -28,7 +28,7 @@ public class Employee {
     ////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
     //relationship office/employee - 1:n
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "office_id")
+    @JoinColumn(name = "current_office_id")
     private Office office;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -26,6 +26,10 @@ public class User{
     @OneToMany(mappedBy = "user")
     private Set<Employee> EmployeeSetFromUser = new HashSet<>();
 
+    //relationship user/customer - 1:n
+    @OneToMany(mappedBy = "user")
+    private Set<Customer> customerSetFromUser = new HashSet<>();
+    //TODO: think whether List or Set
     public User(){
     }
     

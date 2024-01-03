@@ -1,10 +1,13 @@
 package com.logistics.logisticsCompany.entities.offices;
 
 
+import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,7 +33,9 @@ public class Office {
 	//relationship office/employee - 1:n
 	@OneToMany(mappedBy = "office")
 	private Set<Employee> employeeSet = new HashSet<>();
-
+	//relationship office/customer - 1:n
+	@OneToMany(mappedBy = "office")
+	private List<Customer> customerList = new ArrayList<>();
 	
 	//Constructors
 	public Office(){

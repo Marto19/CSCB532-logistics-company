@@ -3,6 +3,8 @@ package com.logistics.logisticsCompany.entities.orders;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "shipment")
@@ -48,7 +50,12 @@ public class Shipment {
 	
 	@Column(name = "receiveremployeeid", nullable = true)
 	private Integer receiverEmployeeID;
-	
+
+	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
+	//relationship shipment/order_history - 1:n
+	@OneToMany(mappedBy = "shipment")
+	private List<OrderHistory> orderHistoryListFromShipment = new ArrayList<>();
+
 	//Constructors
 	public Shipment() {
 	}
