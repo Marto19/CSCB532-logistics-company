@@ -1,7 +1,11 @@
 package com.logistics.logisticsCompany.entities.offices;
 
 
+import com.logistics.logisticsCompany.entities.users.Employee;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "office")
@@ -21,6 +25,12 @@ public class Office {
 	
 	@Column(name="address", nullable = false, length = 250)
 	private String address;
+
+	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
+	//relationship office/employee - 1:n
+	@OneToMany(mappedBy = "office")
+	private Set<Employee> employeeSet = new HashSet<>();
+
 	
 	//Constructors
 	public Office(){

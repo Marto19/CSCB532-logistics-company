@@ -1,6 +1,9 @@
 package com.logistics.logisticsCompany.entities.users;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "user")
 public class User{
@@ -17,7 +20,12 @@ public class User{
     private String password;
     @Column(name = "role", nullable = false, length = 50)
     private String role;
-    
+
+    ////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
+    //relationship user/employee - 1:n
+    @OneToMany(mappedBy = "user")
+    private Set<Employee> EmployeeSetFromUser = new HashSet<>();
+
     public User(){
     }
     
