@@ -28,11 +28,11 @@ public class Employee {
     ////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
     //relationship office/employee - 1:n
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "current_office_id")
+    @JoinColumn(name = "currentofficeid")
     private Office office;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userid")
     private User user;
 
     //Constructors

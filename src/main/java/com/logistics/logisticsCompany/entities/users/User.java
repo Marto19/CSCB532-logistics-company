@@ -29,7 +29,8 @@ public class User{
     //relationship user/customer - 1:n
     @OneToMany(mappedBy = "user")
     private Set<Customer> customerSetFromUser = new HashSet<>();
-    //TODO: think whether List or Set
+    //TODO: think whether List or Set (martin)
+    //set - unique values, list - duplicates allowed (dani)
     public User(){
     }
     

@@ -26,12 +26,12 @@ public class Customer {
     ////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
     //relationship office/customer - 1:n
     @ManyToOne
-    @JoinColumn(name = "last_office_id")
+    @JoinColumn(name = "lastofficeid")
     private Office office;
 
     //relationship customer/user - n:1
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userid")
     private User user;
 
     //Constructors

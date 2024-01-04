@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "order_history")
+@Table(name = "orderhistory")
 public class OrderHistory {
 	
 	@Id
@@ -16,8 +16,8 @@ public class OrderHistory {
 	@Column(name = "shipmentid", nullable = false)
 	private int shipmentID;
 	
-	@Column(name = "statusid", nullable = false)
-	private int statusID;
+	@Column(name = "status", nullable = false)
+	private int status;
 	
 	@Column(name = "updatedate", nullable = false)
 	private LocalDateTime updateDate;
@@ -28,16 +28,16 @@ public class OrderHistory {
 	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
 	//relationship order_history/shipment - n:1
 	@ManyToOne
-	@JoinColumn(name = "shipment_id")
+	@JoinColumn(name = "shipmentid")
 	private Shipment shipment;
 
 	//Constructors
 	public OrderHistory(){
 	}
 	
-	public OrderHistory(int shipmentID, int statusID, LocalDateTime updateDate, String notes){
+	public OrderHistory(int shipmentID, int status, LocalDateTime updateDate, String notes){
 		this.shipmentID = shipmentID;
-		this.statusID = statusID;
+		this.status = status;
 		this.updateDate = updateDate;
 		this.notes = notes;
 	}
@@ -60,12 +60,12 @@ public class OrderHistory {
 		this.shipmentID = shipmentID;
 	}
 	
-	public int getStatusID(){
-		return this.statusID;
+	public int getStatus(){
+		return this.status;
 	}
 	
-	public void setStatusID(int statusID){
-		this.statusID = statusID;
+	public void setStatus(int status){
+		this.status = status;
 	}
 	
 	public LocalDateTime getUpdateDate(){
@@ -91,7 +91,7 @@ public class OrderHistory {
 		return "OrderHistory{" +
 				"orderID=" + orderHistoryID +
 				", shipmentID='" + shipmentID + '\'' +
-				", statusID='" + statusID + '\'' +
+				", statusID='" + status + '\'' +
 				", updateDate='" + updateDate + '\'' +
 				", notes='" + notes + '\'' +
 				'}';
