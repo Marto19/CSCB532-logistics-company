@@ -1,4 +1,4 @@
-package com.logistics.logisticsCompany.organizaiton;
+package com.logistics.logisticsCompany.entities.orders;
 
 import jakarta.persistence.*;
 

@@ -1,6 +1,6 @@
 //package com.logistics.logisticsCompany.controller;
 //
-//import com.logistics.logisticsCompany.organizaiton.Employee;
+//import com.logistics.logisticsCompany.entities.users.Employee;
 //import com.logistics.logisticsCompany.service.OfficeServiceImpl;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.web.bind.annotation.*;

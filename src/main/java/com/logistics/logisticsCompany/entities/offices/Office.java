@@ -1,14 +1,7 @@
-package com.logistics.logisticsCompany.organizaiton;
+package com.logistics.logisticsCompany.entities.offices;
 
 
-import com.logistics.logisticsCompany.organizaiton.Customer;
-import com.logistics.logisticsCompany.organizaiton.Employee;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "office")
@@ -34,8 +27,8 @@ public class Office {
 //	@OneToMany(mappedBy = "office")
 //	private Set<Employee> employeeSet = new HashSet<>();
 	//relationship office/customer - 1:n
-	@OneToMany(mappedBy = "office")
-	private List<Customer> customerList = new ArrayList<>();
+	//@OneToMany(mappedBy = "office")
+	//private List<Customer> customerList = new ArrayList<>();
 
 	//Constructors
 	public Office(){
