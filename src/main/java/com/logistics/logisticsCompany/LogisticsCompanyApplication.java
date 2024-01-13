@@ -1,17 +1,10 @@
-package com.logistics.logisticsCompany.organizaiton;
+package com.logistics.logisticsCompany;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@ComponentScan(basePackages = { "com.logistics.logisticsCompany.entities" })
-@EntityScan(basePackages = {"com.logistics.logisticsCompany.entities.offices", "com.logistics.logisticsCompany.entities.orders"})
-@EnableJpaRepositories(basePackages = {"com.logistics.logisticsCompany.entities"})
+
 @SpringBootApplication
-@EnableConfigurationProperties
 public class LogisticsCompanyApplication {
 
 //
@@ -20,6 +13,7 @@ public class LogisticsCompanyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LogisticsCompanyApplication.class, args);
 	}
+	//TODO:fix mappings
 
 //	@Override
 //	public void run(String... args) throws Exception {
