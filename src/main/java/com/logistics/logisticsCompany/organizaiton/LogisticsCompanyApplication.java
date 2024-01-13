@@ -17,6 +17,7 @@ public class LogisticsCompanyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LogisticsCompanyApplication.class, args);
 	}
+	//TODO:fix mappings
 
 //	@Override
 //	public void run(String... args) throws Exception {
