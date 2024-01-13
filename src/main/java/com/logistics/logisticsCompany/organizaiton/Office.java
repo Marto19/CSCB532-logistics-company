@@ -1,7 +1,10 @@
-package com.logistics.logisticsCompany.entities;
+package com.logistics.logisticsCompany.organizaiton;
 
 
-import javax.persistence.*;
+import com.logistics.logisticsCompany.organizaiton.Customer;
+import com.logistics.logisticsCompany.organizaiton.Employee;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,79 +16,79 @@ public class Office {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int officeID;
-	
+
 	@Column(name = "office_name", nullable = false, length = 50)//
 	private String officeName;
-	
+
 	@Column(name="city", nullable = false, length = 50)
 	private String city;
-	
+
 	@Column(name="postcode", nullable = false)
 	private int postcode;
-	
+
 	@Column(name="address", nullable = false, length = 250)
 	private String address;
 
 	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
 	//relationship office/employee - 1:n
-	@OneToMany(mappedBy = "office")
-	private Set<Employee> employeeSet = new HashSet<>();
+//	@OneToMany(mappedBy = "office")
+//	private Set<Employee> employeeSet = new HashSet<>();
 	//relationship office/customer - 1:n
 	@OneToMany(mappedBy = "office")
 	private List<Customer> customerList = new ArrayList<>();
-	
+
 	//Constructors
 	public Office(){
 	}
-	
+
 	public Office(String officeName, String city, int postcode, String address){
 		this.officeName = officeName;
 		this.city = city;
 		this.postcode = postcode;
 		this.address = address;
 	}
-	
+
 	//Getters and setters
 	public int getOfficeID(){
 		return this.officeID;
 	}
-	
+
 	public void setOfficeID(int officeID){
 		this.officeID = officeID;
 	}
-	
+
 	public String getOfficeName(){
 		return this.officeName;
 	}
-	
+
 	public void setOfficeName(String officeName){
 		this.officeName = officeName;
 	}
-	
+
 	public String getCity(){
 		return this.city;
 	}
-	
+
 	public void setCity(String city){
 		this.city = city;
 	}
-	
+
 	public int getPostcode(){
 		return this.postcode;
 	}
-	
+
 	public void setPostcode(int postcode){
 		this.postcode = postcode;
 	}
-	
+
 	public String getAddress(){
 		return this.address;
 	}
-	
+
 	public void setAddress(String address){
 		this.address = address;
 	}
-	
+
 	//toString method
 	@Override
 	public String toString() {

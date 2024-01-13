@@ -7,11 +7,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@ComponentScan(basePackages = { "com.logistics.logisticsCompany.entities" })
-@EntityScan(basePackages = {"com.logistics.logisticsCompany.entities.offices", "com.logistics.logisticsCompany.entities.orders"})
-@EnableJpaRepositories(basePackages = {"com.logistics.logisticsCompany.entities"})
+
 @SpringBootApplication
-@EnableConfigurationProperties
 public class LogisticsCompanyApplication {
 
 //

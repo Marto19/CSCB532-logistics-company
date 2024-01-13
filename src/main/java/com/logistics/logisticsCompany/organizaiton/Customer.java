@@ -1,7 +1,7 @@
-package com.logistics.logisticsCompany.entities;
+package com.logistics.logisticsCompany.organizaiton;
 
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 
 @Entity
 @Table(name = "customer")
@@ -23,14 +23,15 @@ public class Customer {
 
     ////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
     //relationship office/customer - 1:n
-    @ManyToOne
-    @JoinColumn(name = "lastofficeid")
-    private Office office;
 
-    //relationship customer/user - n:1
     @ManyToOne
-    @JoinColumn(name = "userid")
-    private User user;
+    @Column(name = "lastofficeid", insertable = false, updatable = false)
+    private Office office;
+//
+//    //relationship customer/user - n:1
+//    @ManyToOne
+//    @JoinColumn(name = "userid")
+//    private User user;
 
     //Constructors
     public Customer(){
