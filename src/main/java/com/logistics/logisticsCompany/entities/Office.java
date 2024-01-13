@@ -1,8 +1,5 @@
-package com.logistics.logisticsCompany.entities.offices;
+package com.logistics.logisticsCompany.entities;
 
-
-import com.logistics.logisticsCompany.entities.users.Customer;
-import com.logistics.logisticsCompany.entities.users.Employee;
 
 import javax.persistence.*;
 import java.util.ArrayList;

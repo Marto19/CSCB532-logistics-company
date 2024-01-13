@@ -1,4 +1,4 @@
-package com.logistics.logisticsCompany.entities.users;
+package com.logistics.logisticsCompany.entities;
 
 import javax.persistence.*;
 import java.util.HashSet;

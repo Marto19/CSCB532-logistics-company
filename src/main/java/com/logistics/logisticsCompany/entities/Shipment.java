@@ -1,4 +1,4 @@
-package com.logistics.logisticsCompany.entities.orders;
+package com.logistics.logisticsCompany.entities;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

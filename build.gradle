@@ -22,6 +22,20 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	/*JPA 2.2 API*/
 	implementation 'javax.persistence:javax.persistence-api:2.2'
+//
+	/MySQL JDBC and R2DBC driver/
+	implementation 'mysql:mysql-connector-java:8.0.33'
+
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.2.1'
+
+
+	/JPA 2.2 API/
+	implementation 'javax.persistence:javax.persistence-api:2.2'
+
+	/JUnit 5 Jupiter API and TestEngine implementation for testing Spring Boot applications/
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 
 }
 

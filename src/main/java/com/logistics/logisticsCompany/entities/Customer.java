@@ -1,7 +1,5 @@
-package com.logistics.logisticsCompany.entities.users;
+package com.logistics.logisticsCompany.entities;
 
-
-import com.logistics.logisticsCompany.entities.offices.Office;
 
 import javax.persistence.*;
 
