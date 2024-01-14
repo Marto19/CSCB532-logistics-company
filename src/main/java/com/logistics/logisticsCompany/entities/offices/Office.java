@@ -1,36 +1,46 @@
 package com.logistics.logisticsCompany.entities.offices;
 
 
+import com.logistics.logisticsCompany.entities.orders.Shipment;
+import com.logistics.logisticsCompany.entities.users.Customer;
+import com.logistics.logisticsCompany.entities.users.Employee;
 import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "office")
 public class Office {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int officeID;
-
-	@Column(name = "office_name", nullable = false, length = 50)//
+	private int id;
+	
+	@Column(name = "office_name", nullable = false, length = 50)
 	private String officeName;
-
-	@Column(name="city", nullable = false, length = 50)
+	
+	@Column(name = "city", nullable = false, length = 50)
 	private String city;
-
-	@Column(name="postcode", nullable = false)
+	
+	@Column(name = "postcode", nullable = false)
 	private int postcode;
-
-	@Column(name="address", nullable = false, length = 250)
+	
+	@Column(name = "address", nullable = false, length = 250)
 	private String address;
-
-	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
-	//relationship office/employee - 1:n
-//	@OneToMany(mappedBy = "office")
-//	private Set<Employee> employeeSet = new HashSet<>();
-	//relationship office/customer - 1:n
-	//@OneToMany(mappedBy = "office")
-	//private List<Customer> customerList = new ArrayList<>();
-
-	//Constructors
+	
+	@OneToMany(mappedBy = "currentOffice")
+	private Set<Employee> employees = new HashSet<>();
+	
+	@OneToMany(mappedBy = "lastOffice")
+	private Set<Customer> customers = new HashSet<>();
+	
+	@OneToMany(mappedBy = "senderOffice")
+	private Set<Shipment> sentFromOffice = new HashSet<>();
+	
+	@OneToMany(mappedBy = "receiverOffice")
+	private Set<Shipment> receivedInOffice = new HashSet<>();
+	
+	//Constructorsa
 	public Office(){
 	}
 
@@ -42,55 +52,5 @@ public class Office {
 	}
 
 	//Getters and setters
-	public int getOfficeID(){
-		return this.officeID;
-	}
-
-	public void setOfficeID(int officeID){
-		this.officeID = officeID;
-	}
-
-	public String getOfficeName(){
-		return this.officeName;
-	}
-
-	public void setOfficeName(String officeName){
-		this.officeName = officeName;
-	}
-
-	public String getCity(){
-		return this.city;
-	}
-
-	public void setCity(String city){
-		this.city = city;
-	}
-
-	public int getPostcode(){
-		return this.postcode;
-	}
-
-	public void setPostcode(int postcode){
-		this.postcode = postcode;
-	}
-
-	public String getAddress(){
-		return this.address;
-	}
-
-	public void setAddress(String address){
-		this.address = address;
-	}
-
-	//toString method
-	@Override
-	public String toString() {
-		return "Office{" +
-				"officeID=" + officeID +
-				", officeName='" + officeName + '\'' +
-				", city='" + city + '\'' +
-				", postcode='" + postcode + '\'' +
-				", address='" + address + '\'' +
-				'}';
-	}
+	
 }
