@@ -14,7 +14,7 @@ import java.util.Set;
 public class Office {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private long id;
 	
 	@Column(name = "office_name", nullable = false, length = 50)
 	private String officeName;
@@ -52,5 +52,87 @@ public class Office {
 	}
 
 	//Getters and setters
-	
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getOfficeName() {
+		return officeName;
+	}
+
+	public void setOfficeName(String officeName) {
+		this.officeName = officeName;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public int getPostcode() {
+		return postcode;
+	}
+
+	public void setPostcode(int postcode) {
+		this.postcode = postcode;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Set<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(Set<Employee> employees) {
+		this.employees = employees;
+	}
+
+	public Set<Customer> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(Set<Customer> customers) {
+		this.customers = customers;
+	}
+
+	public Set<Shipment> getSentFromOffice() {
+		return sentFromOffice;
+	}
+
+	public void setSentFromOffice(Set<Shipment> sentFromOffice) {
+		this.sentFromOffice = sentFromOffice;
+	}
+
+	public Set<Shipment> getReceivedInOffice() {
+		return receivedInOffice;
+	}
+
+	public void setReceivedInOffice(Set<Shipment> receivedInOffice) {
+		this.receivedInOffice = receivedInOffice;
+	}
+
+	@Override
+	public String toString() {
+		return "Office{" +
+				"id=" + id +
+				", officeName='" + officeName + '\'' +
+				", city='" + city + '\'' +
+				", postcode=" + postcode +
+				", address='" + address + '\'' +
+				'}';
+	}
 }
