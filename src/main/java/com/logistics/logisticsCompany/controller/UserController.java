@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 import java.util.Set;
@@ -47,6 +48,17 @@ public class UserController {
         // Return a token or session information upon successful login
         return new ResponseEntity<>("Login successful", HttpStatus.OK);
     }
+
+    @GetMapping("/login")
+    public ModelAndView showLoginPage() {
+        return new ModelAndView("login");
+    }
+
+
+//    @GetMapping("/login")
+//    public String showLoginPage() {
+//        return "index"; // Assuming you have a login.html page
+//    }
 
 
 
