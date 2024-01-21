@@ -36,7 +36,7 @@ public class User {
 	//creating relationship between the enum-entity table - user_role and user
 	//lets consider that one user can have many roles and backwards
 	@ManyToMany(mappedBy = "userList")
-	private List<UserRole> userRoleList;
+	private Set<UserRole> userRoleList;
 	
 	public User() {
 	}
@@ -87,11 +87,11 @@ public class User {
 		this.customers = customers;
 	}
 
-	public List<UserRole> getUserRoleList() {
+	public Set<UserRole> getUserRoleList() {
 		return userRoleList;
 	}
 
-	public void setUserRoleList(List<UserRole> userRoleList) {
+	public void setUserRoleList(Set<UserRole> userRoleList) {
 		this.userRoleList = userRoleList;
 	}
 
