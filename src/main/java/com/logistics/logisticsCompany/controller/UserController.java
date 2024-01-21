@@ -7,7 +7,9 @@ import com.logistics.logisticsCompany.repository.UserRoleRepository;
 import com.logistics.logisticsCompany.service.UserRoleService;
 import com.logistics.logisticsCompany.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,10 +34,12 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
-        // Validate user data
+        // Validate user data and register the user
         User registeredUser = userService.registerUser(user);
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
+
+
 
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody User loginRequest) {
@@ -43,6 +47,8 @@ public class UserController {
         // Return a token or session information upon successful login
         return new ResponseEntity<>("Login successful", HttpStatus.OK);
     }
+
+
 
 
     @PostMapping("/assign-roles")
@@ -77,6 +83,8 @@ public class UserController {
         //} // THE QUERY AND THE BODY SHOULD MATCH IN PROPERTIES TODO: think about removing them from the query
         return new ResponseEntity<>("Roles assigned successfully", HttpStatus.OK);
     }
+
+
 
 }
 
