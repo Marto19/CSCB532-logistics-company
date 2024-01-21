@@ -25,10 +25,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestParam String username, @RequestParam String password) {
-        // Implement login logic, e.g., validate credentials
+    public ResponseEntity<String> loginUser(@RequestBody User loginRequest) {
+        // Implement login logic using loginRequest.getUsername() and loginRequest.getPassword()
         // Return a token or session information upon successful login
         return new ResponseEntity<>("Login successful", HttpStatus.OK);
     }
 }
+
 
