@@ -4,11 +4,13 @@ import com.logistics.logisticsCompany.entities.offices.Office;
 
 import java.util.List;
 
-public interface LogisticsCompanyService {
+public interface OfficeService {
 
-    void addOffice(Office office);
+    void createOffice(Office office);
 
     List<Office> getAllOffices();
 
-    // Add similar methods for other entities
+    void updateOffice(long officeId, Office updatedOffice);
+
+    void deleteOffice(long officeId);
 }

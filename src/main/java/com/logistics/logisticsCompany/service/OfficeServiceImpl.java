@@ -8,41 +8,41 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OfficeServiceImpl {
+public class OfficeServiceImpl implements OfficeService {
 
     @Autowired
     private OfficeRepository officeRepository;
 
+    @Override
     public void createOffice(Office office) {
         officeRepository.save(office);
     }
 
+    @Override
     public List<Office> getAllOffices() {
         return officeRepository.findAll();
     }
 
+    @Override
     public void updateOffice(long officeId, Office updatedOffice) {
-        // Check if the office with the given ID exists
+        // Implementation of updateOffice method
         if (officeRepository.existsById((int) officeId)) {
-            // Set the ID for the updated office
             updatedOffice.setId(officeId);
             officeRepository.save(updatedOffice);
         } else {
             // Handle case where the office with the given ID does not exist
-            // You may throw an exception or handle it according to your requirements
-            //TODO: ADD CUSTOM EXCEPTION
+            // TODO: ADD CUSTOM EXCEPTION
         }
     }
 
+    @Override
     public void deleteOffice(long officeId) {
-        // Check if the office with the given ID exists
+        // Implementation of deleteOffice method
         if (officeRepository.existsById((int) officeId)) {
             officeRepository.deleteById((int) officeId);
         } else {
             // Handle case where the office with the given ID does not exist
-            // You may throw an exception or handle it according to your requirements
-            //TODO: ADD CUSTOM EXCEPTION
-
+            // TODO: ADD CUSTOM EXCEPTION
         }
     }
 }

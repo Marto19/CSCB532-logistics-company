@@ -2,7 +2,6 @@ package com.logistics.logisticsCompany.service;
 
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.repository.OfficeRepository;
-import com.logistics.logisticsCompany.services.LogisticsCompanyService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
