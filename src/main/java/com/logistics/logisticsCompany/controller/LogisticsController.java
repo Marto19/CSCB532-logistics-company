@@ -1,21 +1,22 @@
 package com.logistics.logisticsCompany.controller;
 
+import com.logistics.logisticsCompany.service.LogisticsCompanyService;
+import com.logistics.logisticsCompany.service.LogisticsCompanyServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.logistics.logisticsCompany.entities.offices.Office;
-import com.logistics.logisticsCompany.services.LogisticsCompanyService;
 
 @Controller
 @RequestMapping("/logistics")
 public class LogisticsController {
 
 
-    private final LogisticsCompanyService logisticsService;
+    private final LogisticsCompanyServiceImpl logisticsService;
 
     public LogisticsController(LogisticsCompanyService logisticsService) {
-        this.logisticsService = logisticsService;
+        this.logisticsService = (LogisticsCompanyServiceImpl) logisticsService;
     }
 
     // Mapping for displaying the form to add an office
