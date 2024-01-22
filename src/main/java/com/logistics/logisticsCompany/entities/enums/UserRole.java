@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.entities.enums;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.logistics.logisticsCompany.entities.users.User;
 import jakarta.persistence.*;
 
@@ -18,6 +19,7 @@ public class UserRole {
 
     ////////////////////////////////////making  relationships   //////////////////////////////
     @ManyToMany
+    @JsonIgnore  // Add this annotation to break the loop
     private Set<User> userList;
 
     public UserRole(String userRole) {

@@ -30,6 +30,7 @@ public class OfficeServiceImpl {
         } else {
             // Handle case where the office with the given ID does not exist
             // You may throw an exception or handle it according to your requirements
+            //TODO: ADD CUSTOM EXCEPTION
         }
     }
 
@@ -40,6 +41,8 @@ public class OfficeServiceImpl {
         } else {
             // Handle case where the office with the given ID does not exist
             // You may throw an exception or handle it according to your requirements
+            //TODO: ADD CUSTOM EXCEPTION
+
         }
     }
 }

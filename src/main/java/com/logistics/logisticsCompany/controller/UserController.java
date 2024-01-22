@@ -14,12 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService userService;
     private final UserRoleService userRoleService;
@@ -39,8 +40,6 @@ public class UserController {
         User registeredUser = userService.registerUser(user);
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
-
-
 
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody User loginRequest) {
@@ -95,6 +94,38 @@ public class UserController {
         //} // THE QUERY AND THE BODY SHOULD MATCH IN PROPERTIES TODO: think about removing them from the query
         return new ResponseEntity<>("Roles assigned successfully", HttpStatus.OK);
     }
+
+    //////////////////////CRUD OPERATIONS 3. b)///////////
+    @PostMapping
+    public ResponseEntity<String> createUser(@RequestBody User user) {
+        // Check if the username already exists
+        if (userRepository.existsByUsername(user.getUsername())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Username already exists");
+        }
+
+        // If username doesn't exist, proceed with saving the user
+        userService.createUser(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("User created successfully");
+    }   //todo: add protection in other places too
+
+    @GetMapping
+    public List<User> getAllUsers(){
+        return userService.getAllUsers();
+    }
+
+    @PutMapping("/{id}")
+    public void updateUser(@PathVariable(value = "id") long userId, @RequestBody User updatedUser){
+        userService.updateUser(userId, updatedUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable(value = "id") long userId){
+        userService.deleteUser(userId);
+    }
+
 
 
 

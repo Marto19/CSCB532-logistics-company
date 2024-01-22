@@ -7,6 +7,8 @@ import com.logistics.logisticsCompany.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     @Autowired
@@ -41,6 +43,35 @@ public class UserService {
         user.getUserRoleList().add(userRole);
         userRepository.save(user);
     }
+
+    ////////////////////// CRUD OPTIONS 3. b)   /////////
+    public void createUser(User user){
+        userRepository.save(user);
+    }
+
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
+    }
+
+    public void updateUser(long userId, User updatedUser){
+        if(userRepository.existsById(userId)){
+            updatedUser.setId(userId);
+            userRepository.save(updatedUser);
+        }
+        else{
+            //TODO: THROW CUSTOM EXCEPTION
+        }
+    }
+
+    public void deleteUser(long userId) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+        } else {
+            //TODO: THROW CUSTOM EXCEPTION
+        }
+    }
+
+
 }
 
 
