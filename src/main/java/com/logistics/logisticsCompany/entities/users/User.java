@@ -35,7 +35,7 @@ public class User {
 
 	//creating relationship between the enum-entity table - user_role and user
 	//lets consider that one user can have many roles and backwards
-	@ManyToMany(mappedBy = "userList")
+	@ManyToMany(mappedBy = "userList", cascade = CascadeType.ALL)
 	private Set<UserRole> userRoleList;
 	
 	public User() {
