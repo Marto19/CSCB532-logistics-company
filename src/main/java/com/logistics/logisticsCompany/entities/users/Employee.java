@@ -110,6 +110,14 @@ public class Employee {
         this.receivedShipments = receivedShipments;
     }
 
+    public LogisticsCompany getLogisticsCompany() {
+        return logisticsCompany;
+    }
+
+    public void setLogisticsCompany(LogisticsCompany logisticsCompany) {
+        this.logisticsCompany = logisticsCompany;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
