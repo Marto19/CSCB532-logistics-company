@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
 
 import java.util.List;
@@ -10,5 +11,8 @@ public interface LogisticsCompanyService {
 
     List<Office> getAllOffices();
 
-    // Add similar methods for other entities
+    void createLogisticsCompany(LogisticsCompany logisticsCompany);
+    List<LogisticsCompany> getAllLogisticsCompanies();
+    void updateLogisticsCompany(long companyId, LogisticsCompany updatedCompany);
+    void deleteLogisticsCompany(long companyId);
 }

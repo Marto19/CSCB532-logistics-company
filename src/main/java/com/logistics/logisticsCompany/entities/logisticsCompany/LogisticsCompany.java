@@ -30,6 +30,10 @@ public class LogisticsCompany {     //creating this entity in order to satisfy  
         this.name = name;
     }
 
+    public LogisticsCompany() {
+
+    }
+
     public long getId() {
         return id;
     }
