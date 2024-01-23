@@ -1,6 +1,7 @@
 package com.logistics.logisticsCompany.entities.offices;
 
 
+import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
@@ -39,6 +40,11 @@ public class Office {
 	
 	@OneToMany(mappedBy = "receiverOffice")
 	private Set<Shipment> receivedInOffice = new HashSet<>();
+
+
+	//creating the relationship between office and logisctics company n:1
+	@ManyToOne
+	private LogisticsCompany logisticsCompany;
 	
 	//Constructorsa
 	public Office(){

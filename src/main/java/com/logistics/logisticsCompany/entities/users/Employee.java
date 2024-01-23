@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.entities.users;
 
+import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import jakarta.persistence.*;
@@ -37,6 +38,11 @@ public class Employee {
     
     @OneToMany(mappedBy = "receiverEmployee")
     private Set<Shipment> receivedShipments = new HashSet<>();
+
+    //adding relationship between employee-company n:1
+    @ManyToOne
+    private LogisticsCompany logisticsCompany;
+
 
 
     public Employee(String firstName, String secondName) {
