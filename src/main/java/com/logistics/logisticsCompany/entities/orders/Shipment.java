@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "shipment")
@@ -73,8 +74,8 @@ public class Shipment {
 	//relationship shipment/order_history - 1:n
 	@OneToMany(mappedBy = "shipment")
 	private List<OrderHistory> orderHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
-	
-	
+	//its one to many because when trasposrting something, the employee usually transports more than one goods, therefore itll be assiciated with more than one order history
+
 	//Constructors
 	public Shipment() {
 	}

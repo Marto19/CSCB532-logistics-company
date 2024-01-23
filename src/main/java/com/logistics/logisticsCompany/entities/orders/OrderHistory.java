@@ -1,9 +1,13 @@
 package com.logistics.logisticsCompany.entities.orders;
 
 
+import com.logistics.logisticsCompany.entities.goods.Goods;
+import com.logistics.logisticsCompany.entities.users.Customer;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "orderhistory")
@@ -27,6 +31,13 @@ public class OrderHistory {
 	@ManyToOne
 	@JoinColumn(name = "shipment_id")
 	private Shipment shipment;
+
+	@OneToMany(mappedBy = "orderHistory")
+	private List<Goods> goodsList;
+
+	@ManyToOne
+	private Customer customer;
+
 
 	//Constructors
 	public OrderHistory(){
