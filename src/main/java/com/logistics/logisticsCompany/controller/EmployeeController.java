@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.controller;
 
+import com.logistics.logisticsCompany.DTO.EmployeeDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/employees")
@@ -34,10 +36,16 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
-    }
+    public List<EmployeeDTO> getAllEmployees() {
+        List<Employee> employees = employeeService.getAllEmployees();
 
+        // Convert the list of Employee entities to EmployeeDTOs
+        List<EmployeeDTO> employeeDTOs = employees.stream()
+                .map(EmployeeDTO::new)
+                .collect(Collectors.toList());
+
+        return employeeDTOs;
+    }
     @PutMapping("/{id}")
     public ResponseEntity<String> updateEmployee(@PathVariable(value = "id") long employeeId,
                                                  @RequestBody Employee updatedEmployee) {

@@ -41,15 +41,15 @@ public class ShipmentController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<String> createShipment(@RequestBody Shipment shipment) {
-        try {
-            shipmentService.createShipment(shipment);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Shipment created successfully");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
+//    @PostMapping
+//    public ResponseEntity<String> createShipment(@RequestBody Shipment shipment) {
+//        try {
+//            shipmentService.createShipment(shipment);
+//            return ResponseEntity.status(HttpStatus.CREATED).body("Shipment created successfully");
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//        }
+//    }
 
     @GetMapping
     public List<Shipment> getAllShipments() {

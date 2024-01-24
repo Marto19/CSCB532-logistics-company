@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.controller;
 
+import com.logistics.logisticsCompany.DTO.OfficeDTO;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.repository.OfficeRepository;
 import com.logistics.logisticsCompany.service.OfficeServiceImpl;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/offices")
@@ -34,10 +36,22 @@ public class OfficeController {
                 .body("Office created successfully");
     }//todo: add protection in other places too
     @GetMapping
-    public List<Office> getAllOffices() {
-        return officeService.getAllOffices();
-    }
+    public List<OfficeDTO> getAllOffices() {
+        List<Office> offices = officeService.getAllOffices();
 
+        // Convert the list of Office entities to OfficeDTOs
+        List<OfficeDTO> officeDTOs = offices.stream()
+                .map(office -> new OfficeDTO(
+                        office.getId(),
+                        office.getOfficeName(),
+                        office.getCity(),
+                        office.getPostcode(),
+                        office.getAddress()
+                ))
+                .collect(Collectors.toList());
+
+        return officeDTOs;
+    }
     @PutMapping("/{id}")
     public void updateOffice(@PathVariable(value = "id") long officeId, @RequestBody Office updatedOffice) {
         officeService.updateOffice(officeId, updatedOffice);

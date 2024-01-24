@@ -8,6 +8,7 @@ import com.logistics.logisticsCompany.service.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -22,15 +23,32 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public void registerSentShipment(Shipment shipment) {
-        // Implement logic to register sent shipment
-        // For example, set sender details, save to repository, etc.
+        // Check if the shipment has a predefined ID
+        if (shipment.getId() != 0) {
+            throw new RuntimeException("Cannot register sent shipment with predefined ID");
+        }
+
+        // Set additional details for a sent shipment
+        shipment.setShipmentDate(LocalDate.now()); // Set the shipment date to the current date
+        shipment.setReceivedDate(null); // Reset received date for sent shipments
+
+        // Implement other logic as needed
+
+        // Save the shipment
         shipmentRepository.save(shipment);
     }
 
     @Override
     public void registerReceivedShipment(Shipment shipment) {
-        // Implement logic to register received shipment
-        // For example, set receiver details, save to repository, etc.
+        // Check if the shipment has a predefined ID
+        if (shipment.getId() != 0) {
+            throw new RuntimeException("Cannot register received shipment with predefined ID");
+        }
+
+        // Set additional details for a received shipment
+        shipment.setReceivedDate(LocalDate.now()); // Set the received date to the current date
+        // Implement other logic as needed
+        // Save the shipment
         shipmentRepository.save(shipment);
     }
 
