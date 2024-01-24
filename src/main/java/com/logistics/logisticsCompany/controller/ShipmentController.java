@@ -1,18 +1,14 @@
 package com.logistics.logisticsCompany.controller;
 
-import com.logistics.logisticsCompany.DTO.ShipmentDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.service.ShipmentService;
-import com.logistics.logisticsCompany.service.ShipmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/shipments")
@@ -25,17 +21,15 @@ public class ShipmentController {
         this.shipmentService = shipmentService;
     }
 
-    @PostMapping(value = "/sent", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/sent")
     public ResponseEntity<String> registerSentShipment(@RequestBody Shipment shipment) {
         try {
-            // Validate and process the shipment object
             shipmentService.registerSentShipment(shipment);
             return ResponseEntity.status(HttpStatus.CREATED).body("Sent shipment registered successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
 
     @PostMapping("/received")
     public ResponseEntity<String> registerReceivedShipment(@RequestBody Shipment shipment) {
@@ -47,20 +41,19 @@ public class ShipmentController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<ShipmentDTO>> getAllShipments() {
-        List<ShipmentDTO> shipmentDTOs = shipmentService.getAllShipments()
-                .stream()
-                .map(ShipmentServiceImpl::convertToDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(shipmentDTOs);
+    @PostMapping
+    public ResponseEntity<String> createShipment(@RequestBody Shipment shipment) {
+        try {
+            shipmentService.createShipment(shipment);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Shipment created successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ShipmentDTO> getShipmentById(@PathVariable long id) {
-        ShipmentDTO shipmentDTO = ShipmentServiceImpl.convertToDTO(shipmentService.getShipmentById(id));
-        return ResponseEntity.ok(shipmentDTO);
+    @GetMapping
+    public List<Shipment> getAllShipments() {
+        return shipmentService.getAllShipments();
     }
 
     @PutMapping("/{id}")

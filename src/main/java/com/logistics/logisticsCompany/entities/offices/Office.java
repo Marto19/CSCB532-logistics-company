@@ -1,7 +1,6 @@
 package com.logistics.logisticsCompany.entities.offices;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.entities.users.Customer;

@@ -1,6 +1,5 @@
 package com.logistics.logisticsCompany.entities.users;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.orders.OrderHistory;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
@@ -38,7 +37,6 @@ public class Customer {
     private Office lastOffice;
     
     @OneToMany(mappedBy = "senderCustomer")
-    @JsonManagedReference
     private Set<Shipment> sentShipments = new HashSet<>();
     
     @OneToMany(mappedBy = "receiverCustomer")

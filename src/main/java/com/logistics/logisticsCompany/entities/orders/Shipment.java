@@ -1,9 +1,5 @@
 package com.logistics.logisticsCompany.entities.orders;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
@@ -41,49 +37,43 @@ public class Shipment {
 
 	@Column(name = "receivedDate", nullable = true)
 	private LocalDate receivedDate;
-	
+
 	/*
 		SENDER RELATIONSHIPS - OFFICE, CUSTOMER, EMPLOYEE
 	*/
 	@ManyToOne
 	@JoinColumn(name = "sender_office_id", nullable = false)
-	@JsonIgnore
 	private Office senderOffice;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "sender_customer_id", nullable = false)
-	@JsonIgnore
 	private Customer senderCustomer;
 
 	@ManyToOne
 	@JoinColumn(name = "sender_Employee_id", nullable = false)
-	@JsonIgnore
 	private Employee senderEmployee;
-	
+
 	/*
 		RECEIVER RELATIONSHIPS - OFFICE, CUSTOMER, EMPLOYEE
 	*/
-	
-	
+
+
 	@ManyToOne
 	@JoinColumn(name = "receiver_office_id", nullable = false)
-	@JsonIgnore
 	private Office receiverOffice;
 
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name = "receiver_customer_id", nullable = false)
-	@JsonIgnore
 	private Customer receiverCustomer;
 
 	@ManyToOne
 	@JoinColumn(name = "receiver_employee_id", nullable = true)
-	@JsonIgnore
 	private Employee receiverEmployee;
 
 	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
 	//relationship shipment/order_history - 1:n
-	@OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL)
-	private List<OrderHistory> orderHistories;//todo: think whether List or Set? (caki)
+	@OneToMany(mappedBy = "shipment")
+	private List<OrderHistory> orderHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
 	//its one to many because when trasposrting something, the employee usually transports more than one goods, therefore itll be assiciated with more than one order history
 
 	//Constructors

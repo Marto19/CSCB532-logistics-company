@@ -7,7 +7,7 @@ import java.util.List;
 public interface ShipmentService {
     void registerSentShipment(Shipment shipment);
     void registerReceivedShipment(Shipment shipment);
-//    void createShipment(Shipment shipment);
+    void createShipment(Shipment shipment);
     List<Shipment> getAllShipments();
     Shipment getShipmentById(long shipmentId);
     void updateShipment(long shipmentId, Shipment updatedShipment);
@@ -15,4 +15,4 @@ public interface ShipmentService {
 
 
 
-    }
+}
