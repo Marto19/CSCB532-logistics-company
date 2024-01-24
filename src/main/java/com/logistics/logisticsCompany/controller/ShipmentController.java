@@ -1,7 +1,14 @@
 package com.logistics.logisticsCompany.controller;
 
+import com.logistics.logisticsCompany.DTO.CustomerDTO;
+import com.logistics.logisticsCompany.DTO.EmployeeDTO;
+import com.logistics.logisticsCompany.DTO.OfficeDTO;
+import com.logistics.logisticsCompany.DTO.ShipmentDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
+import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
+import com.logistics.logisticsCompany.entities.users.Customer;
+import com.logistics.logisticsCompany.entities.users.Employee;
 import com.logistics.logisticsCompany.service.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/shipments")
@@ -52,8 +60,59 @@ public class ShipmentController {
 //    }
 
     @GetMapping
-    public List<Shipment> getAllShipments() {
-        return shipmentService.getAllShipments();
+    public List<ShipmentDTO> getAllShipments() {
+        List<Shipment> shipments = shipmentService.getAllShipments();
+        return shipments.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private ShipmentDTO convertToDTO(Shipment shipment) {
+        return new ShipmentDTO(
+                shipment.getId(),
+                shipment.getShipmentDate(),
+                shipment.getWeight(),
+                shipment.getPrice(),
+                shipment.isPricePaid(),
+                shipment.getReceivedDate(),
+                convertToOfficeDTO(shipment.getSenderOffice()),
+                convertToCustomerDTO(shipment.getSenderCustomer()),
+                convertToEmployeeDTO(shipment.getSenderEmployee()),
+                convertToOfficeDTO(shipment.getReceiverOffice()),
+                convertToCustomerDTO(shipment.getReceiverCustomer()),
+                convertToEmployeeDTO(shipment.getReceiverEmployee())
+        );
+    }
+
+    private OfficeDTO convertToOfficeDTO(Office office) {
+        return new OfficeDTO(
+                office.getId(),
+                office.getOfficeName(),
+                office.getCity(),
+                office.getPostcode(),
+                office.getAddress()
+        );
+    }
+
+    private CustomerDTO convertToCustomerDTO(Customer customer) {
+        return new CustomerDTO(
+                customer.getId(),
+                customer.getFirstName(),
+                customer.getSecondName(),
+                customer.getPhone()
+        );
+    }
+
+    private EmployeeDTO convertToEmployeeDTO(Employee employee) {
+
+        if (employee == null) {
+            return null; // or you can create a default EmployeeDTO or throw an exception
+        }
+        return new EmployeeDTO(
+                employee.getId(),
+                employee.getFirstName(),
+                employee.getSecondName()
+        );
     }
 
     @PutMapping("/{id}")

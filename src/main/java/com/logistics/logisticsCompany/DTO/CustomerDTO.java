@@ -24,6 +24,13 @@ public class CustomerDTO {
         // Map other necessary fields here
     }
 
+    public CustomerDTO(long id, String firstName, String secondName, String phone) {
+        this.id = id;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.phone = phone;
+    }
+
     // Getters and setters
 
     public long getId() {

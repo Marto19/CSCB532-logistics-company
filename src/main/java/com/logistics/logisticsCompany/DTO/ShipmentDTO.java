@@ -1,149 +1,71 @@
 package com.logistics.logisticsCompany.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.logistics.logisticsCompany.DTO.CustomerDTO;
+import com.logistics.logisticsCompany.DTO.EmployeeDTO;
+import com.logistics.logisticsCompany.DTO.OfficeDTO;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 public class ShipmentDTO {
+    @JsonProperty("id")
     private long id;
+
+    @JsonProperty("shipmentDate")
     private LocalDate shipmentDate;
+
+    @JsonProperty("weight")
     private BigDecimal weight;
+
+    @JsonProperty("price")
     private BigDecimal price;
+
+    @JsonProperty("pricePaid")
     private boolean pricePaid;
+
+    @JsonProperty("receivedDate")
     private LocalDate receivedDate;
-    private String senderOfficeName;
-    private String senderCustomerName;
-    private String senderEmployeeName;
-    private String receiverOfficeName;
-    private String receiverCustomerName;
-    private String receiverEmployeeName;
-    private List<Long> orderHistoryIds;
 
-    // Constructors, getters, and setters...
+    @JsonProperty("senderOffice")
+    private OfficeDTO senderOffice;
 
+    @JsonProperty("senderCustomer")
+    private CustomerDTO senderCustomer;
+
+    @JsonProperty("senderEmployee")
+    private EmployeeDTO senderEmployee;
+
+    @JsonProperty("receiverOffice")
+    private OfficeDTO receiverOffice;
+
+    @JsonProperty("receiverCustomer")
+    private CustomerDTO receiverCustomer;
+
+    @JsonProperty("receiverEmployee")
+    private EmployeeDTO receiverEmployee;
+
+    // Constructors, getters, and setters
+
+    // Ensure you have a no-argument constructor
     public ShipmentDTO() {
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
+    public ShipmentDTO(long id, LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean pricePaid, LocalDate receivedDate, OfficeDTO senderOffice, CustomerDTO senderCustomer, EmployeeDTO senderEmployee, OfficeDTO receiverOffice, CustomerDTO receiverCustomer, EmployeeDTO receiverEmployee) {
         this.id = id;
-    }
-
-    public LocalDate getShipmentDate() {
-        return shipmentDate;
-    }
-
-    public void setShipmentDate(LocalDate shipmentDate) {
         this.shipmentDate = shipmentDate;
-    }
-
-    public BigDecimal getWeight() {
-        return weight;
-    }
-
-    public void setWeight(BigDecimal weight) {
         this.weight = weight;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public boolean isPricePaid() {
-        return pricePaid;
-    }
-
-    public void setPricePaid(boolean pricePaid) {
         this.pricePaid = pricePaid;
-    }
-
-    public LocalDate getReceivedDate() {
-        return receivedDate;
-    }
-
-    public void setReceivedDate(LocalDate receivedDate) {
         this.receivedDate = receivedDate;
+        this.senderOffice = senderOffice;
+        this.senderCustomer = senderCustomer;
+        this.senderEmployee = senderEmployee;
+        this.receiverOffice = receiverOffice;
+        this.receiverCustomer = receiverCustomer;
+        this.receiverEmployee = receiverEmployee;
     }
 
-    public String getSenderOfficeName() {
-        return senderOfficeName;
-    }
-
-    public void setSenderOfficeName(String senderOfficeName) {
-        this.senderOfficeName = senderOfficeName;
-    }
-
-    public String getSenderCustomerName() {
-        return senderCustomerName;
-    }
-
-    public void setSenderCustomerName(String senderCustomerName) {
-        this.senderCustomerName = senderCustomerName;
-    }
-
-    public String getSenderEmployeeName() {
-        return senderEmployeeName;
-    }
-
-    public void setSenderEmployeeName(String senderEmployeeName) {
-        this.senderEmployeeName = senderEmployeeName;
-    }
-
-    public String getReceiverOfficeName() {
-        return receiverOfficeName;
-    }
-
-    public void setReceiverOfficeName(String receiverOfficeName) {
-        this.receiverOfficeName = receiverOfficeName;
-    }
-
-    public String getReceiverCustomerName() {
-        return receiverCustomerName;
-    }
-
-    public void setReceiverCustomerName(String receiverCustomerName) {
-        this.receiverCustomerName = receiverCustomerName;
-    }
-
-    public String getReceiverEmployeeName() {
-        return receiverEmployeeName;
-    }
-
-    public void setReceiverEmployeeName(String receiverEmployeeName) {
-        this.receiverEmployeeName = receiverEmployeeName;
-    }
-
-    public List<Long> getOrderHistoryIds() {
-        return orderHistoryIds;
-    }
-
-    public void setOrderHistoryIds(List<Long> orderHistoryIds) {
-        this.orderHistoryIds = orderHistoryIds;
-    }
-
-    @Override
-    public String toString() {
-        return "ShipmentDTO{" +
-                "id=" + id +
-                ", shipmentDate=" + shipmentDate +
-                ", weight=" + weight +
-                ", price=" + price +
-                ", pricePaid=" + pricePaid +
-                ", receivedDate=" + receivedDate +
-                ", senderOfficeName='" + senderOfficeName + '\'' +
-                ", senderCustomerName='" + senderCustomerName + '\'' +
-                ", senderEmployeeName='" + senderEmployeeName + '\'' +
-                ", receiverOfficeName='" + receiverOfficeName + '\'' +
-                ", receiverCustomerName='" + receiverCustomerName + '\'' +
-                ", receiverEmployeeName='" + receiverEmployeeName + '\'' +
-                ", orderHistoryIds=" + orderHistoryIds +
-                '}';
-    }
+    // Getters and setters
+    // ...
 }

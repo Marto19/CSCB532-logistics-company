@@ -52,14 +52,14 @@ public class ShipmentServiceImpl implements ShipmentService {
         shipmentRepository.save(shipment);
     }
 
-
-    @Override
-    public void createShipment(Shipment shipment) {
-        if (shipment.getId() != 0) {
-            throw new RuntimeException("Cannot create shipment with predefined ID");
-        }
-        shipmentRepository.save(shipment);
-    }
+//
+//    @Override
+//    public void createShipment(Shipment shipment) {
+//        if (shipment.getId() != 0) {
+//            throw new RuntimeException("Cannot create shipment with predefined ID");
+//        }
+//        shipmentRepository.save(shipment);
+//    }
 
     @Override
     public List<Shipment> getAllShipments() {

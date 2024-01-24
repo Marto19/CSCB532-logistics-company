@@ -23,6 +23,12 @@ public class EmployeeDTO {
         // Add other fields as needed
     }
 
+    public EmployeeDTO(long id, String firstName, String secondName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.secondName = secondName;
+    }
+
     // Getters and setters for the DTO fields
 
     public long getId() {
