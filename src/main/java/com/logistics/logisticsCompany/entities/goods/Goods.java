@@ -22,6 +22,9 @@ public class Goods {
     @Column(name = "weight")        //Todo: add anotations
     private double weight;
 
+    //TODO: maybe create a table which is for the status of the goods -received/ not received
+    //TODO: make connection between them
+
     @ManyToOne
     private OrderHistory orderHistory;
 
