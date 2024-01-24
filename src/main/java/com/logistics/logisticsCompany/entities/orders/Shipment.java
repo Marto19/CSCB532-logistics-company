@@ -47,12 +47,12 @@ public class Shipment {
 	*/
 	@ManyToOne
 	@JoinColumn(name = "sender_office_id", nullable = false)
-	@JsonBackReference
+	@JsonIgnore
 	private Office senderOffice;
 	
 	@ManyToOne
 	@JoinColumn(name = "sender_customer_id", nullable = false)
-	@JsonBackReference
+	@JsonIgnore
 	private Customer senderCustomer;
 
 	@ManyToOne
@@ -70,7 +70,7 @@ public class Shipment {
 	@JsonIgnore
 	private Office receiverOffice;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "receiver_customer_id", nullable = false)
 	@JsonIgnore
 	private Customer receiverCustomer;

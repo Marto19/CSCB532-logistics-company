@@ -37,7 +37,6 @@ public class Office {
 	private Set<Customer> customers = new HashSet<>();
 	
 	@OneToMany(mappedBy = "senderOffice")
-	@JsonManagedReference
 	private Set<Shipment> sentFromOffice = new HashSet<>();
 	
 	@OneToMany(mappedBy = "receiverOffice")

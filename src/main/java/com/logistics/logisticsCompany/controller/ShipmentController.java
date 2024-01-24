@@ -7,6 +7,7 @@ import com.logistics.logisticsCompany.service.ShipmentService;
 import com.logistics.logisticsCompany.service.ShipmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,15 +25,17 @@ public class ShipmentController {
         this.shipmentService = shipmentService;
     }
 
-    @PostMapping("/sent")
+    @PostMapping(value = "/sent", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> registerSentShipment(@RequestBody Shipment shipment) {
         try {
+            // Validate and process the shipment object
             shipmentService.registerSentShipment(shipment);
             return ResponseEntity.status(HttpStatus.CREATED).body("Sent shipment registered successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
 
     @PostMapping("/received")
     public ResponseEntity<String> registerReceivedShipment(@RequestBody Shipment shipment) {
