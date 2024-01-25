@@ -1,6 +1,8 @@
 package com.logistics.logisticsCompany;
 
+import com.logistics.logisticsCompany.controller.CustomerController;
 import com.logistics.logisticsCompany.entities.enums.UserRole;
+import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

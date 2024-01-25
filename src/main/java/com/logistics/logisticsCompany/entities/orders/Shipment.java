@@ -31,8 +31,8 @@ public class Shipment {
 	@Column(name = "price", nullable = false,precision= 10, scale = 2)
 	private BigDecimal price;
 
-	@Column(name = "pricepaid", nullable = false)
-	private boolean pricePaid;
+	@Column(name = "is_paid", nullable = false)
+	private boolean isPaid;
 
 	@Column(name = "receivedDate", nullable = true)
 	private LocalDate receivedDate;
@@ -72,18 +72,18 @@ public class Shipment {
 	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
 	//relationship shipment/order_history - 1:n
 	@OneToMany(mappedBy = "shipment")
-	private List<OrderHistory> orderHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
+	private List<ShipmentStatusHistory> statusHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
 	
 	
 	//Constructors
 	public Shipment() {
 	}
 
-	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean pricePaid, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID) {
+	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID) {
 		this.shipmentDate = shipmentDate;
 		this.weight = weight;
 		this.price = price;
-		this.pricePaid = pricePaid;
+		this.isPaid = isPaid;
 		this.receivedDate = receivedDate;
 	}
 
@@ -119,12 +119,12 @@ public class Shipment {
 		this.price = price;
 	}
 
-	public boolean isPricePaid() {
-		return pricePaid;
+	public boolean isPaid() {
+		return isPaid;
 	}
 
-	public void setPricePaid(boolean pricePaid) {
-		this.pricePaid = pricePaid;
+	public void setPaid(boolean paid) {
+		this.isPaid = paid;
 	}
 
 	public LocalDate getReceivedDate() {
@@ -183,12 +183,12 @@ public class Shipment {
 		this.receiverEmployee = receiverEmployee;
 	}
 
-	public List<OrderHistory> getOrderHistories() {
-		return orderHistories;
+	public List<ShipmentStatusHistory> getStatusHistories() {
+		return statusHistories;
 	}
 
-	public void setOrderHistories(List<OrderHistory> orderHistories) {
-		this.orderHistories = orderHistories;
+	public void setStatusHistories(List<ShipmentStatusHistory> orderHistories) {
+		this.statusHistories = orderHistories;
 	}
 
 	@Override
@@ -198,7 +198,7 @@ public class Shipment {
 				", shipmentDate=" + shipmentDate +
 				", weight=" + weight +
 				", price=" + price +
-				", pricePaid=" + pricePaid +
+				", isPaid=" + isPaid +
 				", receivedDate=" + receivedDate +
 				", senderOffice=" + senderOffice +
 				", senderCustomer=" + senderCustomer +
