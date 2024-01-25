@@ -13,8 +13,8 @@ public class GoodsStatus {
     @Column(name = "status")
     private String goodsStatus;
 
-    @OneToOne
-    private Goods goods;
+//    @OneToOne
+//    private Goods goods;
 
 
     public GoodsStatus(String goodsStatus) {
