@@ -1,6 +1,7 @@
 package com.logistics.logisticsCompany.entities.goods;
 
 
+import com.logistics.logisticsCompany.entities.enums.GoodsStatus;
 import com.logistics.logisticsCompany.entities.enums.GoodsType;
 import com.logistics.logisticsCompany.entities.orders.OrderHistory;
 import jakarta.persistence.*;
@@ -30,6 +31,10 @@ public class Goods {
 
     @OneToOne
     private GoodsType goodsType;
+
+    @OneToOne
+    @JoinColumn(name = "status")
+    private GoodsStatus goodsStatus;
 
     public Goods(String name, double weight) {
         this.name = name;
