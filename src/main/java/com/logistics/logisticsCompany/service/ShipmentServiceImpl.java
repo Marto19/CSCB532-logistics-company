@@ -61,7 +61,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		
 		// Update status histories if necessary
 		// Note: Be careful with updating collections like this. It might be better to handle this in a separate method
-		existingShipment.setStatusHistories(updatedShipment.getStatusHistories());
+		//existingShipment.setStatusHistories(updatedShipment.getStatusHistories());
 		
 		shipmentRepository.save(existingShipment);
 	}

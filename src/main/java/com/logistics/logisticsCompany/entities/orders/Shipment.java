@@ -107,7 +107,7 @@ public class Shipment {
 		this.price = price;
 	}
 	
-	public void setPaid(boolean paid) {
+	public void setIsPaid(boolean paid) {
 		isPaid = paid;
 	}
 	
