@@ -31,8 +31,8 @@ public class Shipment {
 	@Column(name = "price", nullable = false,precision= 10, scale = 2)
 	private BigDecimal price;
 
-	@Column(name = "pricepaid", nullable = false)
-	private boolean pricePaid;
+	@Column(name = "is_paid", nullable = false)
+	private boolean isPaid;
 
 	@Column(name = "receivedDate", nullable = true)
 	private LocalDate receivedDate;
@@ -79,123 +79,122 @@ public class Shipment {
 	public Shipment() {
 	}
 
+	
 	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean pricePaid, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID) {
 		this.shipmentDate = shipmentDate;
 		this.weight = weight;
 		this.price = price;
-		this.pricePaid = pricePaid;
+		this.isPaid = pricePaid;
 		this.receivedDate = receivedDate;
 	}
 
-	public long getId() {
-		return id;
-	}
-
+	//Getters and Setters
+	
+	
 	public void setId(long id) {
 		this.id = id;
 	}
-
-	public LocalDate getShipmentDate() {
-		return shipmentDate;
-	}
-
+	
 	public void setShipmentDate(LocalDate shipmentDate) {
 		this.shipmentDate = shipmentDate;
 	}
-
-	public BigDecimal getWeight() {
-		return weight;
-	}
-
+	
 	public void setWeight(BigDecimal weight) {
 		this.weight = weight;
 	}
-
-	public BigDecimal getPrice() {
-		return price;
-	}
-
+	
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
-
-	public boolean isPricePaid() {
-		return pricePaid;
+	
+	public void setPaid(boolean paid) {
+		isPaid = paid;
 	}
-
-<<<<<<< Updated upstream
-	public void setPricePaid(boolean pricePaid) {
-		this.pricePaid = pricePaid;
-=======
-	public void setIsPaid(boolean paid) {
-		this.isPaid = paid;
->>>>>>> Stashed changes
-	}
-
-	public LocalDate getReceivedDate() {
-		return receivedDate;
-	}
-
+	
 	public void setReceivedDate(LocalDate receivedDate) {
 		this.receivedDate = receivedDate;
 	}
-
-	public Office getSenderOffice() {
-		return senderOffice;
-	}
-
+	
 	public void setSenderOffice(Office senderOffice) {
 		this.senderOffice = senderOffice;
 	}
-
-	public Customer getSenderCustomer() {
-		return senderCustomer;
-	}
-
+	
 	public void setSenderCustomer(Customer senderCustomer) {
 		this.senderCustomer = senderCustomer;
 	}
-
-	public Employee getSenderEmployee() {
-		return senderEmployee;
-	}
-
+	
 	public void setSenderEmployee(Employee senderEmployee) {
 		this.senderEmployee = senderEmployee;
 	}
-
-	public Office getReceiverOffice() {
-		return receiverOffice;
-	}
-
+	
 	public void setReceiverOffice(Office receiverOffice) {
 		this.receiverOffice = receiverOffice;
 	}
-
-	public Customer getReceiverCustomer() {
-		return receiverCustomer;
-	}
-
+	
 	public void setReceiverCustomer(Customer receiverCustomer) {
 		this.receiverCustomer = receiverCustomer;
 	}
-
-	public Employee getReceiverEmployee() {
-		return receiverEmployee;
-	}
-
+	
 	public void setReceiverEmployee(Employee receiverEmployee) {
 		this.receiverEmployee = receiverEmployee;
 	}
-
-	public List<OrderHistory> getOrderHistories() {
-		return orderHistories;
-	}
-
+	
 	public void setOrderHistories(List<OrderHistory> orderHistories) {
 		this.orderHistories = orderHistories;
 	}
-
+	
+	public long getId() {
+		return id;
+	}
+	
+	public LocalDate getShipmentDate() {
+		return shipmentDate;
+	}
+	
+	public BigDecimal getWeight() {
+		return weight;
+	}
+	
+	public BigDecimal getPrice() {
+		return price;
+	}
+	
+	public boolean isPaid() {
+		return isPaid;
+	}
+	
+	public LocalDate getReceivedDate() {
+		return receivedDate;
+	}
+	
+	public Office getSenderOffice() {
+		return senderOffice;
+	}
+	
+	public Customer getSenderCustomer() {
+		return senderCustomer;
+	}
+	
+	public Employee getSenderEmployee() {
+		return senderEmployee;
+	}
+	
+	public Office getReceiverOffice() {
+		return receiverOffice;
+	}
+	
+	public Customer getReceiverCustomer() {
+		return receiverCustomer;
+	}
+	
+	public Employee getReceiverEmployee() {
+		return receiverEmployee;
+	}
+	
+	public List<OrderHistory> getOrderHistories() {
+		return orderHistories;
+	}
+	
 	@Override
 	public String toString() {
 		return "Shipment{" +
@@ -203,7 +202,7 @@ public class Shipment {
 				", shipmentDate=" + shipmentDate +
 				", weight=" + weight +
 				", price=" + price +
-				", pricePaid=" + pricePaid +
+				", isPaid=" + isPaid +
 				", receivedDate=" + receivedDate +
 				", senderOffice=" + senderOffice +
 				", senderCustomer=" + senderCustomer +
