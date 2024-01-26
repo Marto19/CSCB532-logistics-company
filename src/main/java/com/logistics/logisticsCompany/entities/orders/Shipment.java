@@ -123,8 +123,13 @@ public class Shipment {
 		return pricePaid;
 	}
 
+<<<<<<< Updated upstream
 	public void setPricePaid(boolean pricePaid) {
 		this.pricePaid = pricePaid;
+=======
+	public void setIsPaid(boolean paid) {
+		this.isPaid = paid;
+>>>>>>> Stashed changes
 	}
 
 	public LocalDate getReceivedDate() {
