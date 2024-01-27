@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.entities.orders;
 
+import com.logistics.logisticsCompany.entities.enums.GoodsType;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "shipment")
@@ -25,7 +27,7 @@ public class Shipment {
 //	@Enumerated(EnumType.STRING)	//todo
 //	private ShipmentStatus shipmentStatus;
 
-	@Column(name = "weight", nullable = false,  precision = 3, scale = 2)
+	@Column(name = "weight", nullable = false,  precision = 10, scale = 2)
 	private BigDecimal weight;
 
 	@Column(name = "price", nullable = false,precision= 10, scale = 2)
@@ -36,14 +38,14 @@ public class Shipment {
 
 	@Column(name = "receivedDate", nullable = true)
 	private LocalDate receivedDate;
-	
+
 	/*
 		SENDER RELATIONSHIPS - OFFICE, CUSTOMER, EMPLOYEE
 	*/
 	@ManyToOne
 	@JoinColumn(name = "sender_office_id", nullable = false)
 	private Office senderOffice;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "sender_customer_id", nullable = false)
 	private Customer senderCustomer;
@@ -51,12 +53,12 @@ public class Shipment {
 	@ManyToOne
 	@JoinColumn(name = "sender_Employee_id", nullable = false)
 	private Employee senderEmployee;
-	
+
 	/*
 		RECEIVER RELATIONSHIPS - OFFICE, CUSTOMER, EMPLOYEE
 	*/
-	
-	
+
+
 	@ManyToOne
 	@JoinColumn(name = "receiver_office_id", nullable = false)
 	private Office receiverOffice;
@@ -73,8 +75,13 @@ public class Shipment {
 	//relationship shipment/order_history - 1:n
 	@OneToMany(mappedBy = "shipment")
 	private List<OrderHistory> orderHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
-	
-	
+	//its one to many because when trasposrting something, the employee usually transports more than one goods, therefore itll be assiciated with more than one order history
+
+
+	@ManyToOne
+	private GoodsType goodsType;
+
+
 	//Constructors
 	public Shipment() {
 	}
