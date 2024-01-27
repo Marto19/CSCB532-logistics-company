@@ -2,6 +2,7 @@ package com.logistics.logisticsCompany.controller;
 
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
+import com.logistics.logisticsCompany.repository.LogisticsCompanyRepository;
 import com.logistics.logisticsCompany.service.LogisticsCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,12 +18,19 @@ public class LogisticsCompanyController {
     private final LogisticsCompanyService logisticsCompanyService;
 
     @Autowired
-    public LogisticsCompanyController(LogisticsCompanyService logisticsCompanyService) {
+    public LogisticsCompanyController(LogisticsCompanyService logisticsCompanyService, com.logistics.logisticsCompany.repository.LogisticsCompanyRepository logisticsCompanyRepository) {
         this.logisticsCompanyService = logisticsCompanyService;
+        LogisticsCompanyRepository = logisticsCompanyRepository;
     }
+
+    private final LogisticsCompanyRepository LogisticsCompanyRepository;
 
     @PostMapping
     public ResponseEntity<String> createLogisticsCompany(@RequestBody LogisticsCompany logisticsCompany) {
+        if (LogisticsCompanyRepository.existsByName(logisticsCompany.getName())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Logistics company with the same name already exists");
+        }
         try {
             logisticsCompanyService.createLogisticsCompany(logisticsCompany);
             return ResponseEntity.status(HttpStatus.CREATED).body("LogisticsCompany created successfully");
