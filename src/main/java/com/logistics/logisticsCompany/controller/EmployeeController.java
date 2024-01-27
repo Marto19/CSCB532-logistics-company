@@ -4,6 +4,7 @@ import com.logistics.logisticsCompany.DTO.EmployeeDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
+import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
 import com.logistics.logisticsCompany.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,6 +47,13 @@ public class EmployeeController {
                 .collect(Collectors.toList());
 
         return employeeDTOs;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable(value = "id") long employeeId) {
+        Optional<Employee> customer = employeeService.getEmployeeById(employeeId);
+        return customer.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     @PutMapping("/{id}")
     public ResponseEntity<String> updateEmployee(@PathVariable(value = "id") long employeeId,

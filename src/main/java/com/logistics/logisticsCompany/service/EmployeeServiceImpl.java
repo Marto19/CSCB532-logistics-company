@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -65,5 +66,10 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new EntityNotFoundException("Employee with ID " + employeeId + " not found."));
         employee.setLogisticsCompany(logisticsCompany);
         employeeRepository.save(employee);
+    }
+
+    @Override
+    public Optional<Employee> getEmployeeById(long emplpoyeeId) {
+        return employeeRepository.findById(emplpoyeeId);
     }
 }

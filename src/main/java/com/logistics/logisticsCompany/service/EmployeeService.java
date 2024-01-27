@@ -2,9 +2,11 @@ package com.logistics.logisticsCompany.service;
 
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
+import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EmployeeService {
 
@@ -19,4 +21,7 @@ public interface EmployeeService {
     void assignOfficeToEmployee(long employeeId, Office office);
 
     void assignLogisticsCompanyToEmployee(long employeeId, LogisticsCompany logisticsCompany);
+
+    Optional<Employee> getEmployeeById(long emplpoyeeId);
+
 }
