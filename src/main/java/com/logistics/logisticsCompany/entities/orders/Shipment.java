@@ -58,7 +58,6 @@ public class Shipment {
 		RECEIVER RELATIONSHIPS - OFFICE, CUSTOMER, EMPLOYEE
 	*/
 
-
 	@ManyToOne
 	@JoinColumn(name = "receiver_office_id", nullable = false)
 	private Office receiverOffice;
@@ -180,50 +179,6 @@ public class Shipment {
 	
 	public void setReceiverCustomer(Customer receiverCustomer) {
 		this.receiverCustomer = receiverCustomer;
-	}
-	
-	public void setOrderHistories(List<ShipmentStatusHistory> orderHistories) {
-		this.statusHistories = orderHistories;
-	}
-	
-	public long getId() {
-		return id;
-	}
-	
-	public LocalDate getShipmentDate() {
-		return shipmentDate;
-	}
-	
-	public BigDecimal getWeight() {
-		return weight;
-	}
-	
-	public BigDecimal getPrice() {
-		return price;
-	}
-	
-	public LocalDate getReceivedDate() {
-		return receivedDate;
-	}
-	
-	public Office getSenderOffice() {
-		return senderOffice;
-	}
-	
-	public Customer getSenderCustomer() {
-		return senderCustomer;
-	}
-	
-	public Employee getSenderEmployee() {
-		return senderEmployee;
-	}
-	
-	public Office getReceiverOffice() {
-		return receiverOffice;
-	}
-	
-	public Customer getReceiverCustomer() {
-		return receiverCustomer;
 	}
 	
 	public Employee getReceiverEmployee() {
