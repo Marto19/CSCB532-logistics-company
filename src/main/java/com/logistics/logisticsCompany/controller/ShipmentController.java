@@ -73,7 +73,7 @@ public class ShipmentController {
                 shipment.getShipmentDate(),
                 shipment.getWeight(),
                 shipment.getPrice(),
-                shipment.isPricePaid(),
+                shipment.isPaid(),
                 shipment.getReceivedDate(),
                 convertToOfficeDTO(shipment.getSenderOffice()),
                 convertToCustomerDTO(shipment.getSenderCustomer()),

@@ -86,7 +86,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         existingShipment.setShipmentDate(updatedShipment.getShipmentDate());
         existingShipment.setWeight(updatedShipment.getWeight());
         existingShipment.setPrice(updatedShipment.getPrice());
-        existingShipment.setPricePaid(updatedShipment.isPricePaid());
+        existingShipment.setIsPaid(updatedShipment.isPaid());
         existingShipment.setReceivedDate(updatedShipment.getReceivedDate());
 
         shipmentRepository.save(existingShipment);
