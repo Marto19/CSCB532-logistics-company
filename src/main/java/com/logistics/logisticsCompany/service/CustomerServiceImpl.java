@@ -13,9 +13,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
-
+    
     @Override
     public void createCustomer(Customer customer) {
+        //simple check (ignore it)
+        if (customer.getFirstName() == null || customer.getFirstName().isEmpty()) {
+            throw new IllegalArgumentException("First name must not be null or empty");
+        }
         customerRepository.save(customer);
     }
 

@@ -74,24 +74,21 @@ public class Shipment {
 	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
 	//relationship shipment/order_history - 1:n
 	@OneToMany(mappedBy = "shipment")
-	private List<OrderHistory> orderHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
-	//it is one to many because when transporting something, the employee usually transports more than one goods, therefore it'll be associated with more than one order history
 
+	private List<ShipmentStatusHistory> statusHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
 
 	@ManyToOne
 	private GoodsType goodsType;
-
 
 	//Constructors
 	public Shipment() {
 	}
 
-	
-	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean pricePaid, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID) {
+	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID) {
 		this.shipmentDate = shipmentDate;
 		this.weight = weight;
 		this.price = price;
-		this.isPaid = pricePaid;
+		this.isPaid = isPaid;
 		this.receivedDate = receivedDate;
 	}
 
@@ -184,23 +181,67 @@ public class Shipment {
 	public void setReceiverCustomer(Customer receiverCustomer) {
 		this.receiverCustomer = receiverCustomer;
 	}
-
+	
+	public void setOrderHistories(List<ShipmentStatusHistory> orderHistories) {
+		this.statusHistories = orderHistories;
+	}
+	
+	public long getId() {
+		return id;
+	}
+	
+	public LocalDate getShipmentDate() {
+		return shipmentDate;
+	}
+	
+	public BigDecimal getWeight() {
+		return weight;
+	}
+	
+	public BigDecimal getPrice() {
+		return price;
+	}
+	
+	public LocalDate getReceivedDate() {
+		return receivedDate;
+	}
+	
+	public Office getSenderOffice() {
+		return senderOffice;
+	}
+	
+	public Customer getSenderCustomer() {
+		return senderCustomer;
+	}
+	
+	public Employee getSenderEmployee() {
+		return senderEmployee;
+	}
+	
+	public Office getReceiverOffice() {
+		return receiverOffice;
+	}
+	
+	public Customer getReceiverCustomer() {
+		return receiverCustomer;
+	}
+	
 	public Employee getReceiverEmployee() {
 		return receiverEmployee;
 	}
-	
+
 	public void setReceiverEmployee(Employee receiverEmployee) {
 		this.receiverEmployee = receiverEmployee;
 	}
 
-	public List<OrderHistory> getOrderHistories() {
-		return orderHistories;
+	public List<ShipmentStatusHistory> getStatusHistories() {
+		return statusHistories;
 	}
-	
-	public void setOrderHistories(List<OrderHistory> orderHistories) {
-		this.orderHistories = orderHistories;
+
+	public void setStatusHistories(List<ShipmentStatusHistory> orderHistories) {
+		this.statusHistories = orderHistories;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Shipment{" +
