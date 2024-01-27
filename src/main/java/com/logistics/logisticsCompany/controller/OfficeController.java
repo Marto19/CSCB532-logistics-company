@@ -24,9 +24,9 @@ public class OfficeController {
     @PostMapping
     public ResponseEntity<String> createOffice(@RequestBody Office office) {
         // Check if the office with the given name already exists
-        if (officeRepository.existsByOfficeName(office.getOfficeName())) {
+        if (officeRepository.existsByAddress(office.getAddress())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Office with the same name already exists");
+                    .body("Office with the same address already exists");
         }
 
         // If the office doesn't exist, proceed with saving it

@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OfficeRepository extends JpaRepository<Office, Integer> {
     boolean existsByOfficeName(String officeName);
+    boolean existsByAddress(String address);
 }
