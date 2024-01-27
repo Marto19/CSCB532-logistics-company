@@ -1,6 +1,7 @@
 package com.logistics.logisticsCompany.entities.users;
 
 import com.logistics.logisticsCompany.entities.offices.Office;
+import com.logistics.logisticsCompany.entities.orders.OrderHistory;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
 import jakarta.persistence.*;
 
@@ -40,6 +41,9 @@ public class Customer {
     
     @OneToMany(mappedBy = "receiverCustomer")
     private Set<Shipment> receivedShipments = new HashSet<>();
+
+    @OneToMany(mappedBy = "customer")
+    private Set<OrderHistory> orderHistorySet;
     
     
     //Constructors

@@ -38,7 +38,7 @@ public class Office {
 	@OneToMany(mappedBy = "senderOffice")
 	private Set<Shipment> sentFromOffice = new HashSet<>();
 	
-	@OneToMany(mappedBy = "receiverOffice")
+	@OneToMany(mappedBy = "receiverOffice", cascade = CascadeType.REMOVE)// todo :consider putting this cascade type other places too
 	private Set<Shipment> receivedInOffice = new HashSet<>();
 
 

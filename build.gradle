@@ -26,13 +26,13 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '3.2.1'
 
 
-	//configuring springWebSecurity
+//	//configuring springWebSecurity
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 ////  Temporary explicit version to fix Thymeleaf bug
 //	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
 //	testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.2.1'
-
-	testImplementation group: 'com.h2database', name: 'h2', version: '2.2.224'
+//
+//	testImplementation group: 'com.h2database', name: 'h2', version: '2.2.224'
 
 
 }

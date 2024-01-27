@@ -1,6 +1,7 @@
 package com.logistics.logisticsCompany.controller;
 
 
+import com.logistics.logisticsCompany.DTO.CustomerDTO;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.CustomerRepository;
@@ -40,8 +41,9 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+    public List<CustomerDTO> getAllCustomers() {
+        List<Customer> customers = customerService.getAllCustomers();
+        return CustomerDTO.toDTOList(customers);
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,8 @@
 package com.logistics.logisticsCompany.entities.orders;
 
 
+import com.logistics.logisticsCompany.entities.enums.GoodsStatus;
+import com.logistics.logisticsCompany.entities.users.Customer;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -28,11 +30,23 @@ public class ShipmentStatusHistory {
 	@JoinColumn(name = "shipment_id")
 	private Shipment shipment;
 
+//	@OneToMany(mappedBy = "orderHistory")
+//	private List<Goods> goodsList;
+
+	@ManyToOne
+	private Customer customer;
+
+//	@OneToOne
+//	private GoodsStatus goodsStatus;
+
+	@ManyToOne
+	private GoodsStatus goodsStatus;
+
 	//Constructors
 	public ShipmentStatusHistory(){
 	}
 
-	public ShipmentStatusHistory(int shipmentID, int status, LocalDateTime updateDate, String notes){
+	public ShipmentStatusHistory(int status, LocalDateTime updateDate, String notes){
 		this.status = status;
 		this.updateDate = updateDate;
 		this.notes = notes;
@@ -49,13 +63,13 @@ public class ShipmentStatusHistory {
 		this.id = id;
 	}
 
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
+//	public int getStatus() {
+//		return status;
+//	}
+//
+//	public void setStatus(int status) {
+//		this.status = status;
+//	}
 
 	public LocalDateTime getUpdateDate() {
 		return updateDate;
@@ -85,7 +99,7 @@ public class ShipmentStatusHistory {
 	public String toString() {
 		return "ShipmentStatusHistory{" +
 				"id=" + id +
-				", status=" + status +
+//				", status=" + status +
 				", updateDate=" + updateDate +
 				", notes='" + notes + '\'' +
 				'}';
