@@ -54,7 +54,6 @@ public class OrderHistory {
 
 	//Getters and setters
 
-
 	public long getId() {
 		return id;
 	}
