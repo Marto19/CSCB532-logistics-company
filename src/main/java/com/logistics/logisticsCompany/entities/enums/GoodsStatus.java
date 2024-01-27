@@ -1,6 +1,6 @@
 package com.logistics.logisticsCompany.entities.enums;
 
-import com.logistics.logisticsCompany.entities.orders.OrderHistory;
+import com.logistics.logisticsCompany.entities.orders.ShipmentStatusHistory;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -18,7 +18,7 @@ public class GoodsStatus {
 //    @OneToOne
 //    private Goods goods;
     @OneToMany
-    private Set<OrderHistory> orderHistorySet;
+    private Set<ShipmentStatusHistory> orderHistorySet;
 
 
     public GoodsStatus(String goodsStatus) {

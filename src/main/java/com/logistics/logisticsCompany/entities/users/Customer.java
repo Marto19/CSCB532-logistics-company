@@ -1,8 +1,8 @@
 package com.logistics.logisticsCompany.entities.users;
 
 import com.logistics.logisticsCompany.entities.offices.Office;
-import com.logistics.logisticsCompany.entities.orders.OrderHistory;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
+import com.logistics.logisticsCompany.entities.orders.ShipmentStatusHistory;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -43,7 +43,7 @@ public class Customer {
     private Set<Shipment> receivedShipments = new HashSet<>();
 
     @OneToMany(mappedBy = "customer")
-    private Set<OrderHistory> orderHistorySet;
+    private Set<ShipmentStatusHistory> orderHistorySet;
     
     
     //Constructors
