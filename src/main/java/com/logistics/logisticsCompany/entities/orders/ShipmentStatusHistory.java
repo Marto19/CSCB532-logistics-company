@@ -8,15 +8,15 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "orderhistory")
-public class OrderHistory {
+@Table(name = "shipment_status_history")
+public class ShipmentStatusHistory {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-//	@Column(name = "status", nullable = false)
-//	private int status;
+	@Column(name = "status", nullable = false)
+	private int status;
 
 	@Column(name = "update_date", nullable = false)
 	private LocalDateTime updateDate;
@@ -43,11 +43,11 @@ public class OrderHistory {
 	private GoodsStatus goodsStatus;
 
 	//Constructors
-	public OrderHistory(){
+	public ShipmentStatusHistory(){
 	}
 
-	public OrderHistory(int shipmentID,  LocalDateTime updateDate, String notes){
-//		this.status = status;
+	public ShipmentStatusHistory(int status, LocalDateTime updateDate, String notes){
+		this.status = status;
 		this.updateDate = updateDate;
 		this.notes = notes;
 	}
@@ -97,7 +97,7 @@ public class OrderHistory {
 
 	@Override
 	public String toString() {
-		return "OrderHistory{" +
+		return "ShipmentStatusHistory{" +
 				"id=" + id +
 //				", status=" + status +
 				", updateDate=" + updateDate +

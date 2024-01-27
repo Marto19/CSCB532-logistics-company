@@ -55,71 +55,71 @@ public class Customer {
         this.secondName = secondName;
         this.phone = phone;
     }
-
-    public long getId() {
-        return id;
-    }
-
+    
     public void setId(long id) {
         this.id = id;
     }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
+    
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
+    
     public void setSecondName(String secondName) {
         this.secondName = secondName;
     }
-
-    public String getPhone() {
-        return phone;
-    }
-
+    
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    public User getUsers() {
-        return users;
-    }
-
+    
     public void setUsers(User users) {
         this.users = users;
     }
-
-    public Office getLastOffice() {
-        return lastOffice;
-    }
-
+    
     public void setLastOffice(Office lastOffice) {
         this.lastOffice = lastOffice;
     }
-
-    public Set<Shipment> getSentShipments() {
-        return sentShipments;
-    }
-
+    
     public void setSentShipments(Set<Shipment> sentShipments) {
         this.sentShipments = sentShipments;
     }
-
-    public Set<Shipment> getReceivedShipments() {
-        return receivedShipments;
-    }
-
+    
     public void setReceivedShipments(Set<Shipment> receivedShipments) {
         this.receivedShipments = receivedShipments;
     }
-
+    
+    public long getId() {
+        return id;
+    }
+    
+    public String getFirstName() {
+        return firstName;
+    }
+    
+    public String getSecondName() {
+        return secondName;
+    }
+    
+    public String getPhone() {
+        return phone;
+    }
+    
+    public User getUsers() {
+        return users;
+    }
+    
+    public Office getLastOffice() {
+        return lastOffice;
+    }
+    
+    public Set<Shipment> getSentShipments() {
+        return sentShipments;
+    }
+    
+    public Set<Shipment> getReceivedShipments() {
+        return receivedShipments;
+    }
+    
     @Override
     public String toString() {
         return "Customer{" +
@@ -129,4 +129,6 @@ public class Customer {
                 ", phone='" + phone + '\'' +
                 '}';
     }
+    
+
 }

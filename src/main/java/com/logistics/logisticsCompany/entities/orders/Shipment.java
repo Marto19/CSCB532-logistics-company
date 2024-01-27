@@ -74,24 +74,21 @@ public class Shipment {
 	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
 	//relationship shipment/order_history - 1:n
 	@OneToMany(mappedBy = "shipment")
-	private List<OrderHistory> orderHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
-	//its one to many because when trasposrting something, the employee usually transports more than one goods, therefore itll be assiciated with more than one order history
 
+	private List<ShipmentStatusHistory> statusHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
 
 	@ManyToOne
 	private GoodsType goodsType;
-
 
 	//Constructors
 	public Shipment() {
 	}
 
-	
-	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean pricePaid, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID) {
+	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID) {
 		this.shipmentDate = shipmentDate;
 		this.weight = weight;
 		this.price = price;
-		this.isPaid = pricePaid;
+		this.isPaid = isPaid;
 		this.receivedDate = receivedDate;
 	}
 
@@ -112,6 +109,10 @@ public class Shipment {
 	
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public boolean isPaid() {
+		return isPaid;
 	}
 	
 	public void setIsPaid(boolean paid) {
@@ -142,12 +143,8 @@ public class Shipment {
 		this.receiverCustomer = receiverCustomer;
 	}
 	
-	public void setReceiverEmployee(Employee receiverEmployee) {
-		this.receiverEmployee = receiverEmployee;
-	}
-	
-	public void setOrderHistories(List<OrderHistory> orderHistories) {
-		this.orderHistories = orderHistories;
+	public void setOrderHistories(List<ShipmentStatusHistory> orderHistories) {
+		this.statusHistories = orderHistories;
 	}
 	
 	public long getId() {
@@ -164,10 +161,6 @@ public class Shipment {
 	
 	public BigDecimal getPrice() {
 		return price;
-	}
-	
-	public boolean isPaid() {
-		return isPaid;
 	}
 	
 	public LocalDate getReceivedDate() {
@@ -197,11 +190,19 @@ public class Shipment {
 	public Employee getReceiverEmployee() {
 		return receiverEmployee;
 	}
-	
-	public List<OrderHistory> getOrderHistories() {
-		return orderHistories;
+
+	public void setReceiverEmployee(Employee receiverEmployee) {
+		this.receiverEmployee = receiverEmployee;
 	}
-	
+
+	public List<ShipmentStatusHistory> getStatusHistories() {
+		return statusHistories;
+	}
+
+	public void setStatusHistories(List<ShipmentStatusHistory> orderHistories) {
+		this.statusHistories = orderHistories;
+	}
+
 	@Override
 	public String toString() {
 		return "Shipment{" +
