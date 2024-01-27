@@ -25,7 +25,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @PostMapping
+    @PostMapping        //actually creates employee, it doesnt add employee to a specific company
     public ResponseEntity<String> addEmployee(@RequestBody Employee employee) {
         try {
             employeeService.addEmployee(employee);

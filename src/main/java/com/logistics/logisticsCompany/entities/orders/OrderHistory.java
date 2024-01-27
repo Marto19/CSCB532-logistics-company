@@ -1,13 +1,11 @@
 package com.logistics.logisticsCompany.entities.orders;
 
 
-import com.logistics.logisticsCompany.entities.goods.Goods;
+import com.logistics.logisticsCompany.entities.enums.GoodsStatus;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "orderhistory")
@@ -17,8 +15,8 @@ public class OrderHistory {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "status", nullable = false)
-	private int status;
+//	@Column(name = "status", nullable = false)
+//	private int status;
 
 	@Column(name = "update_date", nullable = false)
 	private LocalDateTime updateDate;
@@ -32,19 +30,24 @@ public class OrderHistory {
 	@JoinColumn(name = "shipment_id")
 	private Shipment shipment;
 
-	@OneToMany(mappedBy = "orderHistory")
-	private List<Goods> goodsList;
+//	@OneToMany(mappedBy = "orderHistory")
+//	private List<Goods> goodsList;
 
 	@ManyToOne
 	private Customer customer;
 
+//	@OneToOne
+//	private GoodsStatus goodsStatus;
+
+	@ManyToOne
+	private GoodsStatus goodsStatus;
 
 	//Constructors
 	public OrderHistory(){
 	}
 
-	public OrderHistory(int shipmentID, int status, LocalDateTime updateDate, String notes){
-		this.status = status;
+	public OrderHistory(int shipmentID,  LocalDateTime updateDate, String notes){
+//		this.status = status;
 		this.updateDate = updateDate;
 		this.notes = notes;
 	}
@@ -60,13 +63,13 @@ public class OrderHistory {
 		this.id = id;
 	}
 
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
+//	public int getStatus() {
+//		return status;
+//	}
+//
+//	public void setStatus(int status) {
+//		this.status = status;
+//	}
 
 	public LocalDateTime getUpdateDate() {
 		return updateDate;
@@ -96,7 +99,7 @@ public class OrderHistory {
 	public String toString() {
 		return "OrderHistory{" +
 				"id=" + id +
-				", status=" + status +
+//				", status=" + status +
 				", updateDate=" + updateDate +
 				", notes='" + notes + '\'' +
 				'}';

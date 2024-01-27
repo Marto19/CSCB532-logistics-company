@@ -1,7 +1,9 @@
 package com.logistics.logisticsCompany.entities.enums;
 
-import com.logistics.logisticsCompany.entities.goods.Goods;
+import com.logistics.logisticsCompany.entities.orders.Shipment;
 import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "goods_type")
@@ -13,8 +15,11 @@ public class GoodsType {
     @Column(name = "type_name")     //TODO: add validation annotations
     private String typeName;
 
-    @OneToOne(mappedBy = "goodsType")
-    private Goods goods;
+//    @OneToOne(mappedBy = "goodsType")
+//    private Goods goods;
+
+    @OneToMany(mappedBy = "goodsType")
+    private Set<Shipment> shipment;
 
     public GoodsType(String typeName) {
         this.typeName = typeName;

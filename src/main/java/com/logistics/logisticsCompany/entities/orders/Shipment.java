@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.entities.orders;
 
+import com.logistics.logisticsCompany.entities.enums.GoodsType;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
@@ -75,6 +76,11 @@ public class Shipment {
 	@OneToMany(mappedBy = "shipment")
 	private List<OrderHistory> orderHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
 	//its one to many because when trasposrting something, the employee usually transports more than one goods, therefore itll be assiciated with more than one order history
+
+
+	@ManyToOne
+	private GoodsType goodsType;
+
 
 	//Constructors
 	public Shipment() {

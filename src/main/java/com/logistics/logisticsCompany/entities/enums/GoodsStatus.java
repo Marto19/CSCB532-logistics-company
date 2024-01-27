@@ -1,7 +1,9 @@
 package com.logistics.logisticsCompany.entities.enums;
 
-import com.logistics.logisticsCompany.entities.goods.Goods;
+import com.logistics.logisticsCompany.entities.orders.OrderHistory;
 import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "goods_status")   //this table is an enum, it will contain: REGISTERED,SENT, SHIPPED, DELIVERED
@@ -15,6 +17,8 @@ public class GoodsStatus {
 
 //    @OneToOne
 //    private Goods goods;
+    @OneToMany
+    private Set<OrderHistory> orderHistorySet;
 
 
     public GoodsStatus(String goodsStatus) {
