@@ -4,8 +4,8 @@ import com.logistics.logisticsCompany.DTO.EmployeeDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
-import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
+import com.logistics.logisticsCompany.repository.EmployeeRepository;
 import com.logistics.logisticsCompany.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,12 +23,19 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository) {
         this.employeeService = employeeService;
+        this.employeeRepository = employeeRepository;
     }
 
+    private final EmployeeRepository employeeRepository;
+
     @PostMapping        //actually creates employee, it doesnt add employee to a specific company
-    public ResponseEntity<String> addEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<String> createEmployee(@RequestBody Employee employee) {
+        if (employeeRepository.existsByFirstName(employee.getFirstName()) && employeeRepository.existsBySecondName(employee.getSecondName())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("This employee by the name " + employee.getFirstName() + " " + employee.getSecondName() + " already exists");
+        }
         try {
             employeeService.addEmployee(employee);
             return ResponseEntity.status(HttpStatus.CREATED).body("Employee added successfully");
