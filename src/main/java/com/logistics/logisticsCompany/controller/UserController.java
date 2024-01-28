@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.controller;
 
+import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.enums.UserRole;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.UserRepository;
@@ -120,8 +121,13 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable(value = "id") long userId){
-        userServiceImpl.deleteUser(userId);
+    public ResponseEntity<String> deleteUser(@PathVariable(value = "id") long userId){
+        try {
+            userServiceImpl.deleteUser(userId);
+            return ResponseEntity.ok("Shipment deleted successfully");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with the provided id doesn't exist");
+        }
     }
 
 

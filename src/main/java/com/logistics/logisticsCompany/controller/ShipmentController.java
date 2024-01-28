@@ -134,7 +134,7 @@ public class ShipmentController {
             shipmentService.deleteShipment(shipmentId);
             return ResponseEntity.ok("Shipment deleted successfully");
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Shipment with the provided id doesn't exist");
         }
     }
 }
