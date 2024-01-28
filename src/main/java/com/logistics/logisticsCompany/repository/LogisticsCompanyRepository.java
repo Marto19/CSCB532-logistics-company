@@ -12,4 +12,6 @@ public interface LogisticsCompanyRepository extends JpaRepository<LogisticsCompa
     boolean existsById(long id);
 
     Optional<LogisticsCompany> getLogisticsCompaniesById(long id);
+    
+    
 }

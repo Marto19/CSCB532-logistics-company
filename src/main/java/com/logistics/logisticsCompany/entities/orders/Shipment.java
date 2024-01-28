@@ -83,18 +83,27 @@ public class Shipment {
 	private List<ShipmentStatusHistory> statusHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
 
 	@ManyToOne
-	@JoinColumn(name = "goods_type_id", nullable = false)
+	@JoinColumn(name = "goods_type_id", nullable = true)
 	private GoodsType goodsType;
 	
 	@ManyToOne
-	@JoinColumn(name = "delivery_payment_type_id", nullable = false)
+	@JoinColumn(name = "delivery_payment_type_id", nullable = true)
 	private DeliveryPaymentType deliveryPaymentType;
 
 	
 	//Constructors
 	public Shipment() {
 	}
-
+	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, BigDecimal priceDelivery, boolean isPaidDelivery, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID, GoodsType goodsType, DeliveryPaymentType deliveryPaymentType) {
+		this.shipmentDate = shipmentDate;
+		this.weight = weight;
+		this.price = price;
+		this.isPaid = isPaid;
+		this.receivedDate = receivedDate;
+		this.goodsType = goodsType;
+		this.deliveryPaymentType = deliveryPaymentType;
+		// Initialize other fields as necessary
+	}
 	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID) {
 		this.shipmentDate = shipmentDate;
 		this.weight = weight;
@@ -104,7 +113,43 @@ public class Shipment {
 	}
 
 	//Getters and Setters
-
+	
+	public void setPaidDelivery(boolean paidDelivery) {
+		isPaidDelivery = paidDelivery;
+	}
+	
+	public void setPriceDelivery(BigDecimal priceDelivery) {
+		this.priceDelivery = priceDelivery;
+	}
+	
+	public void setPaid(boolean paid) {
+		isPaid = paid;
+	}
+	
+	public void setGoodsType(GoodsType goodsType) {
+		this.goodsType = goodsType;
+	}
+	
+	public void setDeliveryPaymentType(DeliveryPaymentType deliveryPaymentType) {
+		this.deliveryPaymentType = deliveryPaymentType;
+	}
+	
+	public boolean isPaidDelivery() {
+		return isPaidDelivery;
+	}
+	
+	public BigDecimal getPriceDelivery() {
+		return priceDelivery;
+	}
+	
+	public GoodsType getGoodsType() {
+		return goodsType;
+	}
+	
+	public DeliveryPaymentType getDeliveryPaymentType() {
+		return deliveryPaymentType;
+	}
+	
 	public long getId() {
 		return id;
 	}

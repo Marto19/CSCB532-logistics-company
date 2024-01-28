@@ -5,6 +5,7 @@ import com.logistics.logisticsCompany.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,8 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer.getFirstName() == null || customer.getFirstName().isEmpty()) {
             throw new IllegalArgumentException("First name must not be null or empty");
         }
+        //works perfectly - balance 0.00
+        customer.setBalance(BigDecimal.ZERO); // Set balance explicitly to zero
         customerRepository.save(customer);
     }
 

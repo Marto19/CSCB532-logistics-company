@@ -51,15 +51,14 @@ public class Customer {
     
     
     //Constructors
-    
+    public Customer(){
+    }
     public Customer(String firstName, String secondName, String phone) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.phone = phone;
-        this.balance = BigDecimal.ZERO;
     }
-
-    public Customer(){}
+    
     
     //Getters and setters
     
