@@ -71,6 +71,17 @@ public class ShipmentController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ShipmentDTO> getShipmentsById(@PathVariable(value = "id") long shipmentId) {
+        if (!shipmentRepository.existsById(shipmentId)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Shipment shipment = shipmentService.getShipmentById(shipmentId);
+        ShipmentDTO shipmentDTO = convertToDTO(shipment);
+
+        return new ResponseEntity<>(shipmentDTO, HttpStatus.OK);
+    }
+
     private ShipmentDTO convertToDTO(Shipment shipment) {
         return new ShipmentDTO(
                 shipment.getId(),

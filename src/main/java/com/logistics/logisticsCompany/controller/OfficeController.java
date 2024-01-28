@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -53,6 +54,24 @@ public class OfficeController {
 
         return officeDTOs;
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OfficeDTO> getOfficeById(@PathVariable(value = "id") long officeId) {
+        Optional<Office> office = officeRepository.getOfficeById(officeId);
+
+        return office.map(o -> new ResponseEntity<>(
+                new OfficeDTO(
+                        o.getId(),
+                        o.getOfficeName(),
+                        o.getCity(),
+                        o.getPostcode(),
+                        o.getAddress()
+                ),
+                HttpStatus.OK
+        )).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<String> updateOffice(@PathVariable(value = "id") long officeId, @RequestBody Office updatedOffice) {
         if(!officeRepository.existsById(officeId)){
