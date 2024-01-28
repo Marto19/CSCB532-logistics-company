@@ -116,8 +116,19 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public void updateUser(@PathVariable(value = "id") long userId, @RequestBody User updatedUser){
-        userServiceImpl.updateUser(userId, updatedUser);
+    public ResponseEntity<String> updateUser(@PathVariable(value = "id") long userId, @RequestBody User updatedUser){
+        if(!userRepository.existsById(userId)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User with the provided id doesn't exist");
+        }
+        try {
+            userServiceImpl.updateUser(userId, updatedUser);
+            return ResponseEntity.ok("Shipment updated successfully");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

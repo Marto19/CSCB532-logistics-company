@@ -9,6 +9,7 @@ import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
+import com.logistics.logisticsCompany.repository.ShipmentRepository;
 import com.logistics.logisticsCompany.service.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,12 @@ public class ShipmentController {
 
     private final ShipmentService shipmentService;
 
+    private final ShipmentRepository shipmentRepository;
+
     @Autowired
-    public ShipmentController(ShipmentService shipmentService) {
+    public ShipmentController(ShipmentService shipmentService, ShipmentRepository shipmentRepository) {
         this.shipmentService = shipmentService;
+        this.shipmentRepository = shipmentRepository;
     }
 
     @PostMapping("/sent")
@@ -118,6 +122,10 @@ public class ShipmentController {
     @PutMapping("/{id}")    //TODO:FIX THIS "MISMATCH IN ID'S"
     public ResponseEntity<String> updateShipment(@PathVariable(value = "id") long shipmentId,
                                                  @RequestBody Shipment updatedShipment) {
+        if(!shipmentRepository.existsById(shipmentId)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Company with the provided id doesn't exist");
+        }
         try {
             shipmentService.updateShipment(shipmentId, updatedShipment);
             return ResponseEntity.ok("Shipment updated successfully");

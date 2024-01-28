@@ -1,6 +1,7 @@
 package com.logistics.logisticsCompany.controller;
 
 import com.logistics.logisticsCompany.DTO.OfficeDTO;
+import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.repository.OfficeRepository;
 import com.logistics.logisticsCompany.service.OfficeServiceImpl;
@@ -53,8 +54,19 @@ public class OfficeController {
         return officeDTOs;
     }
     @PutMapping("/{id}")
-    public void updateOffice(@PathVariable(value = "id") long officeId, @RequestBody Office updatedOffice) {
-        officeService.updateOffice(officeId, updatedOffice);
+    public ResponseEntity<String> updateOffice(@PathVariable(value = "id") long officeId, @RequestBody Office updatedOffice) {
+        if(!officeRepository.existsById(officeId)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Company with the provided id doesn't exist");
+        }
+        try {
+            officeService.updateOffice(officeId, updatedOffice);
+            return ResponseEntity.ok("Office updated successfully");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

@@ -53,10 +53,12 @@ public class CustomerController {
 
     @PutMapping("/{customerId}")
     public ResponseEntity<?> updateCustomer(@PathVariable Optional<Long> customerId, @RequestBody Customer updatedCustomer) {
+        if(!customerRepository.existsById(customerId)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Customer with the provided id doesn't exist");
+        }
         if (customerId.isPresent()) {
             Long id = customerId.get();
-            // Use 'id' for further processing
-            // Your code here, for example, updating the customer with the provided 'id'
             updatedCustomer.setId(id);
             customerService.updateCustomer(id, updatedCustomer);
             return ResponseEntity.ok("Customer updated successfully");
@@ -71,7 +73,7 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable(value = "id") long customerId) {
         if (!customerRepository.existsById(customerId)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Customer with the provided id doesn't exist");
         }
         customerService.deleteCustomer(customerId);

@@ -49,6 +49,10 @@ public class LogisticsCompanyController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateLogisticsCompany(@PathVariable(value = "id") long companyId,
                                                          @RequestBody LogisticsCompany updatedCompany) {
+        if(!logisticsCompanyRepository.existsById(companyId)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Company with the provided id doesn't exist");
+        }
         try {
             logisticsCompanyService.updateLogisticsCompany(companyId, updatedCompany);
             return ResponseEntity.ok("LogisticsCompany updated successfully");
