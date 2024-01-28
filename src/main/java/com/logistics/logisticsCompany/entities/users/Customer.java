@@ -27,7 +27,7 @@ public class Customer {
     @Column(name = "phone", nullable = false, length = 13)
     private String phone;
     
-    @Column(name = "balance", nullable = false, precision = 19, scale = 4)
+    @Column(name = "balance", nullable = false, precision = 19, scale = 2)
     private BigDecimal balance;
 
     // Many-to-One relationship with User
@@ -58,6 +58,8 @@ public class Customer {
         this.phone = phone;
         this.balance = BigDecimal.ZERO;
     }
+
+    public Customer(){}
     
     //Getters and setters
     

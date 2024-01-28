@@ -24,7 +24,6 @@ public class EntityDtoMapper {
 		dto.setReceiverOffice(convertToOfficeDTO(shipment.getReceiverOffice()));
 		dto.setReceiverCustomer(convertToCustomerDTO(shipment.getReceiverCustomer()));
 		dto.setReceiverEmployee(convertToEmployeeDTO(shipment.getReceiverEmployee()));
-		// Add other fields if necessary
 		return dto;
 	}
 	
