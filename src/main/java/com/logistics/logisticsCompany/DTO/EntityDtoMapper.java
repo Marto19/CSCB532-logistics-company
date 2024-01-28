@@ -1,6 +1,8 @@
 package com.logistics.logisticsCompany.DTO;
 
 
+import com.logistics.logisticsCompany.entities.enums.DeliveryPaymentType;
+import com.logistics.logisticsCompany.entities.enums.ShipmentStatus;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.entities.users.Customer;
@@ -55,6 +57,20 @@ public class EntityDtoMapper {
 		dto.setId(employee.getId());
 		dto.setFirstName(employee.getFirstName());
 		dto.setSecondName(employee.getSecondName());
+		return dto;
+	}
+	
+	public DeliveryPaymentTypeDTO convertToDeliveryPaymentTypeDTO(DeliveryPaymentType deliveryPaymentType) {
+		DeliveryPaymentTypeDTO dto = new DeliveryPaymentTypeDTO();
+		dto.setId(deliveryPaymentType.getId());
+		dto.setPaymentType(deliveryPaymentType.getPaymentType());
+		return dto;
+	}
+	
+	public ShipmentStatusDTO convertToShipmentStatusDTO(ShipmentStatus shipmentStatus) {
+		ShipmentStatusDTO dto = new ShipmentStatusDTO();
+		dto.setId(shipmentStatus.getId());
+		dto.setShipmentStatus(shipmentStatus.getShipmentStatus());
 		return dto;
 	}
 	
