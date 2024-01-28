@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     boolean existsByFirstName(String firstName);
     boolean existsBySecondName(String secondName);
+    boolean existsById(long id);
 
 
 }

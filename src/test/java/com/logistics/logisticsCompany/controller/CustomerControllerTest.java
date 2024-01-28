@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.controller;
 
+import com.logistics.logisticsCompany.DTO.CustomerDTO;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.repository.CustomerRepository;
 import com.logistics.logisticsCompany.service.CustomerService;
@@ -58,7 +59,7 @@ class CustomerControllerTest {
     @Test
     void getAllCustomers() {
         //Retrieves all customers
-        List<Customer> customers = customerController.getAllCustomers();
+        List<CustomerDTO> customers = customerController.getAllCustomers();
         
         //Checks if the retrieved customers list contains the saved customers
         assertEquals(customers.get(0).getPhone(), customer1.getPhone());

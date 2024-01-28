@@ -13,4 +13,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     
     // Retrieve a customer by phone number
     Optional<Customer> findByPhone(String phone);
+
+    boolean existsById(long id);
 }

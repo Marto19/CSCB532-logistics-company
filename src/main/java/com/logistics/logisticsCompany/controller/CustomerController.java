@@ -29,13 +29,11 @@ public class CustomerController {
     public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
         // Check if a customer with the given phone already exists
         if (customerService.existsByPhone(customer.getPhone())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Customer with the provided phone number already exists");
         }
-
         // If the customer with the phone number doesn't exist, proceed with saving the customer
         customerService.createCustomer(customer);
-
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Customer created successfully");
     }
@@ -72,6 +70,10 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable(value = "id") long customerId) {
+        if (!customerRepository.existsById(customerId)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Customer with the provided id doesn't exist");
+        }
         customerService.deleteCustomer(customerId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Customer deleted successfully");

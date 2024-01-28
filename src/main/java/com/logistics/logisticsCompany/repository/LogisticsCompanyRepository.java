@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LogisticsCompanyRepository extends JpaRepository<LogisticsCompany, Long> {
     boolean existsByName(String name);
-
+    boolean existsById(long id);
 }

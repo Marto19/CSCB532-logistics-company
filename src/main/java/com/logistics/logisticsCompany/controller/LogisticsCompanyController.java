@@ -16,10 +16,12 @@ import java.util.List;
 public class LogisticsCompanyController {
 
     private final LogisticsCompanyService logisticsCompanyService;
+    private final LogisticsCompanyRepository logisticsCompanyRepository;
 
     @Autowired
-    public LogisticsCompanyController(LogisticsCompanyService logisticsCompanyService, com.logistics.logisticsCompany.repository.LogisticsCompanyRepository logisticsCompanyRepository) {
+    public LogisticsCompanyController(LogisticsCompanyService logisticsCompanyService, com.logistics.logisticsCompany.repository.LogisticsCompanyRepository logisticsCompanyRepository1, com.logistics.logisticsCompany.repository.LogisticsCompanyRepository logisticsCompanyRepository) {
         this.logisticsCompanyService = logisticsCompanyService;
+        this.logisticsCompanyRepository = logisticsCompanyRepository1;
         LogisticsCompanyRepository = logisticsCompanyRepository;
     }
 
@@ -59,6 +61,10 @@ public class LogisticsCompanyController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLogisticsCompany(@PathVariable(value = "id") long companyId) {
+        if (!logisticsCompanyRepository.existsById(companyId)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Company with the provided id doesn't exist");
+        }
         try {
             logisticsCompanyService.deleteLogisticsCompany(companyId);
             return ResponseEntity.ok("LogisticsCompany deleted successfully");

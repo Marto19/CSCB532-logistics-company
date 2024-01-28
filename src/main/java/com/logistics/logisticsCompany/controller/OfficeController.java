@@ -58,7 +58,12 @@ public class OfficeController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteOffice(@PathVariable(value = "id") long officeId) {
+    public ResponseEntity<String> deleteOffice(@PathVariable(value = "id") long officeId) {
+        if (!officeRepository.existsById(officeId)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Customer with the provided id doesn't exist");
+        }
         officeService.deleteOffice(officeId);
+        return ResponseEntity.ok("Office with id = " + officeId + " deleted successfully");
     }
 }

@@ -77,6 +77,9 @@ public class EmployeeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable(value = "id") long employeeId) {
+        if(!employeeRepository.existsById(employeeId)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee with the provided id doesn't exist");
+        }
         try {
             employeeService.deleteEmployee(employeeId);
             return ResponseEntity.ok("Employee deleted successfully");
