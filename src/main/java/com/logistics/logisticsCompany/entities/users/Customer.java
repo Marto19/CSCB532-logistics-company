@@ -5,6 +5,7 @@ import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.entities.orders.ShipmentStatusHistory;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +27,9 @@ public class Customer {
     @Column(name = "phone", nullable = false, length = 13)
     private String phone;
     
+    @Column(name = "balance", nullable = false, precision = 19, scale = 4)
+    private BigDecimal balance;
+
     // Many-to-One relationship with User
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -47,14 +51,16 @@ public class Customer {
     
     
     //Constructors
-    public Customer(){
-    }
-
+    
     public Customer(String firstName, String secondName, String phone) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.phone = phone;
+        this.balance = BigDecimal.ZERO;
     }
+    
+    //Getters and setters
+    
     
     public void setId(long id) {
         this.id = id;
@@ -70,6 +76,10 @@ public class Customer {
     
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+    
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
     
     public void setUsers(User users) {
@@ -88,6 +98,10 @@ public class Customer {
         this.receivedShipments = receivedShipments;
     }
     
+    public void setOrderHistorySet(Set<ShipmentStatusHistory> orderHistorySet) {
+        this.orderHistorySet = orderHistorySet;
+    }
+    
     public long getId() {
         return id;
     }
@@ -102,6 +116,10 @@ public class Customer {
     
     public String getPhone() {
         return phone;
+    }
+    
+    public BigDecimal getBalance() {
+        return balance;
     }
     
     public User getUsers() {
@@ -120,6 +138,10 @@ public class Customer {
         return receivedShipments;
     }
     
+    public Set<ShipmentStatusHistory> getOrderHistorySet() {
+        return orderHistorySet;
+    }
+    
     @Override
     public String toString() {
         return "Customer{" +
@@ -127,8 +149,12 @@ public class Customer {
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
                 ", phone='" + phone + '\'' +
+                ", balance=" + balance +
+                ", users=" + users +
+                ", lastOffice=" + lastOffice +
+                ", sentShipments=" + sentShipments +
+                ", receivedShipments=" + receivedShipments +
+                ", orderHistorySet=" + orderHistorySet +
                 '}';
     }
-    
-
 }

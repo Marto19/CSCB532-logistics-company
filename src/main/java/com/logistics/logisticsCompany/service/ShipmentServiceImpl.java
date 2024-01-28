@@ -1,24 +1,28 @@
 
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.DTO.*;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.repository.ShipmentRepository;
-import com.logistics.logisticsCompany.service.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
 
     private final ShipmentRepository shipmentRepository;
-
+    private final EntityDtoMapper entityDtoMapper;
+    
     @Autowired
-    public ShipmentServiceImpl(ShipmentRepository shipmentRepository) {
+    public ShipmentServiceImpl(ShipmentRepository shipmentRepository, EntityDtoMapper entityDtoMapper) {
         this.shipmentRepository = shipmentRepository;
+        this.entityDtoMapper = entityDtoMapper;
     }
 
     @Override
@@ -100,6 +104,44 @@ public class ShipmentServiceImpl implements ShipmentService {
             throw new EntityNotFoundException("Shipment not found with id: " + shipmentId);
         }
     }
-
-
+    
+    
+    //5.d.------------------------
+    @Override
+    public List<Shipment> getAllSentShipmentsByEmployeeId(Long employeeId) {
+        return shipmentRepository.findBySenderEmployeeId(employeeId);
+    }
+    @Override
+    public List<Shipment> getAllReceivedShipmentsByEmployeeId(Long employeeId) {
+        return shipmentRepository.findByReceiverEmployeeId(employeeId);
+    }
+    
+    //5.e.------------------------
+    public List<ShipmentDTO> getShipmentsSentButNotReceived() {
+        String sentStatus = "SENT";
+        List<String> notReceivedStatuses = Arrays.asList("RECEIVED", "DELIVERED");
+        List<Shipment> shipments = shipmentRepository.findShipmentsSentButNotReceived(sentStatus, notReceivedStatuses);
+        return shipments.stream()
+                .map(entityDtoMapper::convertToShipmentDTO)
+                .collect(Collectors.toList());
+    }
+    
+    //5.f.------------------------
+    @Override
+    public List<ShipmentDTO> getShipmentsBySenderCustomerId(Long customerId) {
+        List<Shipment> shipments = shipmentRepository.findBySenderCustomerId(customerId);
+        return shipments.stream()
+                .map(entityDtoMapper::convertToShipmentDTO)
+                .collect(Collectors.toList());
+    }
+    
+    //5.g.------------------------
+    @Override
+    public List<ShipmentDTO> getShipmentsByReceiverCustomerId(Long customerId) {
+        List<Shipment> shipments = shipmentRepository.findByReceiverCustomerId(customerId);
+        return shipments.stream()
+                .map(entityDtoMapper::convertToShipmentDTO)
+                .collect(Collectors.toList());
+    }
+    
 }

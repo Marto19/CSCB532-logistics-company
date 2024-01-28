@@ -10,7 +10,8 @@ public class EmployeeDTO {
     private String currentOfficeName;
 
     // Other fields if needed
-
+    
+    public EmployeeDTO() {}
     public EmployeeDTO(Employee employee) {
         this.id = employee.getId();
         this.firstName = employee.getFirstName();

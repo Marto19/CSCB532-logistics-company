@@ -1,7 +1,7 @@
 package com.logistics.logisticsCompany.entities.orders;
 
 
-import com.logistics.logisticsCompany.entities.enums.GoodsStatus;
+import com.logistics.logisticsCompany.entities.enums.ShipmentStatus;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import jakarta.persistence.*;
 
@@ -29,18 +29,13 @@ public class ShipmentStatusHistory {
 	@ManyToOne
 	@JoinColumn(name = "shipment_id")
 	private Shipment shipment;
-
-//	@OneToMany(mappedBy = "orderHistory")
-//	private List<Goods> goodsList;
-
+	
 	@ManyToOne
 	private Customer customer;
-
-//	@OneToOne
-//	private GoodsStatus goodsStatus;
-
+	
 	@ManyToOne
-	private GoodsStatus goodsStatus;
+	@JoinColumn(name = "shipment_status_id")
+	private ShipmentStatus shipmentStatus;
 
 	//Constructors
 	public ShipmentStatusHistory(){

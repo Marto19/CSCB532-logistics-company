@@ -1,9 +1,6 @@
 package com.logistics.logisticsCompany.controller;
 
-import com.logistics.logisticsCompany.DTO.CustomerDTO;
-import com.logistics.logisticsCompany.DTO.EmployeeDTO;
-import com.logistics.logisticsCompany.DTO.OfficeDTO;
-import com.logistics.logisticsCompany.DTO.ShipmentDTO;
+import com.logistics.logisticsCompany.DTO.*;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
@@ -25,14 +22,16 @@ public class ShipmentController {
 
     private final ShipmentService shipmentService;
 
+    private final EntityDtoMapper entityDtoMapper;
+    
     private final ShipmentRepository shipmentRepository;
-
     @Autowired
-    public ShipmentController(ShipmentService shipmentService, ShipmentRepository shipmentRepository) {
+    public ShipmentController(ShipmentService shipmentService, EntityDtoMapper entityDtoMapper, ShipmentRepository shipmentRepository) {
         this.shipmentService = shipmentService;
+        this.entityDtoMapper = entityDtoMapper;
         this.shipmentRepository = shipmentRepository;
     }
-
+    
     @PostMapping("/sent")
     public ResponseEntity<String> registerSentShipment(@RequestBody Shipment shipment) {
         try {
@@ -62,14 +61,28 @@ public class ShipmentController {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 //        }
 //    }
-
+    
+    //todo marto review this and delete the commented code below it if u accept it.
     @GetMapping
+    public ResponseEntity<List<ShipmentDTO>> getAllRegisteredShipments() {
+        List<Shipment> registeredShipments = shipmentService.getAllShipments();
+        if (registeredShipments.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        List<ShipmentDTO> shipmentDTOs = registeredShipments.stream()
+                .map(entityDtoMapper::convertToShipmentDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(shipmentDTOs, HttpStatus.OK);
+    }
+    /*@GetMapping---------------------------------------------------
     public List<ShipmentDTO> getAllShipments() {
         List<Shipment> shipments = shipmentService.getAllShipments();
         return shipments.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
-    }
+    }*///*COMMENTED CODE----------------------------------------------
+    
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ShipmentDTO> getShipmentsById(@PathVariable(value = "id") long shipmentId) {
@@ -77,59 +90,13 @@ public class ShipmentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Shipment shipment = shipmentService.getShipmentById(shipmentId);
-        ShipmentDTO shipmentDTO = convertToDTO(shipment);
+        ShipmentDTO shipmentDTO = entityDtoMapper.convertToShipmentDTO(shipment);
 
         return new ResponseEntity<>(shipmentDTO, HttpStatus.OK);
     }
-
-    private ShipmentDTO convertToDTO(Shipment shipment) {
-        return new ShipmentDTO(
-                shipment.getId(),
-                shipment.getShipmentDate(),
-                shipment.getWeight(),
-                shipment.getPrice(),
-                shipment.isPaid(),
-                shipment.getReceivedDate(),
-                convertToOfficeDTO(shipment.getSenderOffice()),
-                convertToCustomerDTO(shipment.getSenderCustomer()),
-                convertToEmployeeDTO(shipment.getSenderEmployee()),
-                convertToOfficeDTO(shipment.getReceiverOffice()),
-                convertToCustomerDTO(shipment.getReceiverCustomer()),
-                convertToEmployeeDTO(shipment.getReceiverEmployee())
-        );
-    }
-
-    private OfficeDTO convertToOfficeDTO(Office office) {
-        return new OfficeDTO(
-                office.getId(),
-                office.getOfficeName(),
-                office.getCity(),
-                office.getPostcode(),
-                office.getAddress()
-        );
-    }
-
-    private CustomerDTO convertToCustomerDTO(Customer customer) {
-        return new CustomerDTO(
-                customer.getId(),
-                customer.getFirstName(),
-                customer.getSecondName(),
-                customer.getPhone()
-        );
-    }
-
-    private EmployeeDTO convertToEmployeeDTO(Employee employee) {
-
-        if (employee == null) {
-            return null; // or you can create a default EmployeeDTO or throw an exception
-        }
-        return new EmployeeDTO(
-                employee.getId(),
-                employee.getFirstName(),
-                employee.getSecondName()
-        );
-    }
-
+    
+    
+    
     @PutMapping("/{id}")    //TODO:FIX THIS "MISMATCH IN ID'S"
     public ResponseEntity<String> updateShipment(@PathVariable(value = "id") long shipmentId,
                                                  @RequestBody Shipment updatedShipment) {
@@ -156,4 +123,47 @@ public class ShipmentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Shipment with the provided id doesn't exist");
         }
     }
+    
+    
+    //5.d.------ Get all shipments by customer id
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<ShipmentDTO>> getShipmentsByEmployee(@PathVariable Long employeeId) {
+        List<ShipmentDTO> shipmentDTOs = shipmentService.getAllSentShipmentsByEmployeeId(employeeId)
+                .stream()
+                .map(entityDtoMapper::convertToShipmentDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(shipmentDTOs);
+    }
+    
+    //5.e.------ Get all shipments sent not recieved
+    @GetMapping("/sent-not-received")
+    public ResponseEntity<List<ShipmentDTO>> getShipmentsSentButNotReceived() {
+        List<ShipmentDTO> shipmentDTOs = shipmentService.getShipmentsSentButNotReceived();
+        if (shipmentDTOs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(shipmentDTOs);
+    }
+    
+    //5.f.------ Get all shipments sent of customer by id
+    @GetMapping("/sent-by-client/{clientId}")
+    public ResponseEntity<List<ShipmentDTO>> getShipmentsBySenderCustomerId(@PathVariable Long clientId) {
+        List<ShipmentDTO> shipmentDTOs = shipmentService.getShipmentsBySenderCustomerId(clientId);
+        if (shipmentDTOs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(shipmentDTOs);
+    }
+    
+    //5.g.------ Get all shipments recieved of customer by id
+    @GetMapping("/received-by-client/{clientId}")
+    public ResponseEntity<List<ShipmentDTO>> getShipmentsByReceiverCustomerId(@PathVariable Long clientId) {
+        List<ShipmentDTO> shipmentDTOs = shipmentService.getShipmentsByReceiverCustomerId(clientId);
+        if (shipmentDTOs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(shipmentDTOs);
+    }
+    
+    
 }

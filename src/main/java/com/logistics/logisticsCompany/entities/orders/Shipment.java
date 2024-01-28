@@ -4,6 +4,7 @@ import com.logistics.logisticsCompany.entities.enums.GoodsType;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
+import com.logistics.logisticsCompany.entities.enums.DeliveryPaymentType;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -24,19 +25,25 @@ public class Shipment {
 	private LocalDate shipmentDate;
 
 //	@Column(name = "shipmentstatus", nullable = false)
-//	@Enumerated(EnumType.STRING)	//todo
+//	@Enumerated(EnumType.STRING)	//todo. update 27.01 : new table was created for shipment status (goods status)
 //	private ShipmentStatus shipmentStatus;
 
 	@Column(name = "weight", nullable = false,  precision = 10, scale = 2)
 	private BigDecimal weight;
 
+	@Column(name = "is_paid_delivery", nullable = false)
+	private boolean isPaidDelivery;
+	
+	@Column(name = "price_delivery", nullable = false, precision= 10, scale = 2)
+	private BigDecimal priceDelivery;
+	
 	@Column(name = "price", nullable = false,precision= 10, scale = 2)
 	private BigDecimal price;
 
 	@Column(name = "is_paid", nullable = false)
 	private boolean isPaid;
 
-	@Column(name = "receivedDate", nullable = true)
+	@Column(name = "received_date", nullable = true)
 	private LocalDate receivedDate;
 
 	/*
@@ -73,12 +80,17 @@ public class Shipment {
 	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
 	//relationship shipment/order_history - 1:n
 	@OneToMany(mappedBy = "shipment")
-
 	private List<ShipmentStatusHistory> statusHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
 
 	@ManyToOne
+	@JoinColumn(name = "goods_type_id", nullable = false)
 	private GoodsType goodsType;
+	
+	@ManyToOne
+	@JoinColumn(name = "delivery_payment_type_id", nullable = false)
+	private DeliveryPaymentType deliveryPaymentType;
 
+	
 	//Constructors
 	public Shipment() {
 	}
