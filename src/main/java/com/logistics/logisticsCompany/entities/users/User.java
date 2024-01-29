@@ -17,7 +17,6 @@ import java.util.Set;
 @Entity
 @Data
 @Table(name = "user")
-@Builder
 public class User implements UserDetails {
 	
 	@Id
@@ -27,7 +26,7 @@ public class User implements UserDetails {
 	@Column(name = "username", unique = true, nullable = false, length = 50)
 	
 	private String username;
-	@Column(name = "password", nullable = false, length = 50)
+	@Column(name = "password", nullable = false, length = 256)
 	private String password;
 
 	
@@ -44,7 +43,7 @@ public class User implements UserDetails {
 
 	//creating relationship between the enum-entity table - user_role and user
 	//lets consider that one user can have many roles and backwards
-	@ManyToMany(mappedBy = "userList", cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "userList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)//TODO: think about changing from EAGER to a DTO
 	private Set<UserRole> userRoleList;
 	
 	public User() {
@@ -53,6 +52,15 @@ public class User implements UserDetails {
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
+	}
+
+	@Builder
+	public User(String username, String password, Set<Employee> employees, Set<Customer> customers, Set<UserRole> userRoleList) {
+		this.username = username;
+		this.password = password;
+		this.employees = employees;
+		this.customers = customers;
+		this.userRoleList = userRoleList;
 	}
 
 
@@ -92,16 +100,33 @@ public class User implements UserDetails {
 		this.username = username;
 	}
 
+//	@Override
+//	public Collection<? extends GrantedAuthority> getAuthorities() {
+//		Set<GrantedAuthority> authorities = new HashSet<>();
+//
+//		for (UserRole userRole : userRoleList) {
+//			authorities.add(new SimpleGrantedAuthority(userRole.getUserRole()));
+//		}
+//
+//		return authorities;
+//	}
+
+
+	//modify your getAuthorities method in the User class to initialize the userRoleList
+	// collection if it's not already initialized
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authorities = new HashSet<>();
 
-		for (UserRole userRole : userRoleList) {
-			authorities.add(new SimpleGrantedAuthority(userRole.getUserRole()));
+		if (userRoleList != null) {
+			for (UserRole userRole : userRoleList) {
+				authorities.add(new SimpleGrantedAuthority(userRole.getUserRole()));
+			}
 		}
 
 		return authorities;
 	}
+
 
 
 	public String getPassword() {

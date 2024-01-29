@@ -5,6 +5,8 @@ import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.UserRepository;
 import com.logistics.logisticsCompany.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ public class AuthenticationService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;  //todo: add a bean -fixed - the bean wasn't public in ApplicationConfig
     private  final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     private final UserRoleRepository userRoleRepository;
 
@@ -34,7 +37,17 @@ public class AuthenticationService {
         
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        return null;
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {     //login authentication
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+        var user = repository.findByUsername(request.getUsername());
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }

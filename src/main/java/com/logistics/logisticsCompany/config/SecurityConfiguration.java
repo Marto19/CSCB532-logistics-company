@@ -22,11 +22,11 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{ //1:55:40
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register")   //todo: change whitelist pages
+                        .requestMatchers( "/api/v1/auth/**")   //todo: change whitelist pages
                         .permitAll()
                         .anyRequest()
                         .authenticated()
