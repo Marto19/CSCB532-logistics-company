@@ -26,7 +26,7 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/token/**")   //todo: change whitelist pages
+                        .requestMatchers("/login", "/register")   //todo: change whitelist pages
                         .permitAll()
                         .anyRequest()
                         .authenticated()
