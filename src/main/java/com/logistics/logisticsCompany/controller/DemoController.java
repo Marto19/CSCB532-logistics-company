@@ -21,3 +21,5 @@ public class DemoController {
 //TODO: hide the endpoints properly and learn how to pass the authentication token to the other pages
 //i suppose that once we've generated one, its available for 24 hours, so we can pass it to the other requests
 //which will allow them to be executed
+
+//this controller have the bearer token which is generated when loggin, we nee to see how to pass it to the other requests
