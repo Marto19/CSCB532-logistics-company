@@ -9,7 +9,9 @@
 </head>
 <body class="container mt-5">
 <div class="row justify-content-md-center">
-    <div class="col-md-6">
+    <div class="col-md-6" style="max-width: 300px; text-align: center;">
+        <h1>Sing Up</h1>
+        <br>
         <form th:action="@{/api/v1/auth/register}" method="post" onsubmit="return registerUser()">
             <div class="form-group">
                 <label for="username">Username:</label>
