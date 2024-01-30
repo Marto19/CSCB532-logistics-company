@@ -72,8 +72,9 @@ public class ShipmentServiceImpl implements ShipmentService {
     *SenderEmployee
     *ReceiverCustomer
     *
-    * */
+    * --------------CREATING SHIPMENT LOGIC --------------*/
     @Override
+    @Transactional
     public Shipment createShipment(ShipmentDTO shipmentDto) {
         Shipment shipment = new Shipment();
         
@@ -139,6 +140,8 @@ public class ShipmentServiceImpl implements ShipmentService {
         return shipment;
     }
     
+    //three variants of "DeliveryPaymentType" - "Cash-On-Delivery", "Paid-Delivery", "Not-Paid-Delivery".
+    //based on logic whether price>0 and isPaidDelivery=true or false we determine the type
     private DeliveryPaymentType determineDeliveryPaymentType(ShipmentDTO shipmentDto) {
         if (shipmentDto.getPrice() != null && shipmentDto.getPrice().compareTo(BigDecimal.ZERO) > 0) {
             // If price is provided and greater than 0, it's "Cash-On-Delivery"
@@ -158,7 +161,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         }
     }
     
-    // Logic to calculate priceDelivery based on weight
+    // logic to calculate priceDelivery based on weight (if weight is null, return 0)
     private BigDecimal calculatePriceDelivery(BigDecimal weight) {
         BigDecimal baseDeliveryPrice = new BigDecimal("5.00"); // Base delivery price
         BigDecimal pricePerKg = new BigDecimal("2.00"); // Price per kilogram
@@ -176,6 +179,8 @@ public class ShipmentServiceImpl implements ShipmentService {
         
         return baseDeliveryPrice;
     }
+    
+    
     
     
     @Override
