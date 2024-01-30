@@ -82,14 +82,22 @@ public class ShipmentServiceImpl implements ShipmentService {
         
         // Set weight
         shipment.setWeight(shipmentDto.getWeight());
+        //set isPaidDelivery
+        shipment.setIsPaidDelivery(shipmentDto.getIsPaidDelivery());
         
-        // Fetch delivery payment type
-        DeliveryPaymentType deliveryPaymentType = deliveryPaymentTypeRepository.findById(shipmentDto.getDeliveryPaymentTypeId())
-                .orElseThrow(() -> new EntityNotFoundException("DeliveryPaymentType not found"));
+        // Calculate priceDelivery based on weight, and set price if entered
+        BigDecimal priceDelivery = calculatePriceDelivery(shipmentDto.getWeight());
+        shipment.setPriceDelivery(priceDelivery);
+        
+        BigDecimal price = (shipmentDto.getPrice() == null) ? BigDecimal.ZERO : shipmentDto.getPrice();
+        shipment.setPrice(price);
+        
+        shipment.setTotalPrice(price.add(priceDelivery));
+        
+        // Determine and set DeliveryPaymentType based on price and isPaidDelivery
+        // Determine and set DeliveryPaymentType based on the flags
+        DeliveryPaymentType deliveryPaymentType = determineDeliveryPaymentType(shipmentDto);
         shipment.setDeliveryPaymentType(deliveryPaymentType);
-        
-        // Set prices and paid statuses based on delivery payment type
-        adjustPricesBasedOnDeliveryPaymentType(shipment, deliveryPaymentType);
         
         // Set sender and receiver customer by phone number
         Customer senderCustomer = customerService.getCustomerByPhoneNumber(shipmentDto.getSenderCustomerPhoneNumber());
@@ -98,10 +106,19 @@ public class ShipmentServiceImpl implements ShipmentService {
         shipment.setReceiverCustomer(receiverCustomer);
         
         // Set sender employee and office from the logged-in employee's information
-        /*Employee senderEmployee = employeeService.getEmployeeById(shipmentDto.getSenderEmployeeId())
+        //this is getting the employee by id from the shipmentDto
+        Employee senderEmployee = employeeService.getEmployeeById(shipmentDto.getSenderEmployeeId())
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with ID: " + shipmentDto.getSenderEmployeeId()));
         shipment.setSenderEmployee(senderEmployee);
-        shipment.setSenderOffice(senderEmployee.getCurrentOffice());*/
+        shipment.setSenderOffice(senderEmployee.getCurrentOffice());
+        
+        //fixme - set receiver employee and office from the logged-in employee's information - waiting for marto to implement authentication
+        //   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //    String currentUsername = authentication.getName();
+        //    Employee senderEmployee = employeeService.getEmployeeByUsername(currentUsername)
+        //            .orElseThrow(() -> new EntityNotFoundException("Employee not found for username: " + currentUsername));
+        //    shipment.setSenderEmployee(senderEmployee);
+        //    shipment.setSenderOffice(senderEmployee.getCurrentOffice());
         
         // Set receiver office
         if (shipmentDto.getReceiverOfficeId() != null) {
@@ -112,6 +129,8 @@ public class ShipmentServiceImpl implements ShipmentService {
             // Handle the case where receiverOfficeId is null
         }
         
+        
+        
         shipmentRepository.save(shipment);
         
         // Create initial shipment status history as 'Registered'
@@ -120,36 +139,22 @@ public class ShipmentServiceImpl implements ShipmentService {
         return shipment;
     }
     
-    private void adjustPricesBasedOnDeliveryPaymentType(Shipment shipment, DeliveryPaymentType deliveryPaymentType) {
-        if (deliveryPaymentType == null || deliveryPaymentType.getPaymentType() == null) {
-            throw new IllegalArgumentException("Invalid or missing delivery payment type");
-
-        }
-        String paymentType = deliveryPaymentType.getPaymentType();
-        switch (paymentType) {
-            case "Cash-On-Delivery":
-                shipment.setIsPaid(false);
-                shipment.setIsPaidDelivery(false);
-                shipment.setPrice(BigDecimal.ZERO);
-                shipment.setPriceDelivery(calculatePriceDelivery(shipment.getWeight()));
-                break;
-            
-            case "Paid-Delivery":
-                shipment.setIsPaid(false);
-                shipment.setIsPaidDelivery(true);
-                shipment.setPrice(BigDecimal.ZERO);
-                shipment.setPriceDelivery(BigDecimal.ZERO);
-                break;
-            
-            case "Not-Paid-Delivery":
-                shipment.setIsPaid(false);
-                shipment.setIsPaidDelivery(false);
-                shipment.setPrice(BigDecimal.ZERO);
-                shipment.setPriceDelivery(calculatePriceDelivery(shipment.getWeight()));
-                break;
-            
-            default:
-                throw new IllegalArgumentException("Unknown delivery payment type: " + deliveryPaymentType.getPaymentType());
+    private DeliveryPaymentType determineDeliveryPaymentType(ShipmentDTO shipmentDto) {
+        if (shipmentDto.getPrice() != null && shipmentDto.getPrice().compareTo(BigDecimal.ZERO) > 0) {
+            // If price is provided and greater than 0, it's "Cash-On-Delivery"
+            return deliveryPaymentTypeRepository
+                    .findByPaymentType("Cash-On-Delivery")
+                    .orElseThrow(() -> new EntityNotFoundException("DeliveryPaymentType 'Cash-On-Delivery' not found"));
+        } else if (shipmentDto.getIsPaidDelivery()) {
+            // If isPaidDelivery is true, it's "Paid-Delivery"
+            return deliveryPaymentTypeRepository
+                    .findByPaymentType("Paid-Delivery")
+                    .orElseThrow(() -> new EntityNotFoundException("DeliveryPaymentType 'Paid-Delivery' not found"));
+        } else {
+            // If isPaidDelivery is false, it's "Not-Paid-Delivery"
+            return deliveryPaymentTypeRepository
+                    .findByPaymentType("Not-Paid-Delivery")
+                    .orElseThrow(() -> new EntityNotFoundException("DeliveryPaymentType 'Not-Paid-Delivery' not found"));
         }
     }
     
@@ -238,7 +243,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         existingShipment.setShipmentDate(updatedShipment.getShipmentDate());
         existingShipment.setWeight(updatedShipment.getWeight());
         existingShipment.setPrice(updatedShipment.getPrice());
-        existingShipment.setIsPaid(updatedShipment.isPaid());
+        existingShipment.setIsPaid(updatedShipment.getIsPaid());
         existingShipment.setReceivedDate(updatedShipment.getReceivedDate());
 
         shipmentRepository.save(existingShipment);

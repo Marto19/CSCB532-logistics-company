@@ -17,10 +17,10 @@ public class EntityDtoMapper {
 		
 		dto.setWeight(shipment.getWeight());
 		dto.setPrice(shipment.getPrice());
-		dto.setIsPaid(shipment.isPaid());
+		dto.setIsPaid(shipment.getIsPaid());
 		dto.setPriceDelivery(shipment.getPriceDelivery());
-		dto.setIsPaidDelivery(shipment.isPaidDelivery());
-		
+		dto.setIsPaidDelivery(shipment.getIsPaidDelivery());
+		dto.setTotalPrice(shipment.getTotalPrice());
 		if (shipment.getSenderCustomer() != null) {
 			dto.setSenderCustomerPhoneNumber(shipment.getSenderCustomer().getPhone());
 		}

@@ -43,6 +43,9 @@ public class Shipment {
 	@Column(name = "is_paid", nullable = false)
 	private boolean isPaid;
 
+	@Column(name = "total_price", nullable = true, precision= 10, scale = 2)
+	private BigDecimal totalPrice;
+	
 	@Column(name = "received_date", nullable = true)
 	private LocalDate receivedDate;
 
@@ -115,7 +118,7 @@ public class Shipment {
 		this.deliveryPaymentType = deliveryPaymentType;
 	}
 	
-	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, BigDecimal priceDelivery, boolean isPaidDelivery, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID, GoodsType goodsType, DeliveryPaymentType deliveryPaymentType) {
+	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, BigDecimal priceDelivery, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID, GoodsType goodsType, DeliveryPaymentType deliveryPaymentType) {
 		this.shipmentDate = shipmentDate;
 		this.weight = weight;
 		this.price = price;
@@ -125,7 +128,7 @@ public class Shipment {
 		this.deliveryPaymentType = deliveryPaymentType;
 		// Initialize other fields as necessary
 	}
-	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID) {
+	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, LocalDate receivedDate) {
 		this.shipmentDate = shipmentDate;
 		this.weight = weight;
 		this.price = price;
@@ -135,7 +138,15 @@ public class Shipment {
 
 	//Getters and Setters
 	
-
+	
+	public BigDecimal getTotalPrice() {
+		return totalPrice;
+	}
+	
+	public void setTotalPrice(BigDecimal totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+	
 	public void setIsPaidDelivery(boolean isPaidDelivery) {
 		this.isPaidDelivery = isPaidDelivery;
 	}
@@ -144,8 +155,8 @@ public class Shipment {
 		this.priceDelivery = priceDelivery;
 	}
 	
-	public void setPaid(boolean paid) {
-		isPaid = paid;
+	public void setIsPaid(boolean isPaid) {
+		this.isPaid = isPaid;
 	}
 	
 	public void setGoodsType(GoodsType goodsType) {
@@ -156,7 +167,7 @@ public class Shipment {
 		this.deliveryPaymentType = deliveryPaymentType;
 	}
 	
-	public boolean isPaidDelivery() {
+	public boolean getIsPaidDelivery() {
 		return isPaidDelivery;
 	}
 	
@@ -204,14 +215,10 @@ public class Shipment {
 		this.price = price;
 	}
 
-	public boolean isPaid() {
+	public boolean getIsPaid() {
 		return isPaid;
 	}
-
-	public void setIsPaid(boolean paid) {
-		isPaid = paid;
-	}
-
+	
 	public LocalDate getReceivedDate() {
 		return receivedDate;
 	}
@@ -284,6 +291,7 @@ public class Shipment {
 				", weight=" + weight +
 				", price=" + price +
 				", isPaid=" + isPaid +
+				", totalPrice=" + totalPrice +
 				", receivedDate=" + receivedDate +
 				", senderOffice=" + senderOffice +
 				", senderCustomer=" + senderCustomer +
@@ -291,6 +299,7 @@ public class Shipment {
 				", receiverOffice=" + receiverOffice +
 				", receiverCustomer=" + receiverCustomer +
 				", receiverEmployee=" + receiverEmployee +
+
 				'}';
 	}
 }
