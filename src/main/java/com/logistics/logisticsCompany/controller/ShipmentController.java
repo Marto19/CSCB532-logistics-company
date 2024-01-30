@@ -32,6 +32,13 @@ public class ShipmentController {
         this.shipmentRepository = shipmentRepository;
     }
     
+    
+    @PostMapping("/create-shipment-beta")//it needs logged employee id
+    public ResponseEntity<Shipment> createShipment(@RequestBody ShipmentDTO shipmentDto) {
+        Shipment shipment = shipmentService.createShipment(shipmentDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(shipment);
+    }
+    
     @PostMapping("/sent")
     public ResponseEntity<String> registerSentShipment(@RequestBody Shipment shipment) {
         try {

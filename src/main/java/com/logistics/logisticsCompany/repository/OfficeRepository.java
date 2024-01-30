@@ -13,7 +13,7 @@ public interface OfficeRepository extends JpaRepository<Office, Integer> {
     boolean existsByAddress(String address);
     boolean existsById(long id);
     Optional<Office> getOfficeById(long id);
-
-
+    
+    Optional<Office> findById(Long id);//i want to use this..
 
 }

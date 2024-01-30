@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
+import com.logistics.logisticsCompany.service.CustomerService;
 @RestController
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
 
     @Autowired
-    private CustomerServiceImpl customerService;
+    private CustomerService customerService;
 
     @Autowired
     private CustomerRepository customerRepository;

@@ -12,7 +12,9 @@ public interface CustomerService {
     List<Customer> getAllCustomers();
 
     Optional<Customer> getCustomerById(long customerId);
-
+    
+    Customer getCustomerByPhoneNumber(String phoneNumber);
+    
     void updateCustomer(long customerId, Customer updatedCustomer);
 
     void deleteCustomer(long customerId);
@@ -20,4 +22,6 @@ public interface CustomerService {
     boolean existsByPhone(String phone);
 
     boolean existsByPhoneAndIdNot(String phone, long customerId);
+    
+    Optional<Customer> findByPhone(String phone);
 }

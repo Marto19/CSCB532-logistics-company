@@ -34,10 +34,10 @@ public class Shipment {
 	@Column(name = "is_paid_delivery", nullable = false)
 	private boolean isPaidDelivery;
 	
-	@Column(name = "price_delivery", nullable = false, precision= 10, scale = 2)
+	@Column(name = "price_delivery", nullable = true, precision= 10, scale = 2)
 	private BigDecimal priceDelivery;
 	
-	@Column(name = "price", nullable = false,precision= 10, scale = 2)
+	@Column(name = "price", nullable = true,precision= 10, scale = 2)
 	private BigDecimal price;
 
 	@Column(name = "is_paid", nullable = false)
@@ -50,15 +50,15 @@ public class Shipment {
 		SENDER RELATIONSHIPS - OFFICE, CUSTOMER, EMPLOYEE
 	*/
 	@ManyToOne
-	@JoinColumn(name = "sender_office_id", nullable = false)
+	@JoinColumn(name = "sender_office_id", nullable = true)
 	private Office senderOffice;
 
 	@ManyToOne
-	@JoinColumn(name = "sender_customer_id", nullable = false)
+	@JoinColumn(name = "sender_customer_id", nullable = true)
 	private Customer senderCustomer;
 
 	@ManyToOne
-	@JoinColumn(name = "sender_Employee_id", nullable = false)
+	@JoinColumn(name = "sender_Employee_id", nullable = true)
 	private Employee senderEmployee;
 
 	/*
@@ -91,9 +91,30 @@ public class Shipment {
 	private DeliveryPaymentType deliveryPaymentType;
 
 	
+	
 	//Constructors
 	public Shipment() {
 	}
+	
+	public Shipment(LocalDate shipmentDate, BigDecimal weight, boolean isPaidDelivery, BigDecimal priceDelivery, BigDecimal price, boolean isPaid, LocalDate receivedDate, Office senderOffice, Customer senderCustomer, Employee senderEmployee, Office receiverOffice, Customer receiverCustomer, Employee receiverEmployee, List<ShipmentStatusHistory> statusHistories, GoodsType goodsType, DeliveryPaymentType deliveryPaymentType) {
+		this.shipmentDate = shipmentDate;
+		this.weight = weight;
+		this.isPaidDelivery = isPaidDelivery;
+		this.priceDelivery = priceDelivery;
+		this.price = price;
+		this.isPaid = isPaid;
+		this.receivedDate = receivedDate;
+		this.senderOffice = senderOffice;
+		this.senderCustomer = senderCustomer;
+		this.senderEmployee = senderEmployee;
+		this.receiverOffice = receiverOffice;
+		this.receiverCustomer = receiverCustomer;
+		this.receiverEmployee = receiverEmployee;
+		this.statusHistories = statusHistories;
+		this.goodsType = goodsType;
+		this.deliveryPaymentType = deliveryPaymentType;
+	}
+	
 	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, BigDecimal priceDelivery, boolean isPaidDelivery, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID, GoodsType goodsType, DeliveryPaymentType deliveryPaymentType) {
 		this.shipmentDate = shipmentDate;
 		this.weight = weight;
@@ -114,8 +135,9 @@ public class Shipment {
 
 	//Getters and Setters
 	
-	public void setPaidDelivery(boolean paidDelivery) {
-		isPaidDelivery = paidDelivery;
+
+	public void setIsPaidDelivery(boolean isPaidDelivery) {
+		this.isPaidDelivery = isPaidDelivery;
 	}
 	
 	public void setPriceDelivery(BigDecimal priceDelivery) {

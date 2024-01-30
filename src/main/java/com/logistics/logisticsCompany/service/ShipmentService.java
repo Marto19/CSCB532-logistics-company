@@ -2,10 +2,14 @@ package com.logistics.logisticsCompany.service;
 
 import com.logistics.logisticsCompany.DTO.ShipmentDTO;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface ShipmentService {
+    @Transactional
+    Shipment createShipment(ShipmentDTO shipmentDto);
+    
     void registerSentShipment(Shipment shipment);
     void registerReceivedShipment(Shipment shipment);
 //    void createShipment(Shipment shipment);

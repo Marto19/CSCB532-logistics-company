@@ -4,6 +4,8 @@ import com.logistics.logisticsCompany.entities.enums.ShipmentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ShipmentStatusRepository extends JpaRepository<ShipmentStatus, Long> {
 	
@@ -11,4 +13,8 @@ public interface ShipmentStatusRepository extends JpaRepository<ShipmentStatus, 
 	
 	
 	//not sure if this is needed
-	boolean existsByShipmentStatusOrId(String shipmentStatus, Long id);}
+	boolean existsByShipmentStatusOrId(String shipmentStatus, Long id);
+
+	Optional<ShipmentStatus> findByShipmentStatus(String statusName);
+
+}

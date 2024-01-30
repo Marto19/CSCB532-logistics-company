@@ -24,8 +24,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '3.2.1'
-
-
 //	//configuring springWebSecurity
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 ////  Temporary explicit version to fix Thymeleaf bug

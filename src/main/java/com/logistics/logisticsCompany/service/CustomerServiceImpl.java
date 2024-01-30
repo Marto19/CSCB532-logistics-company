@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +9,16 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-
+import com.logistics.logisticsCompany.service.CustomerServiceImpl;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+    private final CustomerRepository customerRepository;
+    
     @Autowired
-    private CustomerRepository customerRepository;
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
     
     @Override
     public void createCustomer(Customer customer) {
@@ -35,7 +40,12 @@ public class CustomerServiceImpl implements CustomerService {
     public Optional<Customer> getCustomerById(long customerId) {
         return customerRepository.findById(customerId);
     }
-
+    
+    @Override
+    public Customer getCustomerByPhoneNumber(String phoneNumber) {
+        return customerRepository.findByPhone(phoneNumber)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found with phone number: " + phoneNumber));
+    }
     @Override
     public void updateCustomer(long customerId, Customer updatedCustomer) {
         Customer existingCustomer = customerRepository.findById(customerId).orElse(null);
@@ -65,5 +75,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public boolean existsByPhoneAndIdNot(String phone, long customerId) {
         return customerRepository.existsByPhoneAndIdNot(phone, customerId);
+    }
+    
+    @Override
+    public Optional<Customer> findByPhone(String phone) {
+        return customerRepository.findByPhone(phone);
     }
 }

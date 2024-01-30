@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OfficeServiceImpl implements OfficeService {
@@ -44,5 +45,10 @@ public class OfficeServiceImpl implements OfficeService {
             // Handle case where the office with the given ID does not exist
             // TODO: ADD CUSTOM EXCEPTION
         }
+    }
+    
+    @Override
+    public Optional<Office> getOfficeById(Long id) {
+        return officeRepository.findById(id);
     }
 }

@@ -14,18 +14,31 @@ public class EntityDtoMapper {
 	
 	public ShipmentDTO convertToShipmentDTO(Shipment shipment) {
 		ShipmentDTO dto = new ShipmentDTO();
-		dto.setId(shipment.getId());
-		dto.setShipmentDate(shipment.getShipmentDate());
+		
 		dto.setWeight(shipment.getWeight());
 		dto.setPrice(shipment.getPrice());
 		dto.setIsPaid(shipment.isPaid());
-		dto.setReceivedDate(shipment.getReceivedDate());
-		dto.setSenderOffice(convertToOfficeDTO(shipment.getSenderOffice()));
-		dto.setSenderCustomer(convertToCustomerDTO(shipment.getSenderCustomer()));
-		dto.setSenderEmployee(convertToEmployeeDTO(shipment.getSenderEmployee()));
-		dto.setReceiverOffice(convertToOfficeDTO(shipment.getReceiverOffice()));
-		dto.setReceiverCustomer(convertToCustomerDTO(shipment.getReceiverCustomer()));
-		dto.setReceiverEmployee(convertToEmployeeDTO(shipment.getReceiverEmployee()));
+		dto.setPriceDelivery(shipment.getPriceDelivery());
+		dto.setIsPaidDelivery(shipment.isPaidDelivery());
+		
+		// Assuming you have a method in Customer entity to get phone number
+		if (shipment.getSenderCustomer() != null) {
+			dto.setSenderCustomerPhoneNumber(shipment.getSenderCustomer().getPhone());
+		}
+		if (shipment.getReceiverCustomer() != null) {
+			dto.setReceiverCustomerPhoneNumber(shipment.getReceiverCustomer().getPhone());
+		}
+		
+		if (shipment.getSenderEmployee() != null) {
+			dto.setSenderEmployeeId(shipment.getSenderEmployee().getId());
+		}
+		if (shipment.getReceiverEmployee() != null) {
+			dto.setReceiverEmployeeId(shipment.getReceiverEmployee().getId());
+		}
+		if (shipment.getDeliveryPaymentType() != null) {
+			dto.setDeliveryPaymentTypeId(shipment.getDeliveryPaymentType().getId());
+		}
+		
 		return dto;
 	}
 	
