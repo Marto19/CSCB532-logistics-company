@@ -21,7 +21,6 @@ public class EntityDtoMapper {
 		dto.setPriceDelivery(shipment.getPriceDelivery());
 		dto.setIsPaidDelivery(shipment.isPaidDelivery());
 		
-		// Assuming you have a method in Customer entity to get phone number
 		if (shipment.getSenderCustomer() != null) {
 			dto.setSenderCustomerPhoneNumber(shipment.getSenderCustomer().getPhone());
 		}
@@ -37,6 +36,10 @@ public class EntityDtoMapper {
 		}
 		if (shipment.getDeliveryPaymentType() != null) {
 			dto.setDeliveryPaymentTypeId(shipment.getDeliveryPaymentType().getId());
+		}
+		
+		if (shipment.getReceiverOffice() != null) {
+			dto.setReceiverOfficeId(shipment.getReceiverOffice().getId());
 		}
 		
 		return dto;

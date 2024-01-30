@@ -98,10 +98,10 @@ public class ShipmentServiceImpl implements ShipmentService {
         shipment.setReceiverCustomer(receiverCustomer);
         
         // Set sender employee and office from the logged-in employee's information
-        Employee senderEmployee = employeeService.getEmployeeById(shipmentDto.getSenderEmployeeId())
+        /*Employee senderEmployee = employeeService.getEmployeeById(shipmentDto.getSenderEmployeeId())
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with ID: " + shipmentDto.getSenderEmployeeId()));
         shipment.setSenderEmployee(senderEmployee);
-        shipment.setSenderOffice(senderEmployee.getCurrentOffice());
+        shipment.setSenderOffice(senderEmployee.getCurrentOffice());*/
         
         // Set receiver office
         if (shipmentDto.getReceiverOfficeId() != null) {
@@ -301,7 +301,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         statusHistory.setUpdateDate(LocalDateTime.now());
         
         // Fetch the 'Registered' status from the repository
-        ShipmentStatus registeredStatus = shipmentStatusRepository.findByShipmentStatus("Registered")
+        ShipmentStatus registeredStatus = shipmentStatusRepository.findByShipmentStatus("REGISTERED")
                 .orElseThrow(() -> new EntityNotFoundException("ShipmentStatus 'Registered' not found"));
         
         // Set the fetched status in the status history

@@ -47,13 +47,16 @@ public class ShipmentDTO {
     }
     
     // Constructor with necessary fields
-    public ShipmentDTO(BigDecimal weight, String senderCustomerPhoneNumber, String receiverCustomerPhoneNumber, Long senderEmployeeId, Long deliveryPaymentTypeId, Long receiverOfficeId) {
+    public ShipmentDTO(BigDecimal weight, String senderCustomerPhoneNumber, String receiverCustomerPhoneNumber, Long senderEmployeeId, Long deliveryPaymentTypeId, Long receiverOfficeId, BigDecimal price, boolean isPaid, BigDecimal priceDelivery, boolean isPaidDelivery, Long receiverEmployeeId) {
         this.weight = weight;
         this.senderCustomerPhoneNumber = senderCustomerPhoneNumber;
         this.receiverCustomerPhoneNumber = receiverCustomerPhoneNumber;
         this.senderEmployeeId = senderEmployeeId;
         this.deliveryPaymentTypeId = deliveryPaymentTypeId;
         this.receiverOfficeId = receiverOfficeId;
+        this.price = price;
+        this.isPaid = isPaid;
+        this.priceDelivery = priceDelivery;
     }
     
     public void setReceiverOfficeId(Long receiverOfficeId) {
@@ -84,8 +87,28 @@ public class ShipmentDTO {
         this.isPaidDelivery = isPaidDelivery;
     }
     
+    public void setSenderCustomerPhoneNumber(String senderCustomerPhoneNumber) {
+        this.senderCustomerPhoneNumber = senderCustomerPhoneNumber;
+    }
+    
+    public void setReceiverCustomerPhoneNumber(String receiverCustomerPhoneNumber) {
+        this.receiverCustomerPhoneNumber = receiverCustomerPhoneNumber;
+    }
+    
+    public void setSenderEmployeeId(Long senderEmployeeId) {
+        this.senderEmployeeId = senderEmployeeId;
+    }
+    
     public void setReceiverEmployeeId(Long receiverEmployeeId) {
         this.receiverEmployeeId = receiverEmployeeId;
+    }
+    
+    public void setDeliveryPaymentTypeId(Long deliveryPaymentTypeId) {
+        this.deliveryPaymentTypeId = deliveryPaymentTypeId;
+    }
+    
+    public BigDecimal getWeight() {
+        return weight;
     }
     
     public BigDecimal getPrice() {
@@ -104,30 +127,6 @@ public class ShipmentDTO {
         return isPaidDelivery;
     }
     
-    public Long getReceiverEmployeeId() {
-        return receiverEmployeeId;
-    }
-    
-    public void setSenderCustomerPhoneNumber(String senderCustomerPhoneNumber) {
-        this.senderCustomerPhoneNumber = senderCustomerPhoneNumber;
-    }
-    
-    public void setReceiverCustomerPhoneNumber(String receiverCustomerPhoneNumber) {
-        this.receiverCustomerPhoneNumber = receiverCustomerPhoneNumber;
-    }
-    
-    public void setSenderEmployeeId(Long senderEmployeeId) {
-        this.senderEmployeeId = senderEmployeeId;
-    }
-    
-    public void setDeliveryPaymentTypeId(Long deliveryPaymentTypeId) {
-        this.deliveryPaymentTypeId = deliveryPaymentTypeId;
-    }
-    
-    public BigDecimal getWeight() {
-        return weight;
-    }
-    
     public String getSenderCustomerPhoneNumber() {
         return senderCustomerPhoneNumber;
     }
@@ -138,6 +137,10 @@ public class ShipmentDTO {
     
     public Long getSenderEmployeeId() {
         return senderEmployeeId;
+    }
+    
+    public Long getReceiverEmployeeId() {
+        return receiverEmployeeId;
     }
     
     public Long getDeliveryPaymentTypeId() {
