@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import com.logistics.logisticsCompany.service.CustomerServiceImpl;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -80,5 +80,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Optional<Customer> findByPhone(String phone) {
         return customerRepository.findByPhone(phone);
+    }
+    
+    @Override
+    public void updateCustomer(Customer customer) {
+        customerRepository.save(customer);
     }
 }

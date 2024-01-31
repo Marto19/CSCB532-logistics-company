@@ -40,6 +40,19 @@ public class ShipmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdShipmentDTO);
     }
     
+    @PostMapping("/mark-as-delivered/{shipmentId}")//enter shipmentid and employeeid in the url
+    public ResponseEntity<?> markAsDelivered(@PathVariable Long shipmentId, @RequestParam Long employeeId) {
+        try {
+            shipmentService.markShipmentAsDelivered(shipmentId, employeeId);
+            return ResponseEntity.ok().body("Shipment marked as delivered successfully");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error marking shipment as delivered: " + e.getMessage());
+        }
+    }
+    
+    
     @PostMapping("/sent")
     public ResponseEntity<String> registerSentShipment(@RequestBody Shipment shipment) {
         try {

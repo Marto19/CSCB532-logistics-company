@@ -9,8 +9,11 @@ import java.util.List;
 public interface ShipmentService {
     @Transactional
     Shipment createShipment(ShipmentDTO shipmentDto);
-    
-    void registerSentShipment(Shipment shipment);
+	
+	@Transactional
+	void markShipmentAsDelivered(Long shipmentId, Long employeeId);
+	
+	void registerSentShipment(Shipment shipment);
     void registerReceivedShipment(Shipment shipment);
 //    void createShipment(Shipment shipment);
     List<Shipment> getAllShipments();

@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -93,7 +92,13 @@ public class ShipmentServiceImpl implements ShipmentService {
         BigDecimal price = (shipmentDto.getPrice() == null) ? BigDecimal.ZERO : shipmentDto.getPrice();
         shipment.setPrice(price);
         
-        shipment.setTotalPrice(price.add(priceDelivery));
+        // Calculate totalPrice based on isDeliveryPaid flag
+        if (shipment.getIsPaidDelivery()) {
+            shipment.setTotalPrice(price);
+        } else {
+            BigDecimal totalPrice = price.add(priceDelivery);
+            shipment.setTotalPrice(totalPrice);
+        }
         
         // Determine and set DeliveryPaymentType based on price and isPaidDelivery
         // Determine and set DeliveryPaymentType based on the flags
@@ -135,7 +140,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         shipmentRepository.save(shipment);
         
         // Create initial shipment status history as 'Registered'
-        createInitialShipmentStatusHistory(shipment);
+        recordShipmentStatusChange(shipment, "REGISTERED");
         
         return shipment;
     }
@@ -180,8 +185,70 @@ public class ShipmentServiceImpl implements ShipmentService {
         return baseDeliveryPrice;
     }
     
-    
-    
+    private void recordShipmentStatusChange(Shipment shipment, String statusName) {
+        ShipmentStatusHistory statusHistory = new ShipmentStatusHistory();
+        statusHistory.setShipment(shipment);
+        statusHistory.setUpdateDate(LocalDateTime.now());
+        
+        // Fetch the status from the repository
+        ShipmentStatus shipmentStatus = shipmentStatusRepository.findByShipmentStatus(statusName)
+                .orElseThrow(() -> new EntityNotFoundException("ShipmentStatus '" + statusName + "' not found"));
+        
+        // Set the fetched status in the status history
+        statusHistory.setShipmentStatus(shipmentStatus);
+        
+        shipmentStatusHistoryRepository.save(statusHistory);
+    }
+    @Override
+    @Transactional
+    public void markShipmentAsDelivered(Long shipmentId, Long employeeId) {
+        Shipment shipment = shipmentRepository.findById(shipmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Shipment not found"));
+        
+        // Set received date and receiver employee
+        shipment.setReceivedDate(LocalDate.now());
+        
+      /*  Employee receiverEmployee = employeeService.getCurrentlyLoggedInEmployee(); //!!!!!!!!!!!!!!!!!!!!!!!!!!FIXME Implement this method!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        shipment.setReceiverEmployee(receiverEmployee);*/
+        Employee receiverEmployee = employeeService.getEmployeeById(employeeId)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found with ID: " + employeeId));//todo fix upper method
+        shipment.setReceiverEmployee(receiverEmployee);
+        
+        //Update customer balance if cash on delivery
+        processPaymentToCustomerBalance(shipmentId);
+        
+        // Update isPaidDelivery TO TRUE, because shipment is supposed to be paid when delivered
+        if(!shipment.getIsPaidDelivery()) {
+            shipment.setIsPaidDelivery(true);
+        }
+        ///////////////////////////////
+        ///Save the updated shipment///
+        ///////////////////////////////
+        shipmentRepository.save(shipment);
+        
+        // Update shipment status history
+        recordShipmentStatusChange(shipment, "DELIVERED");
+        
+        
+    }
+    public void processPaymentToCustomerBalance(Long shipmentId) {
+        Shipment shipment = shipmentRepository.findById(shipmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Shipment not found"));
+        
+        if ("Cash-On-Delivery".equals(shipment.getDeliveryPaymentType().getPaymentType())) {
+            Customer senderCustomer = shipment.getSenderCustomer();
+            BigDecimal shipmentPrice = shipment.getPrice();
+            
+            // Assuming the price is not null and the customer exists
+            if (senderCustomer != null && shipmentPrice != null) {
+                BigDecimal newBalance = senderCustomer.getBalance().add(shipmentPrice);
+                senderCustomer.setBalance(newBalance);
+                customerService.updateCustomer(senderCustomer);
+            }
+        }
+        
+        // Other shipment processing logic...
+    }
     
     @Override
     public void registerSentShipment(Shipment shipment) {
@@ -305,19 +372,6 @@ public class ShipmentServiceImpl implements ShipmentService {
     
     //logic................................................................
 
-    private void createInitialShipmentStatusHistory(Shipment shipment) {
-        ShipmentStatusHistory statusHistory = new ShipmentStatusHistory();
-        statusHistory.setShipment(shipment);
-        statusHistory.setUpdateDate(LocalDateTime.now());
-        
-        // Fetch the 'Registered' status from the repository
-        ShipmentStatus registeredStatus = shipmentStatusRepository.findByShipmentStatus("REGISTERED")
-                .orElseThrow(() -> new EntityNotFoundException("ShipmentStatus 'Registered' not found"));
-        
-        // Set the fetched status in the status history
-        statusHistory.setShipmentStatus(registeredStatus);
-        
-        shipmentStatusHistoryRepository.save(statusHistory);
-    }
+
     
 }

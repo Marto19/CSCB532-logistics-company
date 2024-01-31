@@ -24,4 +24,6 @@ public interface CustomerService {
     boolean existsByPhoneAndIdNot(String phone, long customerId);
     
     Optional<Customer> findByPhone(String phone);
+    
+    void updateCustomer(Customer customer);
 }
