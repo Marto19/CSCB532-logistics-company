@@ -1,4 +1,4 @@
-package com.logistics.logisticsCompany.auth;
+package com.logistics.logisticsCompany.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +10,8 @@ public class AuthenticationPageController {
     public String getLoginPage() {
         return "login";
     }
+
+
 
     @GetMapping("/register")
     public String getRegisterPage() {
