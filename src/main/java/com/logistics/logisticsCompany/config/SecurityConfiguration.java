@@ -39,6 +39,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/api/v1/shipments/**").hasRole("EMPLOYEE")
                         .anyRequest()
                         .authenticated()
+
                         //.and() of course .and() is deprecated, because why not
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //spring will create new session for each request

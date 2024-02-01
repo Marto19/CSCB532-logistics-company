@@ -9,6 +9,8 @@ function handleSuccess(response) {
                 // Save the token to localStorage
                 localStorage.setItem('token', token);
                 console.log('Token stored in localStorage:', token);
+                console.log('Token:', token);
+                console.log('Headers:', headers);
 
                 // Call the function to send the authenticated request
                 sendAuthenticatedRequest();
@@ -103,50 +105,44 @@ function registerUser() {
 
 function sendAuthenticatedRequest() {
     var token = localStorage.getItem('token');
+
+    console.log('Token in localStorage:', token);
+
     if (!token) {
         console.error('Token not found. User is not authenticated.');
         // Handle the case where the user is not authenticated, maybe redirect to login
-        alert('Token not found. User is not authenticated.');
-
         return;
     }
 
-    // Log the token before making the request
-    console.log("Token in localStorage:", token);
-
     // Construct the headers with Authorization Bearer Token
-    var headers = new Headers({
+    var headers = {
         'Authorization': 'Bearer ' + token,
         'Content-Type': 'application/json'
-    });
+    };
 
-    // Log the headers before making the request
-    console.log("Headers:", headers);
+    console.log('Headers:', headers);
 
-    // Make a GET request to /main.html with Authorization header using Fetch API
-    fetch('/main.html', {
+    // Make a GET request to /main.html with Authorization header
+    fetch('http://localhost:8082/main.html', {
         method: 'GET',
         headers: headers
     })
         .then(response => {
+            console.log('Response status:', response.status);
             if (response.ok) {
                 // Handle the successful response, maybe display the content of main.html
                 return response.text();
             } else {
                 // Handle the case where the server responds with an error (e.g., 403)
                 console.error('Error:', response.statusText);
-                return response.text();
             }
         })
         .then(data => {
-            // Log the response data
             console.log('Response from /main.html:', data);
-            // Additional logic if needed
-            if (data === "Access Denied") {
-                alert("Access Denied! Check console for token.");
-            }
+            // You can update your UI with the content of main.html here
         })
         .catch(error => console.error('Error:', error));
 }
+
 
 
