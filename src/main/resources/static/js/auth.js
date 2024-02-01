@@ -120,10 +120,9 @@ function sendAuthenticatedRequest() {
         'Content-Type': 'application/json'
     };
 
-    console.log('Headers:', headers);
 
-    // Make a GET request to /main.html with Authorization header
-    fetch('http://localhost:8082/main.html', {
+// Make a GET request to /main.html with Authorization header using Fetch API
+    fetch('/main.html', {
         method: 'GET',
         headers: headers
     })

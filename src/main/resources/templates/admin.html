@@ -104,7 +104,6 @@
     });
 
     document.getElementById('submitButton').addEventListener('click', function () {
-
         const name = document.getElementById('companyName').value;
         const income = document.getElementById('companyIncome').value;
 
@@ -114,11 +113,13 @@
             income: income
         };
 
+        const token = localStorage.getItem('token'); // Get token from localStorage
 
         fetch('http://localhost:8082/api/v1/logistics-companies', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token // Add Authorization header with token
             },
             body: JSON.stringify(data)
         })
@@ -131,8 +132,14 @@
             });
     });
 
-    document.getElementById('loadCompanies').addEventListener('click', function() {
-        fetch('http://localhost:8082/api/v1/logistics-companies')
+    document.getElementById('loadCompanies').addEventListener('click', function () {
+        const token = localStorage.getItem('token'); // Get token from localStorage
+
+        fetch('http://localhost:8082/api/v1/logistics-companies', {
+            headers: {
+                'Authorization': 'Bearer ' + token // Add Authorization header with token
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -175,7 +182,7 @@
             .catch((error) => {
                 console.error('Error:', error);
             });
-    } )
+    });
 </script>
 </body>
 

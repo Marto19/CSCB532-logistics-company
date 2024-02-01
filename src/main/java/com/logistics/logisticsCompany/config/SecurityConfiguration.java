@@ -27,16 +27,17 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/api/v1/auth/**", "/login", "/register","/admin/adminpage"
-                        , "/api/v1/logistics-companies", "/api/v1/logistics-companies")   //todo: change whitelist pages
-                        .permitAll()
+//                        .requestMatchers( "/api/v1/auth/**", "/login", "/register","/admin/adminpage"
+//                        , "/api/v1/logistics-companies", "/api/v1/logistics-companies")   //todo: change whitelist pages
+                                .requestMatchers( "/api/v1/auth/**", "/login", "/register","/admin/adminpage")
+                                .permitAll()
                         //TODO: FETCH THE ROLES PROPERLY, MAYBE WHEN LOGIN?
-                                .requestMatchers(HttpMethod.POST, "/api/v1/users/assign-roles").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/logistics-companies/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/employees/**").hasRole("EMPLOYEE")
-                                .requestMatchers("/api/v1/users/**").hasRole("USER")
-                                .requestMatchers("/api/v1/customers/**").hasRole("CUSTOMER")
-                                .requestMatchers("/api/v1/shipments/**").hasRole("EMPLOYEE")
+//                                .requestMatchers(HttpMethod.POST, "/api/v1/users/assign-roles").hasRole("ADMIN")
+//                                .requestMatchers("/api/v1/logistics-companies/**").hasRole("ADMIN")
+//                                .requestMatchers("/api/v1/employees/**").hasRole("EMPLOYEE")
+//                                .requestMatchers("/api/v1/users/**").hasRole("USER")
+//                                .requestMatchers("/api/v1/customers/**").hasRole("CUSTOMER")
+//                                .requestMatchers("/api/v1/shipments/**").hasRole("EMPLOYEE")
                         .anyRequest()
                         .authenticated()
 
