@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.enums.UserRole;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.UserRepository;
@@ -54,6 +55,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+    
+    @Override
+    public User getUserById(long id) {
+        return userRepository.getUserById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Shipment not found with id: " + id));
     }
 
     @Override

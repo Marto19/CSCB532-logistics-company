@@ -19,20 +19,17 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/shipments")
 public class ShipmentController {
-
     private final ShipmentService shipmentService;
-
     private final EntityDtoMapper entityDtoMapper;
-    
     private final ShipmentRepository shipmentRepository;
+
     @Autowired
-    public ShipmentController(ShipmentService shipmentService, EntityDtoMapper entityDtoMapper, ShipmentRepository shipmentRepository) {
+    public ShipmentController(ShipmentService shipmentService, ShipmentRepository shipmentRepository, EntityDtoMapper entityDtoMapper) {
         this.shipmentService = shipmentService;
-        this.entityDtoMapper = entityDtoMapper;
         this.shipmentRepository = shipmentRepository;
+        this.entityDtoMapper = entityDtoMapper;
     }
-    
-    
+
     @PostMapping("/create-shipment-beta")
     public ResponseEntity<ShipmentDTO> createShipment(@RequestBody ShipmentDTO shipmentDto) {
         Shipment createdShipment = shipmentService.createShipment(shipmentDto);
@@ -51,7 +48,6 @@ public class ShipmentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error marking shipment as delivered: " + e.getMessage());
         }
     }
-    
     
     @PostMapping("/sent")
     public ResponseEntity<String> registerSentShipment(@RequestBody Shipment shipment) {
