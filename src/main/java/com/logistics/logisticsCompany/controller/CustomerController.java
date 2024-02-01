@@ -2,11 +2,13 @@ package com.logistics.logisticsCompany.controller;
 
 
 import com.logistics.logisticsCompany.DTO.CustomerDTO;
+import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
+import com.logistics.logisticsCompany.DTO.LogisticsCompanyDTO;
+import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.CustomerRepository;
 import com.logistics.logisticsCompany.service.CustomerServiceImpl;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,61 +16,76 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.logistics.logisticsCompany.service.CustomerService;
 @RestController
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
 
-    @Autowired
-    private CustomerService customerService;
+    private final CustomerService customerService;
+    private final CustomerRepository customerRepository;
+    private final EntityDtoMapper entityDtoMapper;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    public CustomerController(CustomerService customerService, CustomerRepository customerRepository, EntityDtoMapper entityDtoMapper) {
+        this.customerService = customerService;
+        this.customerRepository = customerRepository;
+        this.entityDtoMapper = entityDtoMapper;
+    }
 
     @PostMapping
     public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
         // Check if a customer with the given phone already exists
         if (customerService.existsByPhone(customer.getPhone())) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Customer with the provided phone number already exists");
         }
         // If the customer with the phone number doesn't exist, proceed with saving the customer
-        customerService.createCustomer(customer);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Customer created successfully");
+        try {
+            customerService.createCustomer(customer);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Customer created successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping
-    public List<CustomerDTO> getAllCustomers() {
-        List<Customer> customers = customerService.getAllCustomers();
-        return CustomerDTO.toDTOList(customers);
+    public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
+        //Convert to List<CustomerDTO>
+        List<CustomerDTO> customerDTOs = customerService.getAllCustomers().stream()
+                .map(entityDtoMapper::convertToCustomerDTO)
+                .collect(Collectors.toList());
+        //If the list is empty return NO_CONTENT, else return OK and the customers
+        return customerDTOs.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(customerDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable(value = "id") long customerId) {
-        Optional<Customer> customer = customerService.getCustomerById(customerId);
-        return customer.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable(value = "id") long customerId) {
+        return customerService.getCustomerById(customerId)
+                .map(entityDtoMapper::convertToCustomerDTO)
+                .map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/{customerId}")
-    public ResponseEntity<?> updateCustomer(@PathVariable Optional<Long> customerId, @RequestBody Customer updatedCustomer) {
+    public ResponseEntity<?> updateCustomer(@PathVariable(value = "id") long customerId,
+                                            @RequestBody Customer updatedCustomer) {
         if(!customerRepository.existsById(customerId)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Customer with the provided id doesn't exist");
         }
-        if (customerId.isPresent()) {
-            Long id = customerId.get();
-            updatedCustomer.setId(id);
-            customerService.updateCustomer(id, updatedCustomer);
+        try {
+            customerService.updateCustomer(customerId, updatedCustomer);
             return ResponseEntity.ok("Customer updated successfully");
-        } else {
-            // Handle the case when customerId is not present
-            return ResponseEntity.badRequest().body("customerId is required");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable(value = "id") long customerId) {
@@ -76,9 +93,12 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Customer with the provided id doesn't exist");
         }
-        customerService.deleteCustomer(customerId);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("Customer deleted successfully");
+        try {
+            customerService.deleteCustomer(customerId);
+            return ResponseEntity.ok("Customer deleted successfully");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }
 
