@@ -3,11 +3,15 @@ package com.logistics.logisticsCompany.DTO;
 
 import com.logistics.logisticsCompany.entities.enums.DeliveryPaymentType;
 import com.logistics.logisticsCompany.entities.enums.ShipmentStatus;
+import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
+import com.logistics.logisticsCompany.entities.users.User;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class EntityDtoMapper {
@@ -55,6 +59,23 @@ public class EntityDtoMapper {
 		return dto;
 	}
 	
+	public UserDTO convertToUserDTO(User user){
+		UserDTO dto = new UserDTO();
+		
+		dto.setId(user.getId());
+		dto.setUsername(user.getUsername());
+		
+		
+		
+		return dto;
+	}
+	public LogisticsCompanyDTO convertToLogisticsCompanyDTO(LogisticsCompany logisticsCompany) {
+		LogisticsCompanyDTO dto = new LogisticsCompanyDTO();
+		dto.setId(logisticsCompany.getId());
+		dto.setName(logisticsCompany.getName());
+		dto.setIncome(logisticsCompany.getIncome());
+		return dto;
+	}
 	public CustomerDTO convertToCustomerDTO(Customer customer) {
 		CustomerDTO dto = new CustomerDTO();
 		dto.setId(customer.getId());

@@ -1,11 +1,15 @@
 package com.logistics.logisticsCompany.controller;
 
+import com.logistics.logisticsCompany.DTO.LogisticsCompanyDTO;
+import com.logistics.logisticsCompany.DTO.UserDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.users.Employee;
+import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.LogisticsCompanyRepository;
 import com.logistics.logisticsCompany.service.LogisticsCompanyService;
 import com.logistics.logisticsCompany.service.LogisticsCompanyServiceImpl;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,19 +17,22 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
+import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
 @RestController
 @RequestMapping("/api/v1/logistics-companies")
 public class LogisticsCompanyController {
 
     private final LogisticsCompanyService logisticsCompanyService;
     private final LogisticsCompanyRepository logisticsCompanyRepository;
-
+    
+    private final EntityDtoMapper entityDtoMapper;
     @Autowired
-    public LogisticsCompanyController(LogisticsCompanyService logisticsCompanyService, com.logistics.logisticsCompany.repository.LogisticsCompanyRepository logisticsCompanyRepository1, com.logistics.logisticsCompany.repository.LogisticsCompanyRepository logisticsCompanyRepository) {
+    public LogisticsCompanyController(LogisticsCompanyService logisticsCompanyService, com.logistics.logisticsCompany.repository.LogisticsCompanyRepository logisticsCompanyRepository1, com.logistics.logisticsCompany.repository.LogisticsCompanyRepository logisticsCompanyRepository, EntityDtoMapper entityDtoMapper) {
         this.logisticsCompanyService = logisticsCompanyService;
         this.logisticsCompanyRepository = logisticsCompanyRepository1;
         LogisticsCompanyRepository = logisticsCompanyRepository;
+        this.entityDtoMapper= entityDtoMapper;
     }
 
     private final LogisticsCompanyRepository LogisticsCompanyRepository;
@@ -43,17 +50,25 @@ public class LogisticsCompanyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
+    
     @GetMapping
-    public List<LogisticsCompany> getAllLogisticsCompanies() {
-        return logisticsCompanyService.getAllLogisticsCompanies();
+    public ResponseEntity<List<LogisticsCompanyDTO>> getAllLogisticsCompanies() {
+        List<LogisticsCompanyDTO> logisticsCompanyDTOs = logisticsCompanyService.getAllLogisticsCompanies().stream()
+                .map(entityDtoMapper::convertToLogisticsCompanyDTO)
+                .collect(Collectors.toList());
+        
+        return logisticsCompanyDTOs.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<>(logisticsCompanyDTOs, HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<LogisticsCompany> getCompantById(@PathVariable(value = "id") long companyId) {
-        Optional<LogisticsCompany> customer = logisticsCompanyRepository.getLogisticsCompaniesById(companyId);
-        return customer.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<LogisticsCompanyDTO> getLogisticsCompanyById(@PathVariable long id) {
+        return logisticsCompanyService.getLogisticsCompanyById(id)
+                .map(entityDtoMapper::convertToLogisticsCompanyDTO)
+                .map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+    
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateLogisticsCompany(@PathVariable(value = "id") long companyId,

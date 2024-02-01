@@ -33,6 +33,7 @@ public class LogisticsCompanyServiceImpl implements LogisticsCompanyService {
         return officeRepository.findAll();
     }
 
+
     @Override
     public void createLogisticsCompany(LogisticsCompany logisticsCompany) {
         logisticsCompanyRepository.save(logisticsCompany);
@@ -42,6 +43,10 @@ public class LogisticsCompanyServiceImpl implements LogisticsCompanyService {
     public List<LogisticsCompany> getAllLogisticsCompanies() {
         return logisticsCompanyRepository.findAll();
     }
+    public Optional<LogisticsCompany> getLogisticsCompanyById(long id) {
+        return logisticsCompanyRepository.findById(id);
+    }
+
 
     @Override
     @Transactional
