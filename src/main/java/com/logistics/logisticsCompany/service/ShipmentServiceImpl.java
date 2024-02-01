@@ -44,10 +44,13 @@ public class ShipmentServiceImpl implements ShipmentService {
     private final ShipmentStatusRepository shipmentStatusRepository;
     
     private final OfficeService officeService;
+    
+    private final IncomeHistoryService incomeHistoryService;
+    
     @Autowired
     public ShipmentServiceImpl(ShipmentRepository shipmentRepository, EntityDtoMapper entityDtoMapper, DeliveryPaymentTypeRepository deliveryPaymentTypeRepository,
                                CustomerService customerService, EmployeeService employeeService, ShipmentStatusHistoryRepository shipmentStatusHistoryRepository,
-                               ShipmentStatusRepository shipmentStatusRepository, OfficeService officeService ){
+                               ShipmentStatusRepository shipmentStatusRepository, OfficeService officeService, IncomeHistoryService incomeHistoryService){
         this.shipmentRepository = shipmentRepository;
         this.entityDtoMapper = entityDtoMapper;
         this.deliveryPaymentTypeRepository = deliveryPaymentTypeRepository;
@@ -56,6 +59,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 	    this.shipmentStatusHistoryRepository = shipmentStatusHistoryRepository;
         this.shipmentStatusRepository = shipmentStatusRepository;
         this.officeService = officeService;
+        this.incomeHistoryService = incomeHistoryService;
     }
     
     /*
@@ -88,6 +92,8 @@ public class ShipmentServiceImpl implements ShipmentService {
         // Calculate priceDelivery based on weight, and set price if entered
         BigDecimal priceDelivery = calculatePriceDelivery(shipmentDto.getWeight());
         shipment.setPriceDelivery(priceDelivery);
+        
+
         
         BigDecimal price = (shipmentDto.getPrice() == null) ? BigDecimal.ZERO : shipmentDto.getPrice();
         shipment.setPrice(price);
@@ -138,6 +144,11 @@ public class ShipmentServiceImpl implements ShipmentService {
         
         
         shipmentRepository.save(shipment);
+        
+        // if deliveryispaid = true, add record to daily income
+        if (shipment.getIsPaidDelivery()) {
+            incomeHistoryService.recordDailyIncome(shipment.getPriceDelivery(), shipment.getSenderEmployee().getLogisticsCompany().getId());
+        }
         
         // Create initial shipment status history as 'Registered'
         recordShipmentStatusChange(shipment, "REGISTERED");
@@ -220,11 +231,13 @@ public class ShipmentServiceImpl implements ShipmentService {
         // Update isPaidDelivery TO TRUE, because shipment is supposed to be paid when delivered
         if(!shipment.getIsPaidDelivery()) {
             shipment.setIsPaidDelivery(true);
+            incomeHistoryService.recordDailyIncome(shipment.getPriceDelivery(), shipment.getSenderEmployee().getLogisticsCompany().getId());
         }
         ///////////////////////////////
         ///Save the updated shipment///
         ///////////////////////////////
         shipmentRepository.save(shipment);
+        
         
         // Update shipment status history
         recordShipmentStatusChange(shipment, "DELIVERED");
