@@ -33,7 +33,7 @@ class CustomerControllerTest {
     @BeforeEach
     void setUp() {
         customer1 = new Customer("FirstName1", "LastName1", "8888888888");
-        customer2 = new Customer("FirstName1", "LastName1", "9999999999");
+        customer2 = new Customer("FirstName2", "LastName2", "9999999999");
 
         customerController.createCustomer(customer1);
         customerController.createCustomer(customer2);
@@ -62,15 +62,15 @@ class CustomerControllerTest {
         List<CustomerDTO> customers = customerController.getAllCustomers().getBody();
         
         //Checks if the retrieved customers list contains the saved customers
-        assertEquals(customers.get(0).getPhone(), customer1.getPhone());
-        assertEquals(customers.get(1).getPhone(), customer2.getPhone());
+        assertEquals(customers.get(1).getPhone(), customer1.getPhone());
+        assertEquals(customers.get(2).getPhone(), customer2.getPhone());
     }
 
 
     @Test
     void getCustomerById() {
         //Retrieves the customer by ID
-        Customer foundCustomer = customerController.getCustomerById(customer1.getId()).getBody();
+        CustomerDTO foundCustomer = customerController.getCustomerById(customer1.getId()).getBody();
 
         //Checks if the retrieved customer is in the database
         assertNotNull(foundCustomer);
@@ -84,7 +84,7 @@ class CustomerControllerTest {
         customerService.updateCustomer(customer1.getId(), customer1);
         
         //Retrieves the customer and checks if the name was updated
-        Customer updatedCustomer = customerController.getCustomerById(customer1.getId()).getBody();
+        CustomerDTO updatedCustomer = customerController.getCustomerById(customer1.getId()).getBody();
         assertNotNull(updatedCustomer);
         assertEquals("Gosho", updatedCustomer.getFirstName());
     }
