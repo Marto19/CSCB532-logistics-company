@@ -25,18 +25,21 @@ public class OfficeController {
 
     @PostMapping
     public ResponseEntity<String> createOffice(@RequestBody Office office) {
-        // Check if the office with the given name already exists
+        //Checks if office with the given address already exists
         if (officeRepository.existsByAddress(office.getAddress())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Office with the same address already exists");
         }
 
-        // If the office doesn't exist, proceed with saving it
-        officeService.createOffice(office);
+        //Create office if address does not already exist
+        try {
+            officeService.createOffice(office);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Office created successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Office created successfully");
-    }//todo: add protection in other places too
     @GetMapping
     public List<OfficeDTO> getAllOffices() {
         List<Office> offices = officeService.getAllOffices();
