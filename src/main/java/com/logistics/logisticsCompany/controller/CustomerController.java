@@ -2,6 +2,7 @@ package com.logistics.logisticsCompany.controller;
 
 
 import com.logistics.logisticsCompany.DTO.CustomerDTO;
+import com.logistics.logisticsCompany.DTO.EmployeeDTO;
 import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
 import com.logistics.logisticsCompany.DTO.LogisticsCompanyDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;

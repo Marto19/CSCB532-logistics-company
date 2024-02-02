@@ -45,10 +45,6 @@ public class Customer {
     
     @OneToMany(mappedBy = "receiverCustomer")
     private Set<Shipment> receivedShipments = new HashSet<>();
-
-    @OneToMany(mappedBy = "customer")
-    private Set<ShipmentStatusHistory> orderHistorySet;
-    
     
     //Constructors
     public Customer(){
@@ -99,9 +95,7 @@ public class Customer {
         this.receivedShipments = receivedShipments;
     }
     
-    public void setOrderHistorySet(Set<ShipmentStatusHistory> orderHistorySet) {
-        this.orderHistorySet = orderHistorySet;
-    }
+
     
     public long getId() {
         return id;
@@ -139,9 +133,7 @@ public class Customer {
         return receivedShipments;
     }
     
-    public Set<ShipmentStatusHistory> getOrderHistorySet() {
-        return orderHistorySet;
-    }
+
     
     @Override
     public String toString() {
@@ -155,7 +147,6 @@ public class Customer {
                 ", lastOffice=" + lastOffice +
                 ", sentShipments=" + sentShipments +
                 ", receivedShipments=" + receivedShipments +
-                ", orderHistorySet=" + orderHistorySet +
                 '}';
     }
 }

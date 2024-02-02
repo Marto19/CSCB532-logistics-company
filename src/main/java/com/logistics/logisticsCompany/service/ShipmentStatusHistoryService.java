@@ -1,10 +1,15 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.entities.orders.ShipmentStatusHistory;
 
 import java.util.List;
 
 public interface ShipmentStatusHistoryService {
+	
+	
+	void recordShipmentStatusChange(Long shipmentId, String statusName);
+	
 	void createShipmentStatusHistory(ShipmentStatusHistory shipmentStatusHistory);
 	
 	List<ShipmentStatusHistory> getAllShipmentStatusHistories();

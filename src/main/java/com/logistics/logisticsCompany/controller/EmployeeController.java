@@ -59,7 +59,18 @@ public class EmployeeController {
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(employeeDTOs, HttpStatus.OK);
     }
-
+    
+    //todo decide whether we have 1 or more companies
+    @GetMapping("/by-company-id/{companyId}")
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployeesByCompanyId(@PathVariable Long companyId) {
+        List<EmployeeDTO> employeeDTOs = employeeService.getAllEmployeesByCompanyId(companyId).stream()
+                .map(entityDtoMapper::convertToEmployeeDTO)
+                .collect(Collectors.toList());
+        return employeeDTOs.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(employeeDTOs, HttpStatus.OK);
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable(value = "id") long employeeId) {
         return employeeService.getEmployeeById(employeeId)

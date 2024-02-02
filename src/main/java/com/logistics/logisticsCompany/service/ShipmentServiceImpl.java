@@ -4,9 +4,7 @@ package com.logistics.logisticsCompany.service;
 import com.logistics.logisticsCompany.DTO.*;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.enums.DeliveryPaymentType;
-import com.logistics.logisticsCompany.entities.enums.ShipmentStatus;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
-import com.logistics.logisticsCompany.entities.orders.ShipmentStatusHistory;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
 import com.logistics.logisticsCompany.repository.ShipmentRepository;
@@ -16,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.logistics.logisticsCompany.DTO.ShipmentDTO;
@@ -46,11 +42,12 @@ public class ShipmentServiceImpl implements ShipmentService {
     private final OfficeService officeService;
     
     private final IncomeHistoryService incomeHistoryService;
+    private final ShipmentStatusHistoryService shipmentStatusHistoryService;
     
     @Autowired
     public ShipmentServiceImpl(ShipmentRepository shipmentRepository, EntityDtoMapper entityDtoMapper, DeliveryPaymentTypeRepository deliveryPaymentTypeRepository,
                                CustomerService customerService, EmployeeService employeeService, ShipmentStatusHistoryRepository shipmentStatusHistoryRepository,
-                               ShipmentStatusRepository shipmentStatusRepository, OfficeService officeService, IncomeHistoryService incomeHistoryService){
+                               ShipmentStatusRepository shipmentStatusRepository, OfficeService officeService, IncomeHistoryService incomeHistoryService, ShipmentStatusHistoryService shipmentStatusHistoryService){
         this.shipmentRepository = shipmentRepository;
         this.entityDtoMapper = entityDtoMapper;
         this.deliveryPaymentTypeRepository = deliveryPaymentTypeRepository;
@@ -60,6 +57,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         this.shipmentStatusRepository = shipmentStatusRepository;
         this.officeService = officeService;
         this.incomeHistoryService = incomeHistoryService;
+        this.shipmentStatusHistoryService = shipmentStatusHistoryService;
     }
     
     /*
@@ -98,6 +96,8 @@ public class ShipmentServiceImpl implements ShipmentService {
         BigDecimal price = (shipmentDto.getPrice() == null) ? BigDecimal.ZERO : shipmentDto.getPrice();
         shipment.setPrice(price);
         
+        
+        //fixme
         // Calculate totalPrice based on isDeliveryPaid flag
         if (shipment.getIsPaidDelivery()) {
             shipment.setTotalPrice(price);
@@ -151,7 +151,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         }
         
         // Create initial shipment status history as 'Registered'
-        recordShipmentStatusChange(shipment, "REGISTERED");
+        shipmentStatusHistoryService.recordShipmentStatusChange(shipment.getId(), "REGISTERED");
         
         return shipment;
     }
@@ -196,20 +196,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         return baseDeliveryPrice;
     }
     
-    private void recordShipmentStatusChange(Shipment shipment, String statusName) {
-        ShipmentStatusHistory statusHistory = new ShipmentStatusHistory();
-        statusHistory.setShipment(shipment);
-        statusHistory.setUpdateDate(LocalDateTime.now());
-        
-        // Fetch the status from the repository
-        ShipmentStatus shipmentStatus = shipmentStatusRepository.findByShipmentStatus(statusName)
-                .orElseThrow(() -> new EntityNotFoundException("ShipmentStatus '" + statusName + "' not found"));
-        
-        // Set the fetched status in the status history
-        statusHistory.setShipmentStatus(shipmentStatus);
-        
-        shipmentStatusHistoryRepository.save(statusHistory);
-    }
+
     @Override
     @Transactional
     public void markShipmentAsDelivered(Long shipmentId, Long employeeId) {
@@ -240,7 +227,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         
         
         // Update shipment status history
-        recordShipmentStatusChange(shipment, "DELIVERED");
+        shipmentStatusHistoryService.recordShipmentStatusChange(shipment.getId(), "DELIVERED");
         
         
     }
@@ -346,19 +333,19 @@ public class ShipmentServiceImpl implements ShipmentService {
     
     //5.d.------------------------
     @Override
-    public List<Shipment> getAllSentShipmentsByEmployeeId(Long employeeId) {
-        return shipmentRepository.findBySenderEmployeeId(employeeId);
+    public List<ShipmentDTO> getAllSentShipmentsByEmployeeId(Long employeeId) {
+        List<Shipment> shipments = shipmentRepository.findBySenderEmployeeId(employeeId);
+        return shipments.stream()
+                .map(entityDtoMapper::convertToShipmentDTO)
+                .collect(Collectors.toList());
     }
-    @Override
-    public List<Shipment> getAllReceivedShipmentsByEmployeeId(Long employeeId) {
-        return shipmentRepository.findByReceiverEmployeeId(employeeId);
-    }
+
     
     //5.e.------------------------
+    @Override
     public List<ShipmentDTO> getShipmentsSentButNotReceived() {
-        String sentStatus = "SENT";
-        List<String> notReceivedStatuses = Arrays.asList("RECEIVED", "DELIVERED");
-        List<Shipment> shipments = shipmentRepository.findShipmentsSentButNotReceived(sentStatus, notReceivedStatuses);
+        // If there are more statuses in the future, you might want to handle them here
+        List<Shipment> shipments = shipmentRepository.findByStatusNot("DELIVERED");
         return shipments.stream()
                 .map(entityDtoMapper::convertToShipmentDTO)
                 .collect(Collectors.toList());
@@ -368,6 +355,15 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public List<ShipmentDTO> getShipmentsBySenderCustomerId(Long customerId) {
         List<Shipment> shipments = shipmentRepository.findBySenderCustomerId(customerId);
+        return shipments.stream()
+                .map(entityDtoMapper::convertToShipmentDTO)
+                .collect(Collectors.toList());
+    }
+    
+    // Alternatively, if using phone number
+    @Override
+    public List<ShipmentDTO> getShipmentsBySenderCustomerPhone(String phone) {
+        List<Shipment> shipments = shipmentRepository.findBySenderCustomerPhone(phone);
         return shipments.stream()
                 .map(entityDtoMapper::convertToShipmentDTO)
                 .collect(Collectors.toList());

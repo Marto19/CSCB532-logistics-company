@@ -2,6 +2,7 @@ package com.logistics.logisticsCompany.service;
 
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.users.Customer;
+import com.logistics.logisticsCompany.entities.users.Employee;
 import com.logistics.logisticsCompany.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,11 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
-
+    
+/*    @Override
+    public List<Employee> getAllCustomersByCompanyId(Long companyId) {
+     //   return customerRepository.findAllByLogisticsCompanyId(companyId);
+    }*/
     @Override
     public Optional<Customer> getCustomerById(long customerId) {
         return customerRepository.findById(customerId);

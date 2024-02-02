@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.controller;
 
+import com.logistics.logisticsCompany.DTO.incomeHistory.IncomeIntervalRequest;
 import com.logistics.logisticsCompany.DTO.incomeHistory.MonthlyIncomeRequest;
 import com.logistics.logisticsCompany.entities.logisticsCompany.IncomeHistory;
 import com.logistics.logisticsCompany.repository.IncomeHistoryRepository;
@@ -29,7 +30,7 @@ public class IncomeHistoryController {
 
 	// Endpoint for monthly income
 	@PostMapping("/monthly")
-	public ResponseEntity<BigDecimal> getMonthlyIncome(@RequestBody MonthlyIncomeRequest request) {
+	public ResponseEntity<BigDecimal> getMonthlyIncome(@RequestBody MonthlyIncomeRequest request) {//check MonthlyIncomeRequest inside dtos
 		LocalDate startDate = LocalDate.of(request.getYear(), request.getMonth(), 1);
 		LocalDate endDate = startDate.with(TemporalAdjusters.lastDayOfMonth());
 		BigDecimal monthlyIncome = incomeHistoryService.calculatePeriodIncome(startDate, endDate, request.getLogisticsCompanyId());
@@ -38,6 +39,19 @@ public class IncomeHistoryController {
 	
 	//FIXME
 	// Endpoint for income over a custom interval
+	@PostMapping("/interval")
+	public ResponseEntity<BigDecimal> getIncomeByInterval(@RequestBody IncomeIntervalRequest request) {//check IncomeIntervalRequest inside dtos
+		LocalDate startDate = request.getStartDate();
+		LocalDate endDate = request.getEndDate();
+		Long logisticsCompanyId = request.getLogisticsCompanyId();
+		
+		BigDecimal income = incomeHistoryService.calculatePeriodIncome(startDate, endDate, logisticsCompanyId);
+		return ResponseEntity.ok(income);
+	}
+	
+	
+	
+	//FIXME CHOOSE BETWEEN THIS OR THE UPPER METHOD.
 	@GetMapping("/interval")
 	public ResponseEntity<BigDecimal> getIncomeByInterval(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
 	                                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
@@ -45,4 +59,6 @@ public class IncomeHistoryController {
 		BigDecimal totalIncome = incomeHistoryService.calculatePeriodIncome(startDate, endDate, logisticsCompanyId);
 		return ResponseEntity.ok(totalIncome);
 	}
+	
+	
 }
