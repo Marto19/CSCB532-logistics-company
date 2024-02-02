@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.config;
 
+import com.logistics.logisticsCompany.entities.users.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
@@ -19,48 +20,42 @@ import java.util.function.Function;
 //generating, validating, extracting, ect
 @Service
 public class JwtService {
-
     private static final String SECRET_KEY = "9cb7d8506abbddfcc041c82d026a1964b087cc460266b2292894992dbf856cee";
+    private Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    //method to extract a single claim
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
-
     }
 
-    public  String generateToken(UserDetails userDetails){      //generating token from the user itself
-        return  generateToken(new HashMap<>(), userDetails);
+    public String generateToken(UserDetails userDetails){
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", ((User) userDetails).getUserRoleList());
+        return generateToken(claims, userDetails.getUsername());
     }
-    public String generateToken(
-            Map<String, Object> extractClaims,
-            UserDetails userDetails
-    ){
-        return Jwts
-                .builder()
-                .setClaims(extractClaims)
-                .setSubject(userDetails.getUsername())
+
+    private String generateToken(Map<String, Object> claims, String subject){
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))//token valid for 24 hours
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 hours token validity
+                .signWith(key)
                 .compact();
     }
 
-    //methods to allow us to extract the claims from the token or a single one
     private Claims extractAllClaims(String token){
         return Jwts.parserBuilder()
-                .setSigningKey(getSignInKey())  //sign in key is a key that digitally signs the JWT
-                //it helps us verify that the sender of that jwt is who it claims to be
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    //method to validate the token
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
@@ -70,17 +65,8 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    //method to extract the expiration of the token
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
-
-    //method to check if the token is expired
-    
-
-    private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
-
-    }
 }
+
