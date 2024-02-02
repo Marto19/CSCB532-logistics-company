@@ -9,80 +9,63 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ShipmentDTO {
-    @JsonProperty("id")
-    private long id;
-    
-    @JsonProperty("shipmentDate")
-    private LocalDate shipmentDate;
-    
+    //reduced because we dont need id and shipment date to transfer?right?
     @JsonProperty("weight")
     private BigDecimal weight;
     
     @JsonProperty("price")
     private BigDecimal price;
     
-    @JsonProperty("isPaidDelivery")
-    private boolean isPaidDelivery;
+    @JsonProperty("isPaid")
+    private boolean isPaid;
     
     @JsonProperty("priceDelivery")
     private BigDecimal priceDelivery;
     
-    @JsonProperty("isPaid")
-    private boolean isPaid;
+    @JsonProperty("isPaidDelivery")
+    private boolean isPaidDelivery;
     
-    @JsonProperty("receivedDate")
-    private LocalDate receivedDate;
+    @JsonProperty("senderCustomerPhoneNumber")
+    private String senderCustomerPhoneNumber;
     
-    @JsonProperty("senderOffice")
-    private OfficeDTO senderOffice;
+    @JsonProperty("receiverCustomerPhoneNumber")
+    private String receiverCustomerPhoneNumber;
     
-    @JsonProperty("senderCustomer")
-    private CustomerDTO senderCustomer;
+    @JsonProperty("senderEmployeeId")
+    private Long senderEmployeeId;
     
-    @JsonProperty("senderEmployee")
-    private EmployeeDTO senderEmployee;
+    @JsonProperty("receiverEmployeeId")
+    private Long receiverEmployeeId;
     
-    @JsonProperty("receiverOffice")
-    private OfficeDTO receiverOffice;
+    @JsonProperty("deliveryPaymentTypeId")
+    private Long deliveryPaymentTypeId;
     
-    @JsonProperty("receiverCustomer")
-    private CustomerDTO receiverCustomer;
+    @JsonProperty("receiverOfficeId")
+    private Long receiverOfficeId;
     
-    @JsonProperty("receiverEmployee")
-    private EmployeeDTO receiverEmployee;
-    
-    
-    // Constructors, getters, and setters
-
-    // Ensure you have a no-argument constructor
+    @JsonProperty("totalPrice")
+    private BigDecimal totalPrice;
+    // No-argument constructor
     public ShipmentDTO() {
     }
     
-    public ShipmentDTO(long id, LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaidDelivery, BigDecimal priceDelivery, boolean isPaid, LocalDate receivedDate, OfficeDTO senderOffice, CustomerDTO senderCustomer, EmployeeDTO senderEmployee, OfficeDTO receiverOffice, CustomerDTO receiverCustomer, EmployeeDTO receiverEmployee) {
-        this.id = id;
-        this.shipmentDate = shipmentDate;
+    // Constructor with necessary fields
+    
+    public ShipmentDTO(BigDecimal weight, BigDecimal price, boolean isPaid, BigDecimal priceDelivery,
+                       boolean isPaidDelivery, String senderCustomerPhoneNumber, String receiverCustomerPhoneNumber,
+                       Long senderEmployeeId, Long receiverEmployeeId, Long deliveryPaymentTypeId, Long receiverOfficeId, BigDecimal totalPrice) {
         this.weight = weight;
         this.price = price;
-        this.isPaidDelivery = isPaidDelivery;
-        this.priceDelivery = priceDelivery;
         this.isPaid = isPaid;
-        this.receivedDate = receivedDate;
-        this.senderOffice = senderOffice;
-        this.senderCustomer = senderCustomer;
-        this.senderEmployee = senderEmployee;
-        this.receiverOffice = receiverOffice;
-        this.receiverCustomer = receiverCustomer;
-        this.receiverEmployee = receiverEmployee;
-    }
-
-    // Getters and setters
-    
-    public void setId(long id) {
-        this.id = id;
-    }
-    
-    public void setShipmentDate(LocalDate shipmentDate) {
-        this.shipmentDate = shipmentDate;
+        this.priceDelivery = priceDelivery;
+        this.isPaidDelivery = isPaidDelivery;
+        this.senderCustomerPhoneNumber = senderCustomerPhoneNumber;
+        this.receiverCustomerPhoneNumber = receiverCustomerPhoneNumber;
+        this.senderEmployeeId = senderEmployeeId;
+        this.receiverEmployeeId = receiverEmployeeId;
+        this.deliveryPaymentTypeId = deliveryPaymentTypeId;
+        this.receiverOfficeId = receiverOfficeId;
+        this.totalPrice = totalPrice;
     }
     
     public void setWeight(BigDecimal weight) {
@@ -93,52 +76,44 @@ public class ShipmentDTO {
         this.price = price;
     }
     
-    public void setIsPaidDelivery(boolean isPaidDelivery) {
-        this.isPaidDelivery = isPaidDelivery;
+    public void setIsPaid(boolean isPaid) {
+        this.isPaid = isPaid;
     }
     
     public void setPriceDelivery(BigDecimal priceDelivery) {
         this.priceDelivery = priceDelivery;
     }
     
-    public void setIsPaid(boolean isPaid) {
-        this.isPaid = isPaid;
+    public void setIsPaidDelivery(boolean isPaidDelivery) {
+        this.isPaidDelivery = isPaidDelivery;
     }
     
-    public void setReceivedDate(LocalDate receivedDate) {
-        this.receivedDate = receivedDate;
+    public void setSenderCustomerPhoneNumber(String senderCustomerPhoneNumber) {
+        this.senderCustomerPhoneNumber = senderCustomerPhoneNumber;
     }
     
-    public void setSenderOffice(OfficeDTO senderOffice) {
-        this.senderOffice = senderOffice;
+    public void setReceiverCustomerPhoneNumber(String receiverCustomerPhoneNumber) {
+        this.receiverCustomerPhoneNumber = receiverCustomerPhoneNumber;
     }
     
-    public void setSenderCustomer(CustomerDTO senderCustomer) {
-        this.senderCustomer = senderCustomer;
+    public void setSenderEmployeeId(Long senderEmployeeId) {
+        this.senderEmployeeId = senderEmployeeId;
     }
     
-    public void setSenderEmployee(EmployeeDTO senderEmployee) {
-        this.senderEmployee = senderEmployee;
+    public void setReceiverEmployeeId(Long receiverEmployeeId) {
+        this.receiverEmployeeId = receiverEmployeeId;
     }
     
-    public void setReceiverOffice(OfficeDTO receiverOffice) {
-        this.receiverOffice = receiverOffice;
+    public void setDeliveryPaymentTypeId(Long deliveryPaymentTypeId) {
+        this.deliveryPaymentTypeId = deliveryPaymentTypeId;
     }
     
-    public void setReceiverCustomer(CustomerDTO receiverCustomer) {
-        this.receiverCustomer = receiverCustomer;
+    public void setReceiverOfficeId(Long receiverOfficeId) {
+        this.receiverOfficeId = receiverOfficeId;
     }
     
-    public void setReceiverEmployee(EmployeeDTO receiverEmployee) {
-        this.receiverEmployee = receiverEmployee;
-    }
-    
-    public long getId() {
-        return id;
-    }
-    
-    public LocalDate getShipmentDate() {
-        return shipmentDate;
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
     
     public BigDecimal getWeight() {
@@ -149,43 +124,43 @@ public class ShipmentDTO {
         return price;
     }
     
-    public boolean isPaidDelivery() {
-        return isPaidDelivery;
+    public boolean getIsPaid() {
+        return isPaid;
     }
     
     public BigDecimal getPriceDelivery() {
         return priceDelivery;
     }
     
-    public boolean isPaid() {
-        return isPaid;
+    public boolean getIsPaidDelivery() {
+        return isPaidDelivery;
     }
     
-    public LocalDate getReceivedDate() {
-        return receivedDate;
+    public String getSenderCustomerPhoneNumber() {
+        return senderCustomerPhoneNumber;
     }
     
-    public OfficeDTO getSenderOffice() {
-        return senderOffice;
+    public String getReceiverCustomerPhoneNumber() {
+        return receiverCustomerPhoneNumber;
     }
     
-    public CustomerDTO getSenderCustomer() {
-        return senderCustomer;
+    public Long getSenderEmployeeId() {
+        return senderEmployeeId;
     }
     
-    public EmployeeDTO getSenderEmployee() {
-        return senderEmployee;
+    public Long getReceiverEmployeeId() {
+        return receiverEmployeeId;
     }
     
-    public OfficeDTO getReceiverOffice() {
-        return receiverOffice;
+    public Long getDeliveryPaymentTypeId() {
+        return deliveryPaymentTypeId;
     }
     
-    public CustomerDTO getReceiverCustomer() {
-        return receiverCustomer;
+    public Long getReceiverOfficeId() {
+        return receiverOfficeId;
     }
     
-    public EmployeeDTO getReceiverEmployee() {
-        return receiverEmployee;
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
     }
 }

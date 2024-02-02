@@ -22,7 +22,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void addEmployee(Employee employee) {
+    public void createEmployee(Employee employee) {
         employeeRepository.save(employee);
     }
 

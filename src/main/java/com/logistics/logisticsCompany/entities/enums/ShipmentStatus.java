@@ -19,11 +19,13 @@ public class ShipmentStatus {
     private Set<ShipmentStatusHistory> shipmentStatusHistorySet;
 
 
-    public ShipmentStatus(String goodsStatus) {
-        this.shipmentStatus = goodsStatus;
+    public ShipmentStatus(String shipmentStatus) {
+        this.shipmentStatus = shipmentStatus;
     }
 
     public ShipmentStatus(){}
+    
+    
 
     public long getId() {
         return id;
@@ -33,12 +35,12 @@ public class ShipmentStatus {
         this.id = id;
     }
 
-    public String getGoodsStatus() {
+    public String getShipmentStatus() {
         return shipmentStatus;
     }
 
-    public void setGoodsStatus(String goodsStatus) {
-        this.shipmentStatus = goodsStatus;
+    public void setShipmentStatus(String shipmentStatus) {
+        this.shipmentStatus = shipmentStatus;
     }
 
     @Override

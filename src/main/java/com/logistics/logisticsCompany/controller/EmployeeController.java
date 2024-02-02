@@ -1,6 +1,7 @@
 package com.logistics.logisticsCompany.controller;
 
 import com.logistics.logisticsCompany.DTO.EmployeeDTO;
+import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
@@ -19,25 +20,28 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/employees")
 public class EmployeeController {
-
     private final EmployeeService employeeService;
+    private final EmployeeRepository employeeRepository;
+    private final EntityDtoMapper entityDtoMapper;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository) {
+    public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository, EntityDtoMapper entityDtoMapper) {
         this.employeeService = employeeService;
         this.employeeRepository = employeeRepository;
+        this.entityDtoMapper = entityDtoMapper;
     }
 
-    private final EmployeeRepository employeeRepository;
-
-    @PostMapping        //actually creates employee, it doesnt add employee to a specific company
+    @PostMapping
     public ResponseEntity<String> createEmployee(@RequestBody Employee employee) {
-        if (employeeRepository.existsByFirstName(employee.getFirstName()) && employeeRepository.existsBySecondName(employee.getSecondName())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("This employee by the name " + employee.getFirstName() + " " + employee.getSecondName() + " already exists");
-        }
+        //Marto brat izmismi drug condition tva nishto ne pravi
+        //Checks if employee with the given name already exists
+//        if (employeeRepository.existsByFirstName(employee.getFirstName()) && employeeRepository.existsBySecondName(employee.getSecondName())) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body("This employee by the name " + employee.getFirstName() + " " + employee.getSecondName() + " already exists");
+//        }
+        //Create logistics company if name does not already exist
         try {
-            employeeService.addEmployee(employee);
+            employeeService.createEmployee(employee);
             return ResponseEntity.status(HttpStatus.CREATED).body("Employee added successfully");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -45,23 +49,25 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<EmployeeDTO> getAllEmployees() {
-        List<Employee> employees = employeeService.getAllEmployees();
-
-        // Convert the list of Employee entities to EmployeeDTOs
-        List<EmployeeDTO> employeeDTOs = employees.stream()
-                .map(EmployeeDTO::new)
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+        //Convert to List<EmployeeDTO>
+        List<EmployeeDTO> employeeDTOs = employeeService.getAllEmployees().stream()
+                .map(entityDtoMapper::convertToEmployeeDTO)
                 .collect(Collectors.toList());
-
-        return employeeDTOs;
+        //If the list is empty return NO_CONTENT, else return OK and the employees
+        return employeeDTOs.isEmpty()
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                : new ResponseEntity<>(employeeDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable(value = "id") long employeeId) {
-        Optional<Employee> customer = employeeService.getEmployeeById(employeeId);
-        return customer.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable(value = "id") long employeeId) {
+        return employeeService.getEmployeeById(employeeId)
+                .map(entityDtoMapper::convertToEmployeeDTO)
+                .map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<String> updateEmployee(@PathVariable(value = "id") long employeeId,
                                                  @RequestBody Employee updatedEmployee) {
@@ -78,7 +84,8 @@ public class EmployeeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable(value = "id") long employeeId) {
         if(!employeeRepository.existsById(employeeId)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee with the provided id doesn't exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Employee with the provided id doesn't exist");
         }
         try {
             employeeService.deleteEmployee(employeeId);

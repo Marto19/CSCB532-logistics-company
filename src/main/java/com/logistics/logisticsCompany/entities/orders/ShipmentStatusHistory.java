@@ -88,7 +88,31 @@ public class ShipmentStatusHistory {
 	public void setShipment(Shipment shipment) {
 		this.shipment = shipment;
 	}
-
+	
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+	
+	public void setShipmentStatus(ShipmentStatus shipmentStatus) {
+		this.shipmentStatus = shipmentStatus;
+	}
+	
+	public int getStatus() {
+		return status;
+	}
+	
+	public Customer getCustomer() {
+		return customer;
+	}
+	
+	public ShipmentStatus getShipmentStatus() {
+		return shipmentStatus;
+	}
+	
 	@Override
 	public String toString() {
 		return "ShipmentStatusHistory{" +

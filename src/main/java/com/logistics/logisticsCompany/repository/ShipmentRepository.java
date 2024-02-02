@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
     boolean existsById(long id);
@@ -28,4 +30,10 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 	List<Shipment> findBySenderCustomerId(Long customerId);
 	
 	List<Shipment> findByReceiverCustomerId(Long customerId);
+	
+	//5.h.
+	@Query("SELECT SUM(s.priceDelivery) FROM Shipment s WHERE s.senderEmployee.logisticsCompany.id = :companyId AND s.shipmentDate = :date AND s.isPaidDelivery = true")
+	BigDecimal calculateIncomeForCompanyAndDate(@Param("companyId") Long companyId, @Param("date") LocalDate date);
+
+	
 }

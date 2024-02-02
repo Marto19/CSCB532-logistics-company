@@ -59,7 +59,7 @@ class CustomerControllerTest {
     @Test
     void getAllCustomers() {
         //Retrieves all customers
-        List<CustomerDTO> customers = customerController.getAllCustomers();
+        List<CustomerDTO> customers = customerController.getAllCustomers().getBody();
         
         //Checks if the retrieved customers list contains the saved customers
         assertEquals(customers.get(0).getPhone(), customer1.getPhone());

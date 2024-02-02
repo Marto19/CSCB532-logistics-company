@@ -1,29 +1,51 @@
 package com.logistics.logisticsCompany.DTO;
 
 
+import com.logistics.logisticsCompany.entities.enums.DeliveryPaymentType;
+import com.logistics.logisticsCompany.entities.enums.ShipmentStatus;
+import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
+import com.logistics.logisticsCompany.entities.users.User;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class EntityDtoMapper {
 	
 	public ShipmentDTO convertToShipmentDTO(Shipment shipment) {
 		ShipmentDTO dto = new ShipmentDTO();
-		dto.setId(shipment.getId());
-		dto.setShipmentDate(shipment.getShipmentDate());
+		
 		dto.setWeight(shipment.getWeight());
 		dto.setPrice(shipment.getPrice());
-		dto.setIsPaid(shipment.isPaid());
-		dto.setReceivedDate(shipment.getReceivedDate());
-		dto.setSenderOffice(convertToOfficeDTO(shipment.getSenderOffice()));
-		dto.setSenderCustomer(convertToCustomerDTO(shipment.getSenderCustomer()));
-		dto.setSenderEmployee(convertToEmployeeDTO(shipment.getSenderEmployee()));
-		dto.setReceiverOffice(convertToOfficeDTO(shipment.getReceiverOffice()));
-		dto.setReceiverCustomer(convertToCustomerDTO(shipment.getReceiverCustomer()));
-		dto.setReceiverEmployee(convertToEmployeeDTO(shipment.getReceiverEmployee()));
+		dto.setIsPaid(shipment.getIsPaid());
+		dto.setPriceDelivery(shipment.getPriceDelivery());
+		dto.setIsPaidDelivery(shipment.getIsPaidDelivery());
+		dto.setTotalPrice(shipment.getTotalPrice());
+		if (shipment.getSenderCustomer() != null) {
+			dto.setSenderCustomerPhoneNumber(shipment.getSenderCustomer().getPhone());
+		}
+		if (shipment.getReceiverCustomer() != null) {
+			dto.setReceiverCustomerPhoneNumber(shipment.getReceiverCustomer().getPhone());
+		}
+		
+		if (shipment.getSenderEmployee() != null) {
+			dto.setSenderEmployeeId(shipment.getSenderEmployee().getId());
+		}
+		if (shipment.getReceiverEmployee() != null) {
+			dto.setReceiverEmployeeId(shipment.getReceiverEmployee().getId());
+		}
+		if (shipment.getDeliveryPaymentType() != null) {
+			dto.setDeliveryPaymentTypeId(shipment.getDeliveryPaymentType().getId());
+		}
+		
+		if (shipment.getReceiverOffice() != null) {
+			dto.setReceiverOfficeId(shipment.getReceiverOffice().getId());
+		}
+		
 		return dto;
 	}
 	
@@ -37,6 +59,23 @@ public class EntityDtoMapper {
 		return dto;
 	}
 	
+	public UserDTO convertToUserDTO(User user){
+		UserDTO dto = new UserDTO();
+		
+		dto.setId(user.getId());
+		dto.setUsername(user.getUsername());
+		
+		
+		
+		return dto;
+	}
+	public LogisticsCompanyDTO convertToLogisticsCompanyDTO(LogisticsCompany logisticsCompany) {
+		LogisticsCompanyDTO dto = new LogisticsCompanyDTO();
+		dto.setId(logisticsCompany.getId());
+		dto.setName(logisticsCompany.getName());
+		dto.setIncome(logisticsCompany.getIncome());
+		return dto;
+	}
 	public CustomerDTO convertToCustomerDTO(Customer customer) {
 		CustomerDTO dto = new CustomerDTO();
 		dto.setId(customer.getId());
@@ -55,6 +94,20 @@ public class EntityDtoMapper {
 		dto.setId(employee.getId());
 		dto.setFirstName(employee.getFirstName());
 		dto.setSecondName(employee.getSecondName());
+		return dto;
+	}
+	
+	public DeliveryPaymentTypeDTO convertToDeliveryPaymentTypeDTO(DeliveryPaymentType deliveryPaymentType) {
+		DeliveryPaymentTypeDTO dto = new DeliveryPaymentTypeDTO();
+		dto.setId(deliveryPaymentType.getId());
+		dto.setPaymentType(deliveryPaymentType.getPaymentType());
+		return dto;
+	}
+	
+	public ShipmentStatusDTO convertToShipmentStatusDTO(ShipmentStatus shipmentStatus) {
+		ShipmentStatusDTO dto = new ShipmentStatusDTO();
+		dto.setId(shipmentStatus.getId());
+		dto.setShipmentStatus(shipmentStatus.getShipmentStatus());
 		return dto;
 	}
 	
