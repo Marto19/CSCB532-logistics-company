@@ -7,32 +7,33 @@ import jakarta.persistence.*;
 public class DeliveryPaymentType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private long id;
 	
-	@Column(name = "type_name", nullable = false)
-	private String typeName;
+	@Column(name = "payment_type", nullable = false)
+	private String paymentType;
 	
 	// Constructors, getters, and setters
 	public DeliveryPaymentType() {
 	}
 	
-	public DeliveryPaymentType(String typeName) {
-		this.typeName = typeName;
+	public DeliveryPaymentType(String paymentType) {
+		this.paymentType = paymentType;
 	}
 	
-	public Integer getId() {
+	
+	public long getId() {
 		return id;
 	}
 	
-	public void setId(Integer id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	
-	public String getTypeName() {
-		return typeName;
+	public String getPaymentType() {
+		return paymentType;
 	}
 	
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
 	}
 }

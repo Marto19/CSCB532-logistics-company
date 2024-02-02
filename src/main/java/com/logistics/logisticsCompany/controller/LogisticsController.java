@@ -11,8 +11,6 @@ import com.logistics.logisticsCompany.entities.offices.Office;
 @Controller
 @RequestMapping("/logistics")
 public class LogisticsController {
-
-
     private final LogisticsCompanyServiceImpl logisticsService;
 
     public LogisticsController(LogisticsCompanyService logisticsService) {
