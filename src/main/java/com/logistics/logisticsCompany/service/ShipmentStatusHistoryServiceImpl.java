@@ -25,13 +25,17 @@ public class ShipmentStatusHistoryServiceImpl implements ShipmentStatusHistorySe
 		this.shipmentStatusRepository = shipmentStatusRepository;
 		this.shipmentRepository = shipmentRepository;
 	}
-	//TODO IMPLEMENT NOTES? (CONTROLLER NEEDS TO BE ADDED ALSO)
+	
 	@Override
+	// Overloaded method without the notes parameter
 	public void recordShipmentStatusChange(Long shipmentId, String statusName) {
+		recordShipmentStatusChange(shipmentId, statusName, null);
+	}
+	@Override
+	public void recordShipmentStatusChange(Long shipmentId, String statusName, String notes) {
 		ShipmentStatusHistory statusHistory = new ShipmentStatusHistory();
 		statusHistory.setUpdateDate(LocalDateTime.now());
 		
-		// Fetch the Shipment entity by ID
 		Shipment shipment = shipmentRepository.findById(shipmentId)
 				.orElseThrow(() -> new EntityNotFoundException("Shipment not found with ID: " + shipmentId));
 		statusHistory.setShipment(shipment);
@@ -40,51 +44,22 @@ public class ShipmentStatusHistoryServiceImpl implements ShipmentStatusHistorySe
 				.orElseThrow(() -> new EntityNotFoundException("ShipmentStatus '" + statusName + "' not found"));
 		statusHistory.setShipmentStatus(shipmentStatus);
 		
+		// Set notes if provided
+		if (notes != null && !notes.trim().isEmpty()) {
+			statusHistory.setNotes(notes);
+		}
+		
 		shipmentStatusHistoryRepository.save(statusHistory);
 		
 		// Update the status column in Shipment entity with the latest status
-		shipment.setStatus(statusName); // Assuming there's a setStatus method in Shipment entity
-		shipmentRepository.save(shipment); // Save the updated Shipment entity
-	}
-	
-	
-	//most important method
-	@Override
-	public void createShipmentStatusHistory(ShipmentStatusHistory shipmentStatusHistory) {
-		shipmentStatusHistoryRepository.save(shipmentStatusHistory);
-	}
-	
-	@Override
-	public List<ShipmentStatusHistory> getAllShipmentStatusHistories() {
-		return shipmentStatusHistoryRepository.findAll();
-	}
-	
-	@Override
-	public ShipmentStatusHistory getShipmentStatusHistoryById(long id) {
-		return shipmentStatusHistoryRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("ShipmentStatusHistory not found with id: " + id));
-	}
-	
-	@Override
-	public void updateShipmentStatusHistory(long id, ShipmentStatusHistory shipmentStatusHistory) {
-		ShipmentStatusHistory existingShipmentStatusHistory = shipmentStatusHistoryRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("ShipmentStatusHistory not found with id: " + id));
-		
-	/*	// Update the fields of the existing shipment status history
-		existingShipmentStatusHistory.setStatus(shipmentStatusHistory.getStatus());
-		existingShipmentStatusHistory.setUpdateDate(shipmentStatusHistory.getUpdateDate());
-		existingShipmentStatusHistory.setNotes(shipmentStatusHistory.getNotes());
-		existingShipmentStatusHistory.setShipment(shipmentStatusHistory.getShipment());
-		existingShipmentStatusHistory.setCustomer(shipmentStatusHistory.getCustomer());
-		existingShipmentStatusHistory.setShipmentStatus(shipmentStatusHistory.getShipmentStatus());
-		*/
-		shipmentStatusHistoryRepository.save(existingShipmentStatusHistory);
+		shipment.setStatus(statusName);
+		shipmentRepository.save(shipment);
 	}
 	
 	@Override
 	public void deleteShipmentStatusHistory(long id) {
 		if (!shipmentStatusHistoryRepository.existsById(id)) {
-			throw new EntityNotFoundException("ShipmentStatusHistory not found with id: " + id);
+			throw new EntityNotFoundException("ShipmentStatusHistory not found with ID: " + id);
 		}
 		shipmentStatusHistoryRepository.deleteById(id);
 	}

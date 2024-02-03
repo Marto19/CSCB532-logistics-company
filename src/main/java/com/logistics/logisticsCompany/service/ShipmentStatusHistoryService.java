@@ -8,15 +8,10 @@ import java.util.List;
 public interface ShipmentStatusHistoryService {
 	
 	
+	// Overloaded method without the notes parameter
 	void recordShipmentStatusChange(Long shipmentId, String statusName);
 	
-	void createShipmentStatusHistory(ShipmentStatusHistory shipmentStatusHistory);
-	
-	List<ShipmentStatusHistory> getAllShipmentStatusHistories();
-	
-	ShipmentStatusHistory getShipmentStatusHistoryById(long id);
-	
-	void updateShipmentStatusHistory(long id, ShipmentStatusHistory shipmentStatusHistory);
+	void recordShipmentStatusChange(Long shipmentId, String statusName, String notes);
 	
 	void deleteShipmentStatusHistory(long id);
 	
