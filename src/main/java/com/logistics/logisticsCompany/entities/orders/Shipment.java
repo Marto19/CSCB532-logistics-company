@@ -46,9 +46,13 @@ public class Shipment {
 	@Column(name = "total_price", nullable = true, precision= 10, scale = 2)
 	private BigDecimal totalPrice;
 	
+	@Column(name = "status", nullable = true)
+	private String status;
 	@Column(name = "received_date", nullable = true)
 	private LocalDate receivedDate;
 
+	@Column(name = "notes", nullable = true)
+	private String notes;
 	/*
 		SENDER RELATIONSHIPS - OFFICE, CUSTOMER, EMPLOYEE
 	*/
@@ -138,6 +142,22 @@ public class Shipment {
 
 	//Getters and Setters
 	
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	
+	public String getNotes() {
+		return notes;
+	}
 	
 	public BigDecimal getTotalPrice() {
 		return totalPrice;

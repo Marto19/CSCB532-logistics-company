@@ -20,14 +20,10 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 	
 	// This method assumes you want to find shipments that have been sent but not received.
 	// It uses a subquery to find all shipments that have a status history of "SENT" but do not have a status of "RECEIVED" or "DELIVERED"
-	@Query("SELECT s FROM Shipment s WHERE EXISTS (" +
-			"SELECT sh FROM ShipmentStatusHistory sh WHERE sh.shipment = s AND sh.shipmentStatus.shipmentStatus = :sentStatus) " +
-			"AND NOT EXISTS (" +
-			"SELECT sh FROM ShipmentStatusHistory sh WHERE sh.shipment = s AND sh.shipmentStatus.shipmentStatus IN (:notReceivedStatuses))")
-	List<Shipment> findShipmentsSentButNotReceived(@Param("sentStatus") String sentStatus, @Param("notReceivedStatuses") List<String> notReceivedStatuses);
-	
+	List<Shipment> findByStatusNot(String status);
 
 	List<Shipment> findBySenderCustomerId(Long customerId);
+	List<Shipment> findBySenderCustomerPhone(String phone);
 	
 	List<Shipment> findByReceiverCustomerId(Long customerId);
 	

@@ -15,9 +15,6 @@ public class ShipmentStatusHistory {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "status", nullable = false)
-	private int status;
-
 	@Column(name = "update_date", nullable = false)
 	private LocalDateTime updateDate;
 
@@ -31,9 +28,6 @@ public class ShipmentStatusHistory {
 	private Shipment shipment;
 	
 	@ManyToOne
-	private Customer customer;
-	
-	@ManyToOne
 	@JoinColumn(name = "shipment_status_id")
 	private ShipmentStatus shipmentStatus;
 
@@ -41,8 +35,8 @@ public class ShipmentStatusHistory {
 	public ShipmentStatusHistory(){
 	}
 
-	public ShipmentStatusHistory(int status, LocalDateTime updateDate, String notes){
-		this.status = status;
+	public ShipmentStatusHistory(LocalDateTime updateDate, String notes){
+
 		this.updateDate = updateDate;
 		this.notes = notes;
 	}
@@ -89,25 +83,13 @@ public class ShipmentStatusHistory {
 		this.shipment = shipment;
 	}
 	
-	public void setStatus(int status) {
-		this.status = status;
-	}
 	
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
 	
 	public void setShipmentStatus(ShipmentStatus shipmentStatus) {
 		this.shipmentStatus = shipmentStatus;
 	}
 	
-	public int getStatus() {
-		return status;
-	}
 	
-	public Customer getCustomer() {
-		return customer;
-	}
 	
 	public ShipmentStatus getShipmentStatus() {
 		return shipmentStatus;
@@ -117,7 +99,6 @@ public class ShipmentStatusHistory {
 	public String toString() {
 		return "ShipmentStatusHistory{" +
 				"id=" + id +
-//				", status=" + status +
 				", updateDate=" + updateDate +
 				", notes='" + notes + '\'' +
 				'}';

@@ -13,8 +13,10 @@ public interface EmployeeService {
     void createEmployee(Employee employee);
 
     List<Employee> getAllEmployees();
-
-    void updateEmployee(long employeeId, Employee updatedEmployee);
+	
+	List<Employee> getAllEmployeesByCompanyId(Long companyId);
+	
+	void updateEmployee(long employeeId, Employee updatedEmployee);
 
     void deleteEmployee(long employeeId);
 

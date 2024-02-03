@@ -49,6 +49,8 @@ public class ShipmentController {
         }
     }
     
+    
+    //FIXME REMOVE--------------------------------------------------
     @PostMapping("/sent")
     public ResponseEntity<String> registerSentShipment(@RequestBody Shipment shipment) {
         try {
@@ -68,6 +70,7 @@ public class ShipmentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+    //FIXME REMOVE--------------------------------------------------
 
 //    @PostMapping
 //    public ResponseEntity<String> createShipment(@RequestBody Shipment shipment) {
@@ -142,17 +145,14 @@ public class ShipmentController {
     }
     
     
-    //5.d.------ Get all shipments by customer id
+    //5.d.------ Get all shipments by customer id DONE
     @GetMapping("/employee/{employeeId}")
     public ResponseEntity<List<ShipmentDTO>> getShipmentsByEmployee(@PathVariable Long employeeId) {
-        List<ShipmentDTO> shipmentDTOs = shipmentService.getAllSentShipmentsByEmployeeId(employeeId)
-                .stream()
-                .map(entityDtoMapper::convertToShipmentDTO)
-                .collect(Collectors.toList());
+        List<ShipmentDTO> shipmentDTOs = shipmentService.getAllSentShipmentsByEmployeeId(employeeId);
         return ResponseEntity.ok(shipmentDTOs);
     }
     
-    //5.e.------ Get all shipments sent not recieved
+    //5.e.------ Get all shipments sent not recieved DONE
     @GetMapping("/sent-not-received")
     public ResponseEntity<List<ShipmentDTO>> getShipmentsSentButNotReceived() {
         List<ShipmentDTO> shipmentDTOs = shipmentService.getShipmentsSentButNotReceived();
@@ -163,9 +163,20 @@ public class ShipmentController {
     }
     
     //5.f.------ Get all shipments sent of customer by id
-    @GetMapping("/sent-by-client/{clientId}")
-    public ResponseEntity<List<ShipmentDTO>> getShipmentsBySenderCustomerId(@PathVariable Long clientId) {
-        List<ShipmentDTO> shipmentDTOs = shipmentService.getShipmentsBySenderCustomerId(clientId);
+    // Using customer ID
+    @GetMapping("/sent-by-client/{customerId}")
+    public ResponseEntity<List<ShipmentDTO>> getShipmentsBySenderCustomerId(@PathVariable Long customerId) {
+        List<ShipmentDTO> shipmentDTOs = shipmentService.getShipmentsBySenderCustomerId(customerId);
+        if (shipmentDTOs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(shipmentDTOs);
+    }
+    
+    // Alternatively, if using phone number
+    @GetMapping("/by-sender-phone")
+    public ResponseEntity<List<ShipmentDTO>> getShipmentsBySenderCustomerPhone(@RequestParam String phone) {
+        List<ShipmentDTO> shipmentDTOs = shipmentService.getShipmentsBySenderCustomerPhone(phone);
         if (shipmentDTOs.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
