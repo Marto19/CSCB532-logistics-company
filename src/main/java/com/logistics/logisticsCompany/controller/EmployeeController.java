@@ -39,7 +39,7 @@ public class EmployeeController {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 //                    .body("This employee by the name " + employee.getFirstName() + " " + employee.getSecondName() + " already exists");
 //        }
-        //Create logistics company if name does not already exist
+        //Create employee if name does not already exist
         try {
             employeeService.createEmployee(employee);
             return ResponseEntity.status(HttpStatus.CREATED).body("Employee added successfully");
