@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.logistics.logisticsCompany.DTO.CustomerDTO;
 import com.logistics.logisticsCompany.DTO.EmployeeDTO;
 import com.logistics.logisticsCompany.DTO.OfficeDTO;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,27 +14,36 @@ import java.time.LocalDate;
 public class ShipmentDTO {
     //reduced because we dont need id and shipment date to transfer?right?
     @JsonProperty("weight")
+    @NotNull(message = "Weight cannot be null")
+    @Positive(message = "Weight must be positive")
     private BigDecimal weight;
     
     @JsonProperty("price")
+    @PositiveOrZero(message = "Price must be positive")
     private BigDecimal price;
     
     @JsonProperty("isPaid")
     private boolean isPaid;
     
+    
     @JsonProperty("priceDelivery")
     private BigDecimal priceDelivery;
     
     @JsonProperty("isPaidDelivery")
+    @NotNull(message = "IsPaidDelivery cannot be null")
     private boolean isPaidDelivery;
     
     @JsonProperty("senderCustomerPhoneNumber")
+    @NotNull(message = "SenderCustomerPhoneNumber cannot be null")
     private String senderCustomerPhoneNumber;
     
+    
     @JsonProperty("receiverCustomerPhoneNumber")
+    @NotNull(message = "ReceiverCustomerPhoneNumber cannot be null")
     private String receiverCustomerPhoneNumber;
     
     @JsonProperty("senderEmployeeId")
+    @NotNull(message = "SenderEmployeeId cannot be null")
     private Long senderEmployeeId;
     
     @JsonProperty("receiverEmployeeId")
@@ -41,6 +53,7 @@ public class ShipmentDTO {
     private Long deliveryPaymentTypeId;
     
     @JsonProperty("receiverOfficeId")
+    @NotNull(message = "ReceiverOfficeId cannot be null")
     private Long receiverOfficeId;
     
     @JsonProperty("totalPrice")
