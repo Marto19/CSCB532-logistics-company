@@ -1,12 +1,23 @@
 package com.logistics.logisticsCompany.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.logistics.logisticsCompany.entities.users.Employee;
+import jakarta.validation.constraints.NotNull;
 
 public class EmployeeDTO {
 
     private long id;
+    
+    @NotNull(message = "First name cannot be null")
+    @JsonProperty("firstName")
     private String firstName;
+    
+    @NotNull(message = "Second name cannot be null")
+    @JsonProperty("secondName")
     private String secondName;
+    
+    @NotNull(message = "Current office name cannot be null")
+    @JsonProperty("currentOfficeName")
     private String currentOfficeName;
 
     // Other fields if needed

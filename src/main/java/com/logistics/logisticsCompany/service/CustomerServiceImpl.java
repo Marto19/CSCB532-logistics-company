@@ -1,8 +1,10 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.DTO.CustomerDTO;
+import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
+import com.logistics.logisticsCompany.customExceptions.CustomerExistsException;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.users.Customer;
-import com.logistics.logisticsCompany.entities.users.Employee;
 import com.logistics.logisticsCompany.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,21 +17,23 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final EntityDtoMapper entityDtoMapper;
     
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, EntityDtoMapper entityDtoMapper) {
         this.customerRepository = customerRepository;
+        this.entityDtoMapper = entityDtoMapper;
     }
     
     @Override
-    public void createCustomer(Customer customer) {
-        //simple check (ignore it)
-        if (customer.getFirstName() == null || customer.getFirstName().isEmpty()) {
-            throw new IllegalArgumentException("First name must not be null or empty");
+    public Customer createCustomer(CustomerDTO customerDTO) {
+        if (existsByPhone(customerDTO.getPhone())) {
+            throw new CustomerExistsException("Customer with the " + customerDTO.getPhone() + " phone number already exists");
         }
-        //works perfectly - balance 0.00
-        customer.setBalance(BigDecimal.ZERO); // Set balance explicitly to zero
-        customerRepository.save(customer);
+        Customer customer = entityDtoMapper.convertToEntity(customerDTO);
+        customer.setBalance(BigDecimal.ZERO); // Initialize balance to zero for new customers
+        
+        return customerRepository.save(customer);
     }
 
     @Override

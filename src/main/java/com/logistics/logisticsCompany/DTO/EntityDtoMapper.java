@@ -21,10 +21,7 @@ public class EntityDtoMapper {
 		
 		dto.setWeight(shipment.getWeight());
 		dto.setPrice(shipment.getPrice());
-		dto.setIsPaid(shipment.getIsPaid());
-		dto.setPriceDelivery(shipment.getPriceDelivery());
 		dto.setIsPaidDelivery(shipment.getIsPaidDelivery());
-		dto.setTotalPrice(shipment.getTotalPrice());
 		if (shipment.getSenderCustomer() != null) {
 			dto.setSenderCustomerPhoneNumber(shipment.getSenderCustomer().getPhone());
 		}
@@ -35,12 +32,6 @@ public class EntityDtoMapper {
 		if (shipment.getSenderEmployee() != null) {
 			dto.setSenderEmployeeId(shipment.getSenderEmployee().getId());
 		}
-		if (shipment.getReceiverEmployee() != null) {
-			dto.setReceiverEmployeeId(shipment.getReceiverEmployee().getId());
-		}
-		if (shipment.getDeliveryPaymentType() != null) {
-			dto.setDeliveryPaymentTypeId(shipment.getDeliveryPaymentType().getId());
-		}
 		
 		if (shipment.getReceiverOffice() != null) {
 			dto.setReceiverOfficeId(shipment.getReceiverOffice().getId());
@@ -49,6 +40,23 @@ public class EntityDtoMapper {
 		return dto;
 	}
 	
+	public Shipment convertToEntity(ShipmentDTO shipmentDTO) {
+		Shipment shipment = new Shipment();
+		shipment.setWeight(shipmentDTO.getWeight());
+		shipment.setPrice(shipmentDTO.getPrice());
+		shipment.setIsPaidDelivery(shipmentDTO.getIsPaidDelivery());
+		return shipment;
+	}
+	
+	public Customer convertToEntity(CustomerDTO customerDTO){
+		Customer customer = new Customer();
+		customer.setId(customerDTO.getId());
+		customer.setFirstName(customerDTO.getFirstName());
+		customer.setSecondName(customerDTO.getSecondName());
+		customer.setPhone(customerDTO.getPhone());
+		customer.setBalance(customerDTO.getBalance());
+		return customer;
+	}
 	public OfficeDTO convertToOfficeDTO(Office office) {
 		OfficeDTO dto = new OfficeDTO();
 		dto.setId(office.getId());

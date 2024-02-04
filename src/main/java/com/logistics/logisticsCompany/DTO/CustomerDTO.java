@@ -1,6 +1,8 @@
 package com.logistics.logisticsCompany.DTO;
 
 import com.logistics.logisticsCompany.entities.users.Customer;
+import com.logistics.logisticsCompany.validation.ValidPhoneNumber;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -9,8 +11,14 @@ import java.util.stream.Collectors;
 public class CustomerDTO {
     private long id;
     private BigDecimal balance;
+    
+    @NotNull(message = "First name cannot be null")
     private String firstName;
+    
+    @NotNull(message = "Second name cannot be null")
     private String secondName;
+    
+    @ValidPhoneNumber
     private String phone;
 
     // Default constructor

@@ -22,6 +22,8 @@ import com.logistics.logisticsCompany.repository.DeliveryPaymentTypeRepository;
 import com.logistics.logisticsCompany.repository.ShipmentStatusRepository;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import java.util.Optional;
+import java.util.Optional;
+
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
 
@@ -106,10 +108,8 @@ public class ShipmentServiceImpl implements ShipmentService {
         shipment.setDeliveryPaymentType(deliveryPaymentType);
         
         // Set sender and receiver customer by phone number
-        Customer senderCustomer = customerService.getCustomerByPhoneNumber(shipmentDto.getSenderCustomerPhoneNumber())
-                .orElseThrow(() -> new EntityNotFoundException("Sender Customer not found with phone number: " + shipmentDto.getSenderCustomerPhoneNumber()));
-        Customer receiverCustomer = customerService.getCustomerByPhoneNumber(shipmentDto.getReceiverCustomerPhoneNumber())
-                .orElseThrow(() -> new EntityNotFoundException("Receiver Customer not found with phone number: " + shipmentDto.getReceiverCustomerPhoneNumber()));
+        Customer senderCustomer = customerService.getCustomerByPhoneNumber(shipmentDto.getSenderCustomerPhoneNumber());
+        Customer receiverCustomer = customerService.getCustomerByPhoneNumber(shipmentDto.getReceiverCustomerPhoneNumber());
         shipment.setSenderCustomer(senderCustomer);
         shipment.setReceiverCustomer(receiverCustomer);
         
