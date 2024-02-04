@@ -507,6 +507,36 @@
         });
     });
 
+    //delete office
+
+    function deleteOffice(id) {
+        const url = 'http://localhost:8082/api/v1/offices';
+        const apiUrl = url.concat('/', id);
+        if (confirm('Are you sure you want to delete this office?')) {
+            fetch(apiUrl, {
+            method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+    .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // or .json() if your server responds with JSON
+        })
+            .then(() => {
+                console.log('Office deleted successfully');
+                // Optionally, reload the offices list to reflect the deletion
+                document.getElementById('loadOffices').click();
+            })
+            .catch((error) => {
+                console.error('Error deleting the office:', error);
+            });
+    }
+    }
+
 </script>
 </body>
 <!--TODO: FIX THE FETCHING OFFICE BUTTON: DISAPPEARS AFTER FIRST TIME
