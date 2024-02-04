@@ -33,7 +33,6 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<String> createEmployee(@RequestBody Employee employee) {
-        //Create logistics company if name does not already exist
         try {
             employeeService.createEmployee(employee);
             return ResponseEntity.status(HttpStatus.CREATED).body("Employee added successfully");
