@@ -24,12 +24,14 @@ async function handleSuccess(response) {
     const payload = jwtDecode(token);
     const userRoles = payload.role; // assuming the roles are stored in the 'role' property
 
+
+
     localStorage.setItem('roles', userRoles)
     console.log('User roles: ', userRoles)
 
     // Redirect the user to the appropriate page based on their role
     if (userRoles.includes('ROLE_CUSTOMER')) {
-        redirectToPage("/admin.html");
+        redirectToPage("/admin/adminpage");
     } else if (userRoles.includes('ROLE_EMPLOYEE')) {
         redirectToPage("/employee.html");
     } else {
@@ -118,19 +120,5 @@ async function sendAuthenticatedRequest() {
         'Content-Type': 'application/json'
     };
 
-    // Make a GET request to /main.html with Authorization header using Fetch API
-    const response = await fetch('/main.html', {
-        method: 'GET',
-        headers: headers
-    });
 
-    console.log('Response status:', response.status);
-
-    if (!response.ok) {
-        console.error('Error:', response.statusText);
-        return;
-    }
-
-    const data = await response.text();
-    console.log('Response from /main.html:', data);
 }
