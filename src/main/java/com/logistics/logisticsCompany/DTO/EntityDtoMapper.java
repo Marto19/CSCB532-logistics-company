@@ -54,7 +54,10 @@ public class EntityDtoMapper {
 		customer.setFirstName(customerDTO.getFirstName());
 		customer.setSecondName(customerDTO.getSecondName());
 		customer.setPhone(customerDTO.getPhone());
-		customer.setBalance(customerDTO.getBalance());
+/*		if (customerDTO.getUserId() != null){
+			customer.setUsers(new User(customerDTO.getUserId()));
+		}*/
+		
 		return customer;
 	}
 	public OfficeDTO convertToOfficeDTO(Office office) {

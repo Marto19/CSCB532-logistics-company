@@ -43,7 +43,7 @@ public class CustomerController {
             Customer createdCustomer = customerService.createCustomer(customerDTO);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body("Customer created successfully with ID: " + createdCustomer.getId());
-        } catch (CustomerExistsException e) {
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + e.getMessage());

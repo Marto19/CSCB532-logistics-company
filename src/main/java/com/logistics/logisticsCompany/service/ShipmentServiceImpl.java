@@ -65,7 +65,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     
     /*
     *Shipment fields:
-    *isPaid
+    *isPaidx
     *isPaidDelivery
     *price
     *priceDelivery
