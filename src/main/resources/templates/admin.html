@@ -289,7 +289,7 @@
                 const trHead = document.createElement('tr');
 
                 // Define headers for the table
-                const headers = ['ID', 'Address', 'City', 'Postcode', 'Actions'];
+                const headers = ['ID', 'Address', 'City', 'Office Name', 'Postcode', 'Actions'];
                 headers.forEach(header => {
                     const th = document.createElement('th');
                     th.setAttribute('scope', 'col');
@@ -305,12 +305,14 @@
                     const tdID = document.createElement('td');
                     const tdAddress = document.createElement('td');
                     const tdCity = document.createElement('td');
+                    const tdOfficeName =  document.createElement('td');
                     const tdPostcode = document.createElement('td');
                     const tdActions = document.createElement('td');
 
                     tdID.innerText = office.id;
                     tdAddress.innerText = office.address;
                     tdCity.innerText = office.city;
+                    tdOfficeName.innerText = office.officeName;
                     tdPostcode.innerText = office.postcode;
 
                     const deleteButton = document.createElement('button');
@@ -325,7 +327,7 @@
                         document.getElementById('updateOfficeId').value = office.id; // Set the office ID in the hidden input
                         document.getElementById('updateOfficeAddress').value = office.address; // Pre-fill the form with existing values
                         document.getElementById('updateOfficeCity').value = office.city;
-                        document.getElementById('updateOfficeName').value = office.name;
+                        document.getElementById('updateOfficeName').value = office.officeName;
                         document.getElementById('updateOfficePostcode').value = office.postcode;
                         document.getElementById('updateOffice').classList.remove('d-none'); // Show the update form section
                     });
@@ -340,6 +342,7 @@
                     tr.appendChild(tdID);
                     tr.appendChild(tdAddress);
                     tr.appendChild(tdCity);
+                    tr.appendChild(tdOfficeName)
                     tr.appendChild(tdPostcode);
                     tr.appendChild(tdActions);
 
@@ -453,7 +456,59 @@
         }
     });
 
+    //UPDATE OFFICES
+    document.getElementById('updateOfficeButton').addEventListener('click', function () {
+        // Get the values from the form fields
+        const id = document.getElementById('updateOfficeId').value; // Assuming this gets populated somewhere in your code
+        const address = document.getElementById('updateOfficeAddress').value.trim();
+        const city = document.getElementById('updateOfficeCity').value.trim();
+        const officeName = document.getElementById('updateOfficeName').value.trim();
+        const postcode = document.getElementById('updateOfficePostcode').value.trim();
+
+        const url = 'http://localhost:8082/api/v1/offices';
+        const apiUrl = url.concat('/', id);
+        // Check if all fields are filled
+        if (!address || !city  || !officeName || !postcode) {
+            alert('Please fill in all the fields.');
+            return;
+        }
+
+        // Prepare the data to send in the request
+        const data = { address, city, officeName, postcode };
+        console.log(apiUrl);
+
+        // Send the PUT request to update the office
+        fetch(apiUrl, {
+        method: 'PUT',
+            headers: {
+            'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token') // Adjust this as per your auth setup
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            if ( response.status === 200){
+                console.log('Success: ', response.status);
+                successToast.show();
+                return;
+            }
+            return response.json();
+        })
+        .then(updatedOffice => {
+            console.log('Office updated successfully:', updatedOffice);
+            successToast.show();
+        })
+        .catch(error => {
+            console.error('Error updating the office:', error);
+            fetchErrorToast.show();
+        });
+    });
+
 </script>
 </body>
-
+<!--TODO: FIX THE FETCHING OFFICE BUTTON: DISAPPEARS AFTER FIRST TIME
+TODO: UPDADE AND DELETE OFFICES-->
 </html>
