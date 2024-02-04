@@ -1,11 +1,14 @@
-// Function to handle success response from authentication or registration
+import jwtDecode from 'jwt-decode';
+
 async function handleSuccess(response) {
+    console.log('handleSuccess function called');
+    const data = await response.json();
+
     if (!response.ok) {
-        console.error('Error:', await response.json());
+        console.error('Error:', data);
         return;
     }
 
-    const data = await response.json();
     const token = data.token;
 
     if (!token) {
@@ -17,12 +20,27 @@ async function handleSuccess(response) {
     localStorage.setItem('token', token);
     console.log('Token stored in localStorage:', token);
 
+    // Decode the token to get the user's role
+    const payload = jwtDecode(token);
+    const userRoles = payload.role; // assuming the roles are stored in the 'role' property
+
+    localStorage.setItem('roles', userRoles)
+    console.log('User roles: ', userRoles)
+
+    // Redirect the user to the appropriate page based on their role
+    if (userRoles.includes('ROLE_CUSTOMER')) {
+        redirectToPage("/admin.html");
+    } else if (userRoles.includes('ROLE_EMPLOYEE')) {
+        redirectToPage("/employee.html");
+    } else {
+        console.error('Unknown role:', userRoles);
+    }
+
     // Call the function to send the authenticated request
     sendAuthenticatedRequest();
-
-    // Redirect to a specified page or handle as needed
-    redirectToPage("/main.html");
 }
+
+
 
 // Function to redirect to a specified page
 function redirectToPage(page) {
