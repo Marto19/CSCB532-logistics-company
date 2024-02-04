@@ -33,18 +33,13 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<String> createEmployee(@RequestBody Employee employee) {
-        //Marto brat izmismi drug condition tva nishto ne pravi
-        //Checks if employee with the given name already exists
-//        if (employeeRepository.existsByFirstName(employee.getFirstName()) && employeeRepository.existsBySecondName(employee.getSecondName())) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body("This employee by the name " + employee.getFirstName() + " " + employee.getSecondName() + " already exists");
-//        }
-        //Create logistics company if name does not already exist
         try {
             employeeService.createEmployee(employee);
             return ResponseEntity.status(HttpStatus.CREATED).body("Employee added successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
 
@@ -88,16 +83,12 @@ public class EmployeeController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable(value = "id") long employeeId) {
-        if(!employeeRepository.existsById(employeeId)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Employee with the provided id doesn't exist");
-        }
         try {
             employeeService.deleteEmployee(employeeId);
             return ResponseEntity.ok("Employee deleted successfully");
@@ -115,7 +106,7 @@ public class EmployeeController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
 
@@ -128,7 +119,7 @@ public class EmployeeController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
 }

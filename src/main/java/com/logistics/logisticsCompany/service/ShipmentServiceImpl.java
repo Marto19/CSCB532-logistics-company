@@ -10,6 +10,8 @@ import com.logistics.logisticsCompany.entities.users.Employee;
 import com.logistics.logisticsCompany.repository.ShipmentRepository;
 import com.logistics.logisticsCompany.repository.ShipmentStatusHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -292,36 +294,24 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public Shipment getShipmentById(long shipmentId) {
         return shipmentRepository.findById(shipmentId)
-                .orElseThrow(() -> new EntityNotFoundException("Shipment not found with id: " + shipmentId));
+                .orElseThrow(() -> new EntityNotFoundException("Shipment with the provided id doesn't exist"));
     }
 
     @Override
     public void updateShipment(long shipmentId, Shipment updatedShipment) {
-        Shipment existingShipment = shipmentRepository.findById(shipmentId)
-                .orElseThrow(() -> new EntityNotFoundException("Shipment not found with id: " + shipmentId));
-
-        // Add protection to ensure IDs match
-        if (existingShipment.getId() != updatedShipment.getId()) {
-            throw new RuntimeException("Mismatched IDs in the request");
+        if(!shipmentRepository.existsById(shipmentId)){
+            throw new EntityNotFoundException("Shipment with the provided id doesn't exist");
         }
-
-        // Update logic if needed
-        existingShipment.setShipmentDate(updatedShipment.getShipmentDate());
-        existingShipment.setWeight(updatedShipment.getWeight());
-        existingShipment.setPrice(updatedShipment.getPrice());
-        existingShipment.setIsPaid(updatedShipment.getIsPaid());
-        existingShipment.setReceivedDate(updatedShipment.getReceivedDate());
-
-        shipmentRepository.save(existingShipment);
+        updatedShipment.setId(shipmentId);
+        shipmentRepository.save(updatedShipment);
     }
 
     @Override
     public void deleteShipment(long shipmentId) {
-        if (shipmentRepository.existsById(shipmentId)) {
-            shipmentRepository.deleteById(shipmentId);
-        } else {
-            throw new EntityNotFoundException("Shipment not found with id: " + shipmentId);
+        if (!shipmentRepository.existsById(shipmentId)) {
+            throw new EntityNotFoundException("Shipment with the provided id doesn't exist");
         }
+        shipmentRepository.deleteById(shipmentId);
     }
     
     

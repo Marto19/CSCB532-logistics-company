@@ -122,10 +122,6 @@ public class ShipmentController {
     @PutMapping("/{id}")    //TODO:FIX THIS "MISMATCH IN ID'S"
     public ResponseEntity<String> updateShipment(@PathVariable(value = "id") long shipmentId,
                                                  @RequestBody Shipment updatedShipment) {
-        if(!shipmentRepository.existsById(shipmentId)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Company with the provided id doesn't exist");
-        }
         try {
             shipmentService.updateShipment(shipmentId, updatedShipment);
             return ResponseEntity.ok("Shipment updated successfully");

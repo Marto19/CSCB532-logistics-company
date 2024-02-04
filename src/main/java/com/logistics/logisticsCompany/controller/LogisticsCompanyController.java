@@ -31,17 +31,13 @@ public class LogisticsCompanyController {
 
     @PostMapping
     public ResponseEntity<String> createLogisticsCompany(@RequestBody LogisticsCompany logisticsCompany) {
-        //Checks if logistics company with the given name already exists
-        if (logisticsCompanyRepository.existsByName(logisticsCompany.getName())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Logistics company with the same name already exists");
-        }
-        //Create logistics company if name does not already exist
         try {
             logisticsCompanyService.createLogisticsCompany(logisticsCompany);
             return ResponseEntity.status(HttpStatus.CREATED).body("LogisticsCompany created successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
     
@@ -51,9 +47,9 @@ public class LogisticsCompanyController {
         List<LogisticsCompanyDTO> logisticsCompanyDTOs = logisticsCompanyService.getAllLogisticsCompanies().stream()
                 .map(entityDtoMapper::convertToLogisticsCompanyDTO)
                 .collect(Collectors.toList());
-        //If the list is empty return NO_CONTENT, else return OK and the companies
+        //If the list is empty return NOT_FOUND, else return OK and the companies
         return logisticsCompanyDTOs.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(logisticsCompanyDTOs, HttpStatus.OK);
     }
 
@@ -68,26 +64,18 @@ public class LogisticsCompanyController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateLogisticsCompany(@PathVariable(value = "id") long companyId,
                                                          @RequestBody LogisticsCompany updatedCompany) {
-        if(!logisticsCompanyRepository.existsById(companyId)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Company with the provided id doesn't exist");
-        }
         try {
             logisticsCompanyService.updateLogisticsCompany(companyId, updatedCompany);
             return ResponseEntity.ok("LogisticsCompany updated successfully");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLogisticsCompany(@PathVariable(value = "id") long companyId) {
-        if (!logisticsCompanyRepository.existsById(companyId)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Company with the provided id doesn't exist");
-        }
         try {
             logisticsCompanyService.deleteLogisticsCompany(companyId);
             return ResponseEntity.ok("LogisticsCompany deleted successfully");

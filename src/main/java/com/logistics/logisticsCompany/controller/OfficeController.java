@@ -32,18 +32,13 @@ public class OfficeController {
 
     @PostMapping
     public ResponseEntity<String> createOffice(@RequestBody Office office) {
-        //Checks if office with the given address already exists
-        if (officeRepository.existsByAddress(office.getAddress())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Office with the same address already exists");
-        }
-
-        //Create office if address does not already exist
         try {
             officeService.createOffice(office);
             return ResponseEntity.status(HttpStatus.CREATED).body("Office created successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
 
@@ -55,7 +50,7 @@ public class OfficeController {
                 .collect(Collectors.toList());
         //If the list is empty return NO_CONTENT, else return OK and the offices
         return officeDTOs.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(officeDTOs, HttpStatus.OK);
     }
 
@@ -70,26 +65,18 @@ public class OfficeController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateOffice(@PathVariable(value = "id") long officeId,
                                                @RequestBody Office updatedOffice) {
-        if(!officeRepository.existsById(officeId)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Company with the provided id doesn't exist");
-        }
         try {
             officeService.updateOffice(officeId, updatedOffice);
             return ResponseEntity.ok("Office updated successfully");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteOffice(@PathVariable(value = "id") long officeId) {
-        if (!officeRepository.existsById(officeId)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Customer with the provided id doesn't exist");
-        }
         try {
             officeService.deleteOffice(officeId);
             return ResponseEntity.ok("Office deleted successfully");
