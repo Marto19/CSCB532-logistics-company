@@ -189,9 +189,34 @@
         <div class="card-header">
             <ul class="nav nav-pills card-header-pills">
                 <li class="nav-item">
+                    <a class="nav-link" href="#createUser">Create User</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="#viewUsers">View Users</a>
                 </li>
             </ul>
+        </div>
+        <div class="card-body" id="createUser">
+            <div class="card-body w-75 mx-auto text-center">
+                <h5 class="card-title">Insert Username and Role</h5>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Username</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="username">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+                    <input type="password" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="password">
+                </div>
+                <select class="form-select" aria-label="Default select example" id="roleSelect">
+                    <option selected>Open this select menu</option>
+                    <!-- Options will be added here dynamically -->
+                </select>
+                <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                    <button type="button" class="btn btn-primary" id="submitUser">Submit User</button>
+                </div>
+            </div>
         </div>
         <div class="card-body" id="viewUsers">
             <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
@@ -246,6 +271,120 @@
             });
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('.nav-link');
+        const createUserSection = document.getElementById('createUser');
+        const viewUsersSection = document.getElementById('viewUsers');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Determine which link was clicked
+                if (this.getAttribute('href') === '#createUser') {
+                    createUserSection.classList.remove('d-none');
+                    viewUsersSection.classList.add('d-none');
+                } else if (this.getAttribute('href') === '#viewUsers') {
+                    viewUsersSection.classList.remove('d-none');
+                    createUserSection.classList.add('d-none');
+                }
+            });
+        });
+    });
+    /////////////////////////////////////////////////////////////////////// fetch roles
+
+    function fetchAndPopulateRoles() {
+        fetch('http://localhost:8082/api/v1/user-roles', {
+            method: 'GET', // or 'POST'
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token') // Ensure the token is correctly retrieved
+
+                // Include other headers as required, such as Authorization
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                if ( response.status === 201){
+                    console.log('Success: ', response.status);
+                    successToast.show();
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                const selectElement = document.getElementById('roleSelect');
+                // Assuming the API returns an array of roles
+                data.forEach(role => {
+                    const option = document.createElement('option');
+                    option.value = role.id; // Assuming each role has an 'id'
+                    option.textContent = role.userRole; // Adjust based on your data structure
+                    selectElement.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching user roles:', error);
+            });
+    }
+
+    // Call the function when the document is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // First, ensure roles are fetched and populated
+        fetchAndPopulateRoles();
+
+        document.getElementById('submitUser').addEventListener('click', function () {
+            // Assuming you have corrected the ID inconsistencies
+            const username = document.getElementById('username').value.trim(); // Use 'email' if that's what your form uses
+            const password = document.getElementById('password').value.trim(); // Ensure you have an input with id="password"
+            const roleSelect = document.getElementById('roleSelect');
+            const role = roleSelect.value;
+
+            // Initialize toasts
+            var errorToastEl = document.getElementById('errorToast');
+            var errorToast = new bootstrap.Toast(errorToastEl);
+            var successToastEl = document.getElementById('successToast');
+            var successToast = new bootstrap.Toast(successToastEl);
+            var fetchErrorToastEl = document.getElementById('fetchErrorToast');
+            var fetchErrorToast = new bootstrap.Toast(fetchErrorToastEl);
+
+            if (!username || !password || !role) {
+                errorToast.show();
+            } else {
+                const data = { username, password, role }; // Adjust the object keys according to your API requirements
+
+                fetch('http://localhost:8082/api/v1/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token') // Ensure the token is correctly retrieved
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Success:', data);
+                        successToast.show();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        fetchErrorToast.show();
+                    });
+            }
+        });
+    });
+
+    //////// submit user
+
+
+
     document.addEventListener('DOMContentLoaded', function () {
         const navLinks = document.querySelectorAll('.nav-link');
         const createSection = document.getElementById('createOffice');
