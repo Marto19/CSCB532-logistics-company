@@ -23,6 +23,16 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// Jakarta Bean Validation API
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+
+// Hibernate Validator - Jakarta Bean Validation Implementation
+	implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
+
+// Hibernate Validator's CDI integration, if you're using CDI
+	implementation 'org.hibernate.validator:hibernate-validator-cdi:8.0.1.Final'
+
+
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '3.2.1'
 //	//configuring springWebSecurity
 //	implementation 'org.springframework.boot:spring-boot-starter-security'

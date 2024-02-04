@@ -8,9 +8,11 @@ import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
 import com.logistics.logisticsCompany.repository.ShipmentRepository;
 import com.logistics.logisticsCompany.service.ShipmentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class ShipmentController {
     }
 
     @PostMapping("/create-shipment-beta")
-    public ResponseEntity<ShipmentDTO> createShipment(@RequestBody ShipmentDTO shipmentDto) {
+    public ResponseEntity<ShipmentDTO> createShipment(@Valid @RequestBody ShipmentDTO shipmentDto) {
         Shipment createdShipment = shipmentService.createShipment(shipmentDto);
         ShipmentDTO createdShipmentDTO = entityDtoMapper.convertToShipmentDTO(createdShipment);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdShipmentDTO);

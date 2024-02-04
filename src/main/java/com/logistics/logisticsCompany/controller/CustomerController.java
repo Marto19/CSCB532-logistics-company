@@ -5,11 +5,13 @@ import com.logistics.logisticsCompany.DTO.CustomerDTO;
 import com.logistics.logisticsCompany.DTO.EmployeeDTO;
 import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
 import com.logistics.logisticsCompany.DTO.LogisticsCompanyDTO;
+import com.logistics.logisticsCompany.customExceptions.CustomerExistsException;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.CustomerRepository;
 import com.logistics.logisticsCompany.service.CustomerServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,18 +36,27 @@ public class CustomerController {
         this.customerRepository = customerRepository;
         this.entityDtoMapper = entityDtoMapper;
     }
-
+    
     @PostMapping
-    public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<String> createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         try {
-            customerService.createCustomer(customer);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Customer created successfully");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            Customer createdCustomer = customerService.createCustomer(customerDTO);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Customer created successfully with ID: " + createdCustomer.getId());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
-        }
-    }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + e.getMessage());
+    //public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
+    //    try {
+    //        customerService.createCustomer(customer);
+    //        return ResponseEntity.status(HttpStatus.CREATED).body("Customer created successfully");
+    //    } catch (IllegalArgumentException e) {
+    //        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    //    } catch (RuntimeException e) {
+    //        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+    //    }
+    //}
 
     @GetMapping
     public ResponseEntity<List<CustomerDTO>> getAllCustomers() {

@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.DTO.CustomerDTO;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
 
@@ -7,9 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomerService {
-
-    void createCustomer(Customer customer);
-
+    
+    
+    Customer createCustomer(CustomerDTO customerDTO);
+    
     List<Customer> getAllCustomers();
     
     //List<Employee> getAllCustomersByCompanyId(Long companyId);

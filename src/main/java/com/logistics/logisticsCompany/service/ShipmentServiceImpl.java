@@ -23,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.logistics.logisticsCompany.repository.DeliveryPaymentTypeRepository;
 import com.logistics.logisticsCompany.repository.ShipmentStatusRepository;
 import com.logistics.logisticsCompany.entities.offices.Office;
+import java.util.Optional;
+import java.util.Optional;
+
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
 
@@ -64,7 +67,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     
     /*
     *Shipment fields:
-    *isPaid
+    *isPaidx
     *isPaidDelivery
     *price
     *priceDelivery
@@ -84,6 +87,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         // Auto Set shipment date to the current date
         shipment.setShipmentDate(LocalDate.now());
         
+        // Directly set properties from DTO
         // Set weight
         shipment.setWeight(shipmentDto.getWeight());
         //set isPaidDelivery
@@ -93,23 +97,15 @@ public class ShipmentServiceImpl implements ShipmentService {
         BigDecimal priceDelivery = calculatePriceDelivery(shipmentDto.getWeight());
         shipment.setPriceDelivery(priceDelivery);
         
-
-        
+        // if there is any price to get from receiver, if it is null, set it to 0
         BigDecimal price = (shipmentDto.getPrice() == null) ? BigDecimal.ZERO : shipmentDto.getPrice();
         shipment.setPrice(price);
         
-        
-        //fixme
-        // Calculate totalPrice based on isDeliveryPaid flag
-        if (shipment.getIsPaidDelivery()) {
-            shipment.setTotalPrice(price);
-        } else {
-            BigDecimal totalPrice = price.add(priceDelivery);
-            shipment.setTotalPrice(totalPrice);
-        }
+        // Calculate totalPrice for receiver based on isDeliveryPaid flag
+        BigDecimal totalPrice = shipmentDto.getIsPaidDelivery() ? price : price.add(priceDelivery);
+        shipment.setTotalPrice(totalPrice);
         
         // Determine and set DeliveryPaymentType based on price and isPaidDelivery
-        // Determine and set DeliveryPaymentType based on the flags
         DeliveryPaymentType deliveryPaymentType = determineDeliveryPaymentType(shipmentDto);
         shipment.setDeliveryPaymentType(deliveryPaymentType);
         
@@ -139,15 +135,13 @@ public class ShipmentServiceImpl implements ShipmentService {
             Office receiverOffice = officeService.getOfficeById(shipmentDto.getReceiverOfficeId())
                     .orElseThrow(() -> new EntityNotFoundException("Office not found with ID: " + shipmentDto.getReceiverOfficeId()));
             shipment.setReceiverOffice(receiverOffice);
-        } else {
-            // Handle the case where receiverOfficeId is null
         }
         
         
-        
+        //Save shipment entity
         shipmentRepository.save(shipment);
         
-        // if deliveryispaid = true, add record to daily income
+        // if deliveryispaid = true, add to the record of daily income
         if (shipment.getIsPaidDelivery()) {
             incomeHistoryService.recordDailyIncome(shipment.getPriceDelivery(), shipment.getSenderEmployee().getLogisticsCompany().getId());
         }
