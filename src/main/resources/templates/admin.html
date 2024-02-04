@@ -172,7 +172,7 @@
         <div class="card-header">
             <ul class="nav nav-pills card-header-pills">
                 <li class="nav-item">
-                    <a class="nav-link" href="#viewCompanies">View Users</a>
+                    <a class="nav-link" href="#viewUsers">View Users</a>
                 </li>
             </ul>
         </div>
@@ -314,7 +314,7 @@
             .then(data => {
                 console.log(data);
                 const viewOffices = document.getElementById('viewOffices');
-                viewOffices.innerHTML = ''; // Clear existing table/content
+                // viewOffices.innerHTML = ''; // Clear existing table/content
                 const table = document.createElement('table');
                 table.classList.add('table');
                 const thead = document.createElement('thead');
@@ -583,7 +583,7 @@
             .then(data => {
                 console.log(data);
                 const viewUsers = document.getElementById('viewUsers');
-                viewUsers.innerHTML = ''; // Clear existing table/content
+                // viewUsers.innerHTML = ''; // Clear existing table/content
                 const table = document.createElement('table');
                 table.classList.add('table');
                 const thead = document.createElement('thead');
@@ -654,6 +654,7 @@
                 console.error('Error:', error);
             });
     });
+    //TODO: UPDATE USERS FUNCTIONALITY WITH DROP DOWN MENU SHOWING THE AVAILABLE ROLE - WE MIGHT NEED CONTROLLER FOR FETCHING ALL THE AVAILABLE ROLES
 
 </script>
 </body>
