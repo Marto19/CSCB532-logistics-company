@@ -5,6 +5,8 @@ import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
 import com.logistics.logisticsCompany.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -27,8 +29,13 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer.getFirstName() == null || customer.getFirstName().isEmpty()) {
             throw new IllegalArgumentException("First name must not be null or empty");
         }
+        //Check if a customer with the given phone already exists
+        if (this.existsByPhone(customer.getPhone())) {
+            throw new IllegalArgumentException("Customer with the provided phone number already exists");
+        }
         //works perfectly - balance 0.00
         customer.setBalance(BigDecimal.ZERO); // Set balance explicitly to zero
+
         customerRepository.save(customer);
     }
 
@@ -51,24 +58,21 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findByPhone(phoneNumber)
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found with phone number: " + phoneNumber));
     }
+
     @Override
     public void updateCustomer(long customerId, Customer updatedCustomer) {
-        Customer existingCustomer = customerRepository.findById(customerId).orElse(null);
-        if (existingCustomer != null) {
-            // Set the properties to update
-            existingCustomer.setFirstName(updatedCustomer.getFirstName());
-            existingCustomer.setSecondName(updatedCustomer.getSecondName());
-            existingCustomer.setPhone(updatedCustomer.getPhone());
-
-            // Set other properties as needed
-
-            // Save the updated customer
-            customerRepository.save(existingCustomer);
+        if (!customerRepository.existsById(customerId)) {
+            throw new EntityNotFoundException("Customer with the provided id doesn't exist");
         }
+        updatedCustomer.setId(customerId);
+        customerRepository.save(updatedCustomer);
     }
 
     @Override
     public void deleteCustomer(long customerId) {
+        if (!customerRepository.existsById(customerId)){
+            throw new EntityNotFoundException("Customer with the provided id doesn't exist");
+        }
         customerRepository.deleteById(customerId);
     }
 
