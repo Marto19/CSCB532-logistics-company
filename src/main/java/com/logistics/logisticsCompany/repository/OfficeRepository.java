@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface OfficeRepository extends JpaRepository<Office, Integer> {
+public interface OfficeRepository extends JpaRepository<Office, Long> {
     boolean existsByOfficeName(String officeName);
     boolean existsByAddress(String address);
     boolean existsById(long id);
