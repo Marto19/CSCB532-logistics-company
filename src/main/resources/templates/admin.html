@@ -563,9 +563,13 @@
                 console.log('Office deleted successfully');
                 // Optionally, reload the offices list to reflect the deletion
                 document.getElementById('loadOffices').click();
+                const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+                successToast.show();
             })
             .catch((error) => {
                 console.error('Error deleting the office:', error);
+                const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+                errorToast.show();
             });
     }
     }
@@ -656,6 +660,40 @@
     });
     //TODO: UPDATE USERS FUNCTIONALITY WITH DROP DOWN MENU SHOWING THE AVAILABLE ROLE - WE MIGHT NEED CONTROLLER FOR FETCHING ALL THE AVAILABLE ROLES
 
+
+    //delete user
+    function deleteUser(id) {
+        const url = 'http://localhost:8082/api/v1/users';
+        const apiUrl = url.concat('/', id);
+        if (confirm('Are you sure you want to delete this user?')) {
+            // Send the PUT request to update the office
+            fetch(apiUrl, {
+            method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+    .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // or .json() if your server responds with JSON
+        })
+            .then(() => {
+                console.log('User deleted successfully');
+                // Optionally, reload the users list to reflect the deletion
+                document.getElementById('loadUsers').click();
+                const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+                successToast.show();
+            })
+            .catch((error) => {
+                console.error('Error deleting the user:', error);
+                const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+                errorToast.show();
+            });
+    }
+    }
 </script>
 </body>
 <!--TODO: FIX THE FETCHING OFFICE BUTTON: DISAPPEARS AFTER FIRST TIME
