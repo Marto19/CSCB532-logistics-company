@@ -167,6 +167,39 @@
         </div>
     </div>
 
+    <div class="card text-center w-75 mx-auto mt-5 mb-5">
+        <!-- Card Header with Navigation Pills -->
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="#viewCompanies">View Users</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body" id="viewUsers">
+            <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                <button type="button" class="btn btn-primary" id="loadUsers">Load Users</button>
+            </div>
+        </div>
+        <div class="card-body d-none" id="updateUser">
+            <div class="card-body w-75 mx-auto text-center">
+                <h5 class="card-title">Update User Details</h5>
+                <input type="hidden" id="updateUserId">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Username</span>
+                    <input type="text" class="form-control" id="updateUsername">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Role</span>
+                    <input type="text" class="form-control" id="updateRole">
+                </div>
+                <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                    <button type="button" class="btn btn-primary" id="updateUserButton">Update User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
@@ -536,6 +569,91 @@
             });
     }
     }
+
+//     VIEW USERS
+    document.getElementById('loadUsers').addEventListener('click', function () {
+        fetch('http://localhost:8082/api/v1/users', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const viewUsers = document.getElementById('viewUsers');
+                viewUsers.innerHTML = ''; // Clear existing table/content
+                const table = document.createElement('table');
+                table.classList.add('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                const trHead = document.createElement('tr');
+
+                // Define headers for the table
+                const headers = ['ID', 'Username', 'Role', 'Actions'];
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.setAttribute('scope', 'col');
+                    th.innerText = header;
+                    trHead.appendChild(th);
+                });
+                thead.appendChild(trHead);
+                table.appendChild(thead);
+                // Populate the table body with user data
+                data.forEach(user => {
+                    const tr = document.createElement('tr');
+                    const tdID = document.createElement('td');
+                    const tdUsername = document.createElement('td');
+                    const tdRole = document.createElement('td');
+                    const tdActions = document.createElement('td');
+
+                    tdID.innerText = user.id;
+                    tdUsername.innerText = user.username;
+
+                    // Display roles
+                    if (user.userRoleList && user.userRoleList.length > 0) {
+                        const roles = user.userRoleList.map(roleObj => roleObj.userRole).join(', ');
+                        tdRole.innerText = roles;
+                    } else {
+                        tdRole.innerText = 'No Roles'; // Or handle as needed when no roles are found
+                    }
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('btn', 'btn-danger');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.onclick = function () { deleteUser(user.id); };
+
+                    const updateButton = document.createElement('button');
+                    updateButton.classList.add('btn', 'btn-info', 'me-2');
+                    updateButton.innerText = 'Update';
+                    updateButton.addEventListener('click', function () {
+                        document.getElementById('updateUserId').value = user.id; // Set the user ID in the hidden input
+                        document.getElementById('updateUsername').value = user.username; // Pre-fill the form with existing values
+                        document.getElementById('updateRole').value = user.userRoleList.map(roleObj => roleObj.userRole).join(',');
+                        document.getElementById('updateUser').classList.remove('d-none'); // Show the update form section
+                    });
+                    // Append buttons to the Actions cell
+                    tdActions.appendChild(updateButton);
+                    tdActions.appendChild(deleteButton);
+
+                    // Append cells to the row
+                    tr.appendChild(tdID);
+                    tr.appendChild(tdUsername);
+                    tr.appendChild(tdRole);
+                    tr.appendChild(tdActions);
+
+                    // Append row to the tbody
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                viewUsers.appendChild(table);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
 
 </script>
 </body>
