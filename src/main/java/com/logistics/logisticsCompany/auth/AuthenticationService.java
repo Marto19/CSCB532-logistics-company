@@ -11,7 +11,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
-
+/**
+ * The {@code AuthenticationService} class provides authentication-related services within the logistics company application.
+ * It is responsible for user registration and authentication, utilizing the provided {@link UserRepository},
+ * {@link PasswordEncoder}, {@link JwtService}, and {@link AuthenticationManager} dependencies.
+ *
+ * <p>This service class interacts with the database through the {@link UserRepository} and {@link UserRoleRepository} to manage
+ * user-related data and roles. It also utilizes the {@link PasswordEncoder} to securely encode and store passwords,
+ * {@link JwtService} for generating JWT tokens, and {@link AuthenticationManager} for authenticating users during login.</p>
+ *
+ * <p>Note: The service assumes a specific role (e.g., role with ID 1) during user registration. Ensure that the
+ * {@link UserRoleRepository} is properly configured to provide the desired role.</p>
+ *
+ * @version 1.0
+ * @since 2024-02-05
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -23,6 +37,15 @@ public class AuthenticationService {
 
     private final UserRoleRepository userRoleRepository;
 
+    /**
+     * Registers a new user with the provided registration details.
+     *
+     * @param request The {@link RegisterRequest} object containing user registration details.
+     * @return An {@link AuthenticationResponse} containing the generated JWT token after successful registration.
+     *
+     * @see RegisterRequest
+     * @see AuthenticationResponse
+     */
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .username(request.getUsername())
@@ -36,7 +59,17 @@ public class AuthenticationService {
                 .build();
 
     }
-
+    /**
+     * Authenticates a user with the provided credentials during login.
+     *
+     * @param request The {@link AuthenticationRequest} object containing user authentication details.
+     * @return An {@link AuthenticationResponse} containing the generated JWT token after successful authentication.
+     *
+     * @throws "AuthenticationException" If authentication fails.
+     *
+     * @see AuthenticationRequest
+     * @see AuthenticationResponse
+     */
     public AuthenticationResponse authenticate(AuthenticationRequest request) {     //login authentication
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
