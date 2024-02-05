@@ -31,7 +31,7 @@ public class LogisticsCompanyApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// Create a new UserRole
-		UserRole userRole = new UserRole("ROLE_USER");
+		UserRole userRole = new UserRole("ROLE_CUSTOMER");
 		userRole.setId(1);
 
 
@@ -59,6 +59,22 @@ public class LogisticsCompanyApplication implements CommandLineRunner {
 			// Save the UserRole for ROLE_EMPLOYEE
 			userRoleRepository.save(userRoleEmployee);
 			System.out.println("Role created: " + userRoleEmployee.getUserRole());
+		}
+
+		// Create a new UserRole
+		UserRole userRoleADMIN = new UserRole("ROLE_ADMIN");
+		userRole.setId(3);
+
+
+		// Check if the role already exists
+		Optional<UserRole> existingRoleAdmin = userRoleRepository.findByUserRole(userRole.getUserRole());
+
+		if (existingRoleAdmin.isPresent()) {
+			System.out.println("Role already exists: " + existingRoleAdmin.get().getUserRole());
+		} else {
+			// Save the UserRole
+			userRoleRepository.save(userRole);
+			System.out.println("Role created: " + userRoleADMIN.getUserRole());
 		}
 	}
 	//TODO:fix mappings - done

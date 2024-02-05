@@ -42,6 +42,22 @@ dependencies {
 //
 //	testImplementation group: 'com.h2database', name: 'h2', version: '2.2.224'
 
+	//configuring springWebSecurity
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+//  Temporary explicit version to fix Thymeleaf bug
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+	testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.2.1'
+
+	testImplementation group: 'com.h2database', name: 'h2', version: '2.2.224'
+
+
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+
+
+
 
 }
 
