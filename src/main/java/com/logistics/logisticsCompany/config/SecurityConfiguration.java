@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers( "/api/v1/auth/**", "/login", "/register","/admin/adminpage"
 //                        , "/api/v1/logistics-companies", "/api/v1/logistics-companies")   //todo: change whitelist pages
-                                .requestMatchers( "/api/v1/auth/**", "/login", "/register","/admin/adminpage")
+                                .requestMatchers( "/api/v1/auth/**", "/login", "/register","/admin/adminpage", "customer/customerpage")
                                 .permitAll()
                                 //TODO: FETCH THE ROLES PROPERLY, MAYBE WHEN LOGIN?
 //                                .requestMatchers(HttpMethod.POST, "/api/v1/users/assign-roles").hasRole("ADMIN")

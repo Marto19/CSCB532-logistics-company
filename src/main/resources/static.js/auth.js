@@ -30,10 +30,12 @@ async function handleSuccess(response) {
     console.log('User roles: ', userRoles)
 
     // Redirect the user to the appropriate page based on their role
-    if (userRoles.includes('ROLE_CUSTOMER')) {
+    if (userRoles.includes('ROLE_ADMIN')) {  //todo: change to admin
         redirectToPage("/admin/adminpage");
+    } else if (userRoles.includes('ROLE_CUSTOMER')) {
+        redirectToPage("/customer/customerpage");
     } else if (userRoles.includes('ROLE_EMPLOYEE')) {
-        redirectToPage("/employee.html");
+            redirectToPage("/employee.html");
     } else {
         console.error('Unknown role:', userRoles);
     }
