@@ -47,17 +47,19 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + e.getMessage());
-    //public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
-    //    try {
-    //        customerService.createCustomer(customer);
-    //        return ResponseEntity.status(HttpStatus.CREATED).body("Customer created successfully");
-    //    } catch (IllegalArgumentException e) {
-    //        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    //    } catch (RuntimeException e) {
-    //        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
-    //    }
-    //}
+            //public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
+            //    try {
+            //        customerService.createCustomer(customer);
+            //        return ResponseEntity.status(HttpStatus.CREATED).body("Customer created successfully");
+            //    } catch (IllegalArgumentException e) {
+            //        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            //    } catch (RuntimeException e) {
+            //        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+            //    }
+            //}
 
+        }
+    }
     @GetMapping
     public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
         //Get all customers from service layer and convert to List<CustomerDTO>
