@@ -4,6 +4,7 @@ import com.logistics.logisticsCompany.entities.enums.GoodsType;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.Employee;
+import com.logistics.logisticsCompany.entities.enums.DeliveryPaymentType;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -24,34 +25,47 @@ public class Shipment {
 	private LocalDate shipmentDate;
 
 //	@Column(name = "shipmentstatus", nullable = false)
-//	@Enumerated(EnumType.STRING)	//todo
+//	@Enumerated(EnumType.STRING)	//todo. update 27.01 : new table was created for shipment status (goods status)
 //	private ShipmentStatus shipmentStatus;
 
 	@Column(name = "weight", nullable = false,  precision = 10, scale = 2)
 	private BigDecimal weight;
 
-	@Column(name = "price", nullable = false,precision= 10, scale = 2)
+	@Column(name = "is_paid_delivery", nullable = false)
+	private boolean isPaidDelivery;
+	
+	@Column(name = "price_delivery", nullable = true, precision= 10, scale = 2)
+	private BigDecimal priceDelivery;
+	
+	@Column(name = "price", nullable = true,precision= 10, scale = 2)
 	private BigDecimal price;
 
 	@Column(name = "is_paid", nullable = false)
 	private boolean isPaid;
 
-	@Column(name = "receivedDate", nullable = true)
+	@Column(name = "total_price", nullable = true, precision= 10, scale = 2)
+	private BigDecimal totalPrice;
+	
+	@Column(name = "status", nullable = true)
+	private String status;
+	@Column(name = "received_date", nullable = true)
 	private LocalDate receivedDate;
 
+	@Column(name = "notes", nullable = true)
+	private String notes;
 	/*
 		SENDER RELATIONSHIPS - OFFICE, CUSTOMER, EMPLOYEE
 	*/
 	@ManyToOne
-	@JoinColumn(name = "sender_office_id", nullable = false)
+	@JoinColumn(name = "sender_office_id", nullable = true)
 	private Office senderOffice;
 
 	@ManyToOne
-	@JoinColumn(name = "sender_customer_id", nullable = false)
+	@JoinColumn(name = "sender_customer_id", nullable = true)
 	private Customer senderCustomer;
 
 	@ManyToOne
-	@JoinColumn(name = "sender_Employee_id", nullable = false)
+	@JoinColumn(name = "sender_Employee_id", nullable = true)
 	private Employee senderEmployee;
 
 	/*
@@ -73,17 +87,52 @@ public class Shipment {
 	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
 	//relationship shipment/order_history - 1:n
 	@OneToMany(mappedBy = "shipment")
-
 	private List<ShipmentStatusHistory> statusHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
 
 	@ManyToOne
+	@JoinColumn(name = "goods_type_id", nullable = true)
 	private GoodsType goodsType;
+	
+	@ManyToOne
+	@JoinColumn(name = "delivery_payment_type_id", nullable = true)
+	private DeliveryPaymentType deliveryPaymentType;
 
+	
+	
 	//Constructors
 	public Shipment() {
 	}
-
-	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID) {
+	
+	public Shipment(LocalDate shipmentDate, BigDecimal weight, boolean isPaidDelivery, BigDecimal priceDelivery, BigDecimal price, boolean isPaid, LocalDate receivedDate, Office senderOffice, Customer senderCustomer, Employee senderEmployee, Office receiverOffice, Customer receiverCustomer, Employee receiverEmployee, List<ShipmentStatusHistory> statusHistories, GoodsType goodsType, DeliveryPaymentType deliveryPaymentType) {
+		this.shipmentDate = shipmentDate;
+		this.weight = weight;
+		this.isPaidDelivery = isPaidDelivery;
+		this.priceDelivery = priceDelivery;
+		this.price = price;
+		this.isPaid = isPaid;
+		this.receivedDate = receivedDate;
+		this.senderOffice = senderOffice;
+		this.senderCustomer = senderCustomer;
+		this.senderEmployee = senderEmployee;
+		this.receiverOffice = receiverOffice;
+		this.receiverCustomer = receiverCustomer;
+		this.receiverEmployee = receiverEmployee;
+		this.statusHistories = statusHistories;
+		this.goodsType = goodsType;
+		this.deliveryPaymentType = deliveryPaymentType;
+	}
+	
+	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, BigDecimal priceDelivery, LocalDate receivedDate, Integer senderOfficeID, Integer senderCustomerID, Integer senderEmployeeID, Integer receiverOfficeID, Integer receiverCustomerID, Integer receiverEmployeeID, GoodsType goodsType, DeliveryPaymentType deliveryPaymentType) {
+		this.shipmentDate = shipmentDate;
+		this.weight = weight;
+		this.price = price;
+		this.isPaid = isPaid;
+		this.receivedDate = receivedDate;
+		this.goodsType = goodsType;
+		this.deliveryPaymentType = deliveryPaymentType;
+		// Initialize other fields as necessary
+	}
+	public Shipment(LocalDate shipmentDate, BigDecimal weight, BigDecimal price, boolean isPaid, LocalDate receivedDate) {
 		this.shipmentDate = shipmentDate;
 		this.weight = weight;
 		this.price = price;
@@ -92,7 +141,68 @@ public class Shipment {
 	}
 
 	//Getters and Setters
-
+	
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	
+	public String getNotes() {
+		return notes;
+	}
+	
+	public BigDecimal getTotalPrice() {
+		return totalPrice;
+	}
+	
+	public void setTotalPrice(BigDecimal totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+	
+	public void setIsPaidDelivery(boolean isPaidDelivery) {
+		this.isPaidDelivery = isPaidDelivery;
+	}
+	
+	public void setPriceDelivery(BigDecimal priceDelivery) {
+		this.priceDelivery = priceDelivery;
+	}
+	
+	public void setIsPaid(boolean isPaid) {
+		this.isPaid = isPaid;
+	}
+	
+	public void setGoodsType(GoodsType goodsType) {
+		this.goodsType = goodsType;
+	}
+	
+	public void setDeliveryPaymentType(DeliveryPaymentType deliveryPaymentType) {
+		this.deliveryPaymentType = deliveryPaymentType;
+	}
+	
+	public boolean getIsPaidDelivery() {
+		return isPaidDelivery;
+	}
+	
+	public BigDecimal getPriceDelivery() {
+		return priceDelivery;
+	}
+	
+	public GoodsType getGoodsType() {
+		return goodsType;
+	}
+	
+	public DeliveryPaymentType getDeliveryPaymentType() {
+		return deliveryPaymentType;
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -125,14 +235,10 @@ public class Shipment {
 		this.price = price;
 	}
 
-	public boolean isPaid() {
+	public boolean getIsPaid() {
 		return isPaid;
 	}
-
-	public void setIsPaid(boolean paid) {
-		isPaid = paid;
-	}
-
+	
 	public LocalDate getReceivedDate() {
 		return receivedDate;
 	}
@@ -205,6 +311,7 @@ public class Shipment {
 				", weight=" + weight +
 				", price=" + price +
 				", isPaid=" + isPaid +
+				", totalPrice=" + totalPrice +
 				", receivedDate=" + receivedDate +
 				", senderOffice=" + senderOffice +
 				", senderCustomer=" + senderCustomer +
@@ -212,6 +319,7 @@ public class Shipment {
 				", receiverOffice=" + receiverOffice +
 				", receiverCustomer=" + receiverCustomer +
 				", receiverEmployee=" + receiverEmployee +
+
 				'}';
 	}
 }

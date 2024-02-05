@@ -1,7 +1,7 @@
 package com.logistics.logisticsCompany.entities.orders;
 
 
-import com.logistics.logisticsCompany.entities.enums.GoodsStatus;
+import com.logistics.logisticsCompany.entities.enums.ShipmentStatus;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import jakarta.persistence.*;
 
@@ -15,9 +15,6 @@ public class ShipmentStatusHistory {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "status", nullable = false)
-	private int status;
-
 	@Column(name = "update_date", nullable = false)
 	private LocalDateTime updateDate;
 
@@ -29,25 +26,17 @@ public class ShipmentStatusHistory {
 	@ManyToOne
 	@JoinColumn(name = "shipment_id")
 	private Shipment shipment;
-
-//	@OneToMany(mappedBy = "orderHistory")
-//	private List<Goods> goodsList;
-
+	
 	@ManyToOne
-	private Customer customer;
-
-//	@OneToOne
-//	private GoodsStatus goodsStatus;
-
-	@ManyToOne
-	private GoodsStatus goodsStatus;
+	@JoinColumn(name = "shipment_status_id")
+	private ShipmentStatus shipmentStatus;
 
 	//Constructors
 	public ShipmentStatusHistory(){
 	}
 
-	public ShipmentStatusHistory(int status, LocalDateTime updateDate, String notes){
-		this.status = status;
+	public ShipmentStatusHistory(LocalDateTime updateDate, String notes){
+
 		this.updateDate = updateDate;
 		this.notes = notes;
 	}
@@ -93,12 +82,23 @@ public class ShipmentStatusHistory {
 	public void setShipment(Shipment shipment) {
 		this.shipment = shipment;
 	}
-
+	
+	
+	
+	public void setShipmentStatus(ShipmentStatus shipmentStatus) {
+		this.shipmentStatus = shipmentStatus;
+	}
+	
+	
+	
+	public ShipmentStatus getShipmentStatus() {
+		return shipmentStatus;
+	}
+	
 	@Override
 	public String toString() {
 		return "ShipmentStatusHistory{" +
 				"id=" + id +
-//				", status=" + status +
 				", updateDate=" + updateDate +
 				", notes='" + notes + '\'' +
 				'}';

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/CSCB532-logistics-company.iml" filepath="$PROJECT_DIR$/.idea/CSCB532-logistics-company.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.logistics.logisticsCompany.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.logistics.logisticsCompany.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/logisticsCompany.main.iml" filepath="$PROJECT_DIR$/.idea/modules/logisticsCompany.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/logisticsCompany.test.iml" filepath="$PROJECT_DIR$/.idea/modules/logisticsCompany.test.iml" />
     </modules>
   </component>
 </project>
