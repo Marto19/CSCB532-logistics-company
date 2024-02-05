@@ -22,16 +22,6 @@ public class UserLinkageServiceImpl implements UserLinkageService {
 	}
 	
 	@Override
-	public boolean isUserLinkedToCustomer(Long userId) {
-		return customerRepository.existsByUsers_Id(userId);
-	}
-	
-	@Override
-	public boolean isUserLinkedToEmployee(Long userId) {
-		return employeeRepository.existsByUsers_Id(userId);
-	}
-	
-	@Override
 	public User findAndValidateUserForLinkage(Long userId, String username) {
 		User user = findUser(userId, username);
 		

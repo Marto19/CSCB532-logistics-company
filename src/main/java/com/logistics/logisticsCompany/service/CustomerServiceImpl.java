@@ -49,27 +49,19 @@ public class CustomerServiceImpl implements CustomerService {
         }
         
         User user = null;
-        // Use UserLinkageService to find and validate the user for linkage
+        // If user id or username is entered, find the user and link the customer to the user
         if (customerDTO.getUserId() != null || customerDTO.getUsername() != null) {
+            // Find and validate user for linkage
             user = userLinkageService.findAndValidateUserForLinkage(customerDTO.getUserId(), customerDTO.getUsername());
             if (user == null) {
                 throw new EntityNotFoundException("User not found with ID: " + customerDTO.getUserId() + " or username: " + customerDTO.getUsername());
             }
         }
-        Customer customer = entityDtoMapper.convertToEntity(customerDTO);
+        Customer customer = entityDtoMapper.convertCustomerDtoToEntity(customerDTO);
         customer.setUsers(user); // Link the customer to the user if found
         customer.setBalance(BigDecimal.ZERO); // Initialize balance to zero for new customers
         
         return customerRepository.save(customer);
-
-        ////Check if a customer with the given phone already exists
-        //if (this.existsByPhone(customer.getPhone())) {
-        //    throw new IllegalArgumentException("Customer with the provided phone number already exists");
-        //}
-        ////works perfectly - balance 0.00
-        //customer.setBalance(BigDecimal.ZERO); // Set balance explicitly to zero
-
-        //customerRepository.save(customer);
     }
     
 

@@ -40,7 +40,7 @@ public class EntityDtoMapper {
 		return dto;
 	}
 	
-	public Shipment convertToEntity(ShipmentDTO shipmentDTO) {
+	public Shipment convertShipmentDtoToEntity(ShipmentDTO shipmentDTO) {
 		Shipment shipment = new Shipment();
 		shipment.setWeight(shipmentDTO.getWeight());
 		shipment.setPrice(shipmentDTO.getPrice());
@@ -48,7 +48,16 @@ public class EntityDtoMapper {
 		return shipment;
 	}
 	
-	public Customer convertToEntity(CustomerDTO customerDTO){
+	public CustomerDTO convertToCustomerDTO(Customer customer) {
+		CustomerDTO dto = new CustomerDTO();
+		dto.setId(customer.getId());
+		dto.setFirstName(customer.getFirstName());
+		dto.setSecondName(customer.getSecondName());
+		dto.setPhone(customer.getPhone());
+		dto.setBalance(customer.getBalance());
+		return dto;
+	}
+	public Customer convertCustomerDtoToEntity(CustomerDTO customerDTO) {
 		Customer customer = new Customer();
 		customer.setId(customerDTO.getId());
 		customer.setFirstName(customerDTO.getFirstName());
@@ -60,6 +69,7 @@ public class EntityDtoMapper {
 		
 		return customer;
 	}
+	
 	public OfficeDTO convertToOfficeDTO(Office office) {
 		OfficeDTO dto = new OfficeDTO();
 		dto.setId(office.getId());
@@ -70,16 +80,16 @@ public class EntityDtoMapper {
 		return dto;
 	}
 	
-	public UserDTO convertToUserDTO(User user){
+	public UserDTO convertToUserDTO(User user) {
 		UserDTO dto = new UserDTO();
 		
 		dto.setId(user.getId());
 		dto.setUsername(user.getUsername());
 		
 		
-		
 		return dto;
 	}
+	
 	public LogisticsCompanyDTO convertToLogisticsCompanyDTO(LogisticsCompany logisticsCompany) {
 		LogisticsCompanyDTO dto = new LogisticsCompanyDTO();
 		dto.setId(logisticsCompany.getId());
@@ -87,15 +97,18 @@ public class EntityDtoMapper {
 		dto.setIncome(logisticsCompany.getIncome());
 		return dto;
 	}
-	public CustomerDTO convertToCustomerDTO(Customer customer) {
-		CustomerDTO dto = new CustomerDTO();
-		dto.setId(customer.getId());
-		dto.setFirstName(customer.getFirstName());
-		dto.setSecondName(customer.getSecondName());
-		dto.setPhone(customer.getPhone());
-		dto.setBalance(customer.getBalance());
-		return dto;
+	
+	
+	//name, income -> LogisticsCompany
+	public static LogisticsCompany convertLogisticsCompanyDtoToEntity(LogisticsCompanyDTO logisticsCompanyDTO) {
+		LogisticsCompany logisticsCompany = new LogisticsCompany();
+		logisticsCompany.setName(logisticsCompanyDTO.getName());
+		logisticsCompany.setIncome(logisticsCompanyDTO.getIncome());
+		return logisticsCompany;
 	}
+	
+	
+
 	
 	public EmployeeDTO convertToEmployeeDTO(Employee employee) {
 		if (employee == null) {

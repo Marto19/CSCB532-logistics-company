@@ -10,11 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 @RestController
 @RequestMapping("/api/v1/logistics-companies")
 public class LogisticsCompanyController {
@@ -28,10 +29,13 @@ public class LogisticsCompanyController {
         this.logisticsCompanyRepository = logisticsCompanyRepository;
         this.entityDtoMapper= entityDtoMapper;
     }
-
+    
     @PostMapping
-    public ResponseEntity<String> createLogisticsCompany(@RequestBody LogisticsCompany logisticsCompany) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<String> createLogisticsCompany(@Valid @RequestBody LogisticsCompanyDTO logisticsCompanyDTO) {
         try {
+            LogisticsCompany logisticsCompany = EntityDtoMapper.convertLogisticsCompanyDtoToEntity(logisticsCompanyDTO);
+            
             logisticsCompanyService.createLogisticsCompany(logisticsCompany);
             return ResponseEntity.status(HttpStatus.CREATED).body("LogisticsCompany created successfully");
         } catch (IllegalArgumentException e) {
