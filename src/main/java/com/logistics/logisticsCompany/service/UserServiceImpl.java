@@ -1,6 +1,5 @@
 package com.logistics.logisticsCompany.service;
 
-import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.enums.UserRole;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.UserRepository;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -22,7 +20,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
     }
-    
+
     @Override
     public User registerUser(User user) {
         // Implement registration logic, e.g., encrypt password
@@ -33,23 +31,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByUsername(String username) {
         System.out.println("Searching for user with username: " + username);
-        User user = userRepository.findByUsername(username).orElse(null);
+        User user = userRepository.findByUsername(username);
         if (user != null) {
             System.out.println("User found: " + user);
         } else {
             System.out.println("User not found");
         }
         return user;
-    }
-    
-    @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
-    
-    @Override
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
     }
 
     @Override
@@ -66,12 +54,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
-    }
-    
-    @Override
-    public User getUserById(long id) {
-        return userRepository.getUserById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Shipment not found with id: " + id));
     }
 
     @Override

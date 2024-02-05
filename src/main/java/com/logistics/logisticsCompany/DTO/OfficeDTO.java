@@ -18,7 +18,7 @@ public class OfficeDTO {
     @JsonProperty("address")
     private String address;
 
-
+    // Constructors, getters, and setters
 
     // Ensure you have a no-argument constructor
     public OfficeDTO() {
@@ -33,45 +33,5 @@ public class OfficeDTO {
     }
 
     // Getters and setters
-    
-    
-    public void setId(long id) {
-        this.id = id;
-    }
-    
-    public void setOfficeName(String officeName) {
-        this.officeName = officeName;
-    }
-    
-    public void setCity(String city) {
-        this.city = city;
-    }
-    
-    public void setPostcode(int postcode) {
-        this.postcode = postcode;
-    }
-    
-    public void setAddress(String address) {
-        this.address = address;
-    }
-    
-    public long getId() {
-        return id;
-    }
-    
-    public String getOfficeName() {
-        return officeName;
-    }
-    
-    public String getCity() {
-        return city;
-    }
-    
-    public int getPostcode() {
-        return postcode;
-    }
-    
-    public String getAddress() {
-        return address;
-    }
+    // ...
 }

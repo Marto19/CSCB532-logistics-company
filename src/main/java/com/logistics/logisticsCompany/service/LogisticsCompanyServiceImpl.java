@@ -1,14 +1,11 @@
 package com.logistics.logisticsCompany.service;
 
-import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.repository.LogisticsCompanyRepository;
 import com.logistics.logisticsCompany.repository.OfficeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,14 +33,8 @@ public class LogisticsCompanyServiceImpl implements LogisticsCompanyService {
         return officeRepository.findAll();
     }
 
-
     @Override
     public void createLogisticsCompany(LogisticsCompany logisticsCompany) {
-        //Check if a logistics company with the given phone already exists
-        if (logisticsCompanyRepository.existsByName(logisticsCompany.getName())) {
-            throw new IllegalArgumentException("Logistics company with the same name already exists");
-        }
-
         logisticsCompanyRepository.save(logisticsCompany);
     }
 
@@ -51,26 +42,27 @@ public class LogisticsCompanyServiceImpl implements LogisticsCompanyService {
     public List<LogisticsCompany> getAllLogisticsCompanies() {
         return logisticsCompanyRepository.findAll();
     }
-    public Optional<LogisticsCompany> getLogisticsCompanyById(long id) {
-        return logisticsCompanyRepository.findById(id);
-    }
-
 
     @Override
     @Transactional
     public void updateLogisticsCompany(long companyId, LogisticsCompany updatedCompany) {
-        if(!logisticsCompanyRepository.existsById(companyId)){
-            throw new EntityNotFoundException("Logistics company with the provided id doesn't exist");
+        Optional<LogisticsCompany> optionalCompany = logisticsCompanyRepository.findById(companyId);
+        if (optionalCompany.isPresent()) {
+            LogisticsCompany existingCompany = optionalCompany.get();
+            // Update the attributes of the existing company with the attributes of updatedCompany
+            existingCompany.setName(updatedCompany.getName());
+            existingCompany.setIncome(updatedCompany.getIncome());
+            // Set other attributes as needed
+
+            logisticsCompanyRepository.save(existingCompany);
+        } else {
+            // Handle case where the company with the given ID is not found
+            throw new IllegalArgumentException("LogisticsCompany with ID " + companyId + " not found");
         }
-        updatedCompany.setId(companyId);
-        logisticsCompanyRepository.save(updatedCompany);
     }
 
     @Override
     public void deleteLogisticsCompany(long companyId) {
-        if (!logisticsCompanyRepository.existsById(companyId)){
-            throw new EntityNotFoundException("Logistics company with the provided id doesn't exist");
-        }
         logisticsCompanyRepository.deleteById(companyId);
     }
 }

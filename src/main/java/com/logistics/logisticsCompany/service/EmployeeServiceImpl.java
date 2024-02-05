@@ -6,8 +6,6 @@ import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.users.Employee;
 import com.logistics.logisticsCompany.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,11 +22,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void createEmployee(Employee employee) {
-        if (employee.getFirstName() == null || employee.getFirstName().isEmpty() || employee.getSecondName() == null || employee.getSecondName().isEmpty()) {
-            throw new IllegalArgumentException("Employee name must not be null or empty");
-        }
-
+    public void addEmployee(Employee employee) {
         employeeRepository.save(employee);
     }
 
@@ -36,34 +30,31 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
-    
-    @Override
-    public List<Employee> getAllEmployeesByCompanyId(Long companyId) {
-        return employeeRepository.findAllByLogisticsCompanyId(companyId);
-    }
-    
+
     @Override
     public void updateEmployee(long employeeId, Employee updatedEmployee) {
-        if (!employeeRepository.existsById(employeeId)) {
-            throw new EntityNotFoundException("Employee with the provided id doesn't exist");
+        if (employeeRepository.existsById(employeeId)) {
+            updatedEmployee.setId(employeeId);
+            employeeRepository.save(updatedEmployee);
+        } else {
+            throw new EntityNotFoundException("Employee with ID " + employeeId + " not found.");
         }
-        updatedEmployee.setId(employeeId);
-        employeeRepository.save(updatedEmployee);
     }
 
     @Override
     public void deleteEmployee(long employeeId) {
-        if (!employeeRepository.existsById(employeeId)) {
-            throw new EntityNotFoundException("Employee with the provided id doesn't exist");
+        if (employeeRepository.existsById(employeeId)) {
+            employeeRepository.deleteById(employeeId);
+        } else {
+            throw new EntityNotFoundException("Employee with ID " + employeeId + " not found.");
         }
-        employeeRepository.deleteById(employeeId);
     }
 
     // Additional method for assigning an office to an employee
     @Override
     public void assignOfficeToEmployee(long employeeId, Office office) {
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new EntityNotFoundException("Employee with the provided id doesn't exist"));
+                .orElseThrow(() -> new EntityNotFoundException("Employee with ID " + employeeId + " not found."));
         employee.setCurrentOffice(office);
         employeeRepository.save(employee);
     }
@@ -72,7 +63,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void assignLogisticsCompanyToEmployee(long employeeId, LogisticsCompany logisticsCompany) {
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new EntityNotFoundException("Employee with the provided id doesn't exist"));
+                .orElseThrow(() -> new EntityNotFoundException("Employee with ID " + employeeId + " not found."));
         employee.setLogisticsCompany(logisticsCompany);
         employeeRepository.save(employee);
     }

@@ -1,7 +1,6 @@
 package com.logistics.logisticsCompany.controller;
 
 import com.logistics.logisticsCompany.DTO.EmployeeDTO;
-import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
@@ -20,60 +19,49 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/employees")
 public class EmployeeController {
+
     private final EmployeeService employeeService;
-    private final EmployeeRepository employeeRepository;
-    private final EntityDtoMapper entityDtoMapper;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository, EntityDtoMapper entityDtoMapper) {
+    public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository) {
         this.employeeService = employeeService;
         this.employeeRepository = employeeRepository;
-        this.entityDtoMapper = entityDtoMapper;
     }
 
-    @PostMapping
+    private final EmployeeRepository employeeRepository;
+
+    @PostMapping        //actually creates employee, it doesnt add employee to a specific company
     public ResponseEntity<String> createEmployee(@RequestBody Employee employee) {
+        if (employeeRepository.existsByFirstName(employee.getFirstName()) && employeeRepository.existsBySecondName(employee.getSecondName())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("This employee by the name " + employee.getFirstName() + " " + employee.getSecondName() + " already exists");
+        }
         try {
-            employeeService.createEmployee(employee);
+            employeeService.addEmployee(employee);
             return ResponseEntity.status(HttpStatus.CREATED).body("Employee added successfully");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
-        //Convert to List<EmployeeDTO>
-        List<EmployeeDTO> employeeDTOs = employeeService.getAllEmployees().stream()
-                .map(entityDtoMapper::convertToEmployeeDTO)
+    public List<EmployeeDTO> getAllEmployees() {
+        List<Employee> employees = employeeService.getAllEmployees();
+
+        // Convert the list of Employee entities to EmployeeDTOs
+        List<EmployeeDTO> employeeDTOs = employees.stream()
+                .map(EmployeeDTO::new)
                 .collect(Collectors.toList());
-        //If the list is empty return NO_CONTENT, else return OK and the employees
-        return employeeDTOs.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(employeeDTOs, HttpStatus.OK);
-    }
-    
-    //todo decide whether we have 1 or more companies
-    @GetMapping("/by-company-id/{companyId}")
-    public ResponseEntity<List<EmployeeDTO>> getAllEmployeesByCompanyId(@PathVariable Long companyId) {
-        List<EmployeeDTO> employeeDTOs = employeeService.getAllEmployeesByCompanyId(companyId).stream()
-                .map(entityDtoMapper::convertToEmployeeDTO)
-                .collect(Collectors.toList());
-        return employeeDTOs.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(employeeDTOs, HttpStatus.OK);
-    }
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable(value = "id") long employeeId) {
-        return employeeService.getEmployeeById(employeeId)
-                .map(entityDtoMapper::convertToEmployeeDTO)
-                .map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+        return employeeDTOs;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable(value = "id") long employeeId) {
+        Optional<Employee> customer = employeeService.getEmployeeById(employeeId);
+        return customer.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
     @PutMapping("/{id}")
     public ResponseEntity<String> updateEmployee(@PathVariable(value = "id") long employeeId,
                                                  @RequestBody Employee updatedEmployee) {
@@ -83,12 +71,15 @@ public class EmployeeController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable(value = "id") long employeeId) {
+        if(!employeeRepository.existsById(employeeId)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee with the provided id doesn't exist");
+        }
         try {
             employeeService.deleteEmployee(employeeId);
             return ResponseEntity.ok("Employee deleted successfully");
@@ -106,7 +97,7 @@ public class EmployeeController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -119,7 +110,7 @@ public class EmployeeController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

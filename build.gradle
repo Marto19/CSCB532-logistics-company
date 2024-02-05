@@ -23,14 +23,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	// Jakarta Bean Validation API
-	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
-
-// Hibernate Validator - Jakarta Bean Validation Implementation
-	implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
-
-// Hibernate Validator's CDI integration, if you're using CDI
-	implementation 'org.hibernate.validator:hibernate-validator-cdi:8.0.1.Final'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '3.2.1'
 
 
 	//configuring springWebSecurity
@@ -46,16 +39,6 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
-
-
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '3.2.1'
-//	//configuring springWebSecurity
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-////  Temporary explicit version to fix Thymeleaf bug
-//	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
-//	testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.2.1'
-//
-//	testImplementation group: 'com.h2database', name: 'h2', version: '2.2.224'
 
 
 

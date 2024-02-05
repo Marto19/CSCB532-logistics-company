@@ -25,10 +25,7 @@ public class LogisticsCompany {     //creating this entity in order to satisfy  
 
     @OneToMany(mappedBy = "logisticsCompany")
     private Set<Employee> employeeSet;
-    
-    @OneToMany(mappedBy = "logisticsCompany")
-    private Set<IncomeHistory> incomeHistories;
-    
+
     public LogisticsCompany(String name) {
         this.name = name;
     }

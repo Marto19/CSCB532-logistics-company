@@ -4,7 +4,6 @@ import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -12,7 +11,5 @@ public interface LogisticsCompanyRepository extends JpaRepository<LogisticsCompa
     boolean existsByName(String name);
     boolean existsById(long id);
 
-    Optional<LogisticsCompany> getLogisticsCompanyById(long id);
-    
-
+    Optional<LogisticsCompany> getLogisticsCompaniesById(long id);
 }

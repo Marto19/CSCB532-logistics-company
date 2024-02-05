@@ -1,23 +1,18 @@
 package com.logistics.logisticsCompany.controller;
 
-import com.logistics.logisticsCompany.DTO.ShipmentDTO;
-import com.logistics.logisticsCompany.DTO.UserDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.enums.UserRole;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
-import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.UserRepository;
 import com.logistics.logisticsCompany.repository.UserRoleRepository;
 import com.logistics.logisticsCompany.service.UserRoleServiceImpl;
-import com.logistics.logisticsCompany.service.UserService;
 import com.logistics.logisticsCompany.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,25 +22,22 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final UserRoleServiceImpl userRoleService;
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;  // Add this line
-    private final EntityDtoMapper entityDtoMapper;
-    
     @Autowired
-    public UserController(UserServiceImpl userServiceImpl, UserRoleServiceImpl userRoleService, UserRepository userRepository, UserRoleRepository userRoleRepository, EntityDtoMapper entityDtoMapper) {
-        this.userService = userServiceImpl;
+    public UserController(UserServiceImpl userServiceImpl, UserRoleServiceImpl userRoleService, UserRepository userRepository, UserRoleRepository userRoleRepository) {
+        this.userServiceImpl = userServiceImpl;
         this.userRoleService = userRoleService;
         this.userRepository = userRepository;  // Add this line
         this.userRoleRepository = userRoleRepository;
-        this.entityDtoMapper = entityDtoMapper;
     }
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         // Validate user data and register the user
-        User registeredUser = userService.registerUser(user);
+        User registeredUser = userServiceImpl.registerUser(user);
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
 
@@ -73,7 +65,7 @@ public class UserController {
     @PostMapping("/assign-roles")
     public ResponseEntity<String> assignRoles(@RequestParam String username, @RequestParam Set<String> roles) {
         System.out.println("Assign Roles method reached.");
-        User user = userService.findUserByUsername(username);
+        User user = userServiceImpl.findUserByUsername(username);
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
@@ -113,33 +105,22 @@ public class UserController {
         }
 
         // If username doesn't exist, proceed with saving the user
-        userService.createUser(user);
+        userServiceImpl.createUser(user);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("User created successfully");
     }   //todo: add protection in other places too
-    
+
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<User> registeredUsers = userService.getAllUsers();
-        if (registeredUsers.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        List<UserDTO> userDTOs = registeredUsers.stream()
-                .map(entityDtoMapper::convertToUserDTO)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
+    public List<User> getAllUsers(){
+        return userServiceImpl.getAllUsers();
     }
-    
+
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable(value = "id") long userId) {
-        if (!userRepository.existsById(userId)){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        User user = userService.getUserById(userId);
-        UserDTO userDTO = entityDtoMapper.convertToUserDTO(user);
-        
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    public ResponseEntity<User> getUserById(@PathVariable(value = "id") long userId) {
+        Optional<User> customer = userRepository.getUserById(userId);
+        return customer.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/{id}")
@@ -149,7 +130,7 @@ public class UserController {
                     .body("User with the provided id doesn't exist");
         }
         try {
-            userService.updateUser(userId, updatedUser);
+            userServiceImpl.updateUser(userId, updatedUser);
             return ResponseEntity.ok("Shipment updated successfully");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -161,7 +142,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable(value = "id") long userId){
         try {
-            userService.deleteUser(userId);
+            userServiceImpl.deleteUser(userId);
             return ResponseEntity.ok("Shipment deleted successfully");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with the provided id doesn't exist");

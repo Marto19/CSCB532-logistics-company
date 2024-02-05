@@ -41,7 +41,6 @@ public class Employee {
 
     //adding relationship between employee-company n:1
     @ManyToOne
-    @JoinColumn(name = "company_id")
     private LogisticsCompany logisticsCompany;
 
 
