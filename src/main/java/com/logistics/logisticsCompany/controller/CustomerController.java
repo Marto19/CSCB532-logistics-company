@@ -26,27 +26,18 @@ public class CustomerController {
     private CustomerRepository customerRepository;
 
     @PostMapping
-    public ResponseEntity<String> createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
-        try {
-            Customer createdCustomer = customerService.createCustomer(customerDTO);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Customer created successfully with ID: " + createdCustomer.getId());
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + e.getMessage());
-            //public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
-            //    try {
-            //        customerService.createCustomer(customer);
-            //        return ResponseEntity.status(HttpStatus.CREATED).body("Customer created successfully");
-            //    } catch (IllegalArgumentException e) {
-            //        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-            //    } catch (RuntimeException e) {
-            //        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
-            //    }
-            //}
+    public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
+        // Check if a customer with the given phone already exists
+        if (customerService.existsByPhone(customer.getPhone())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Customer with the provided phone number already exists");
         }
+        // If the customer with the phone number doesn't exist, proceed with saving the customer
+        customerService.createCustomer(customer);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Customer created successfully");
     }
+
     @GetMapping
     public List<CustomerDTO> getAllCustomers() {
         List<Customer> customers = customerService.getAllCustomers();
