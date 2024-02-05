@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CSCB525_transport_company</title>
+    <link rel="stylesheet" href="reset.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+<nav class="navbar bg-body-tertiary mb-5">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">CSCB525 Transport Company</a>
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
+             aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Shipments</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<main>
+    <div class="card text-center w-75 mx-auto mb-5">
+        <!-- Card Header with Navigation Pills -->
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="#createCompany">Create Company</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#viewCompanies">View Companies</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body" id="createCompany">
+            <div class="card-body w-75 mx-auto text-center">
+                <h5 class="card-title">Insert Name and Income</h5>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Name</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="companyName">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Income</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="companyIncome">
+                </div>
+                <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                    <button type="button" class="btn btn-primary" id="submitButton">Submit Company</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" id="viewCompanies">
+            <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                <button type="button" class="btn btn-primary" id="loadCompanies">Load Companies</button>
+            </div>
+        </div>
+        <div class="card-body d-none" id="updateCompany">
+            <div class="card-body w-75 mx-auto text-center">
+                <h5 class="card-title">Update Company Details</h5>
+                <input type="hidden" id="updateCompanyId">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Name</span>
+                    <input type="text" class="form-control" id="updateCompanyName">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Income</span>
+                    <input type="text" class="form-control" id="updateCompanyIncome">
+                </div>
+                <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                    <button type="button" class="btn btn-primary" id="updateCompanyButton">Update Company</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card text-center w-75 mx-auto mt-5">
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="#createOffice">Create Office</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#viewOffices">View Offices</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body" id="createOffice">
+            <div class="card-body w-75 mx-auto text-center">
+                <h5 class="card-title">Insert Office Details</h5>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Address</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="officeAddress">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">City</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="officeCity">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Office Name</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="officeName">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Postcode</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="officePostcode">
+                </div>
+                <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                    <button type="button" class="btn btn-primary" id="submitOffice">Submit Office</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" id="viewOffices">
+            <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                <button type="button" class="btn btn-primary" id="loadOffices">Load Offices</button>
+            </div>
+        </div>
+        <div class="card-body d-none" id="updateOffice">
+            <div class="card-body w-75 mx-auto text-center">
+                <h5 class="card-title">Update Office Details</h5>
+                <input type="hidden" id="updateOfficeId">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Address</span>
+                    <input type="text" class="form-control" id="updateOfficeAddress">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">City</span>
+                    <input type="text" class="form-control" id="updateOfficeCity">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Office Name</span>
+                    <input type="text" class="form-control" id="updateOfficeName">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Postcode</span>
+                    <input type="text" class="form-control" id="updateOfficePostcode">
+                </div>
+                <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                    <button type="button" class="btn btn-primary" id="updateOfficeButton">Update Office</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="successToast" class="toast text-white bg-success" role="alert" aria-live="assertive"
+             aria-atomic="true">
+            <div class="toast-body">
+                Submitted successfully.
+            </div>
+        </div>
+        <div id="errorToast" class="toast text-white bg-danger" role="alert" aria-live="assertive"
+             aria-atomic="true">
+            <div class="toast-body">
+                Please fill in all the fields.
+            </div>
+        </div>
+        <div id="fetchErrorToast" class="toast text-white bg-danger" role="alert" aria-live="assertive"
+             aria-atomic="true">
+            <div class="toast-body">
+                There was a problem submitting the details. Please try again.
+            </div>
+        </div>
+    </div>
+
+    <div class="card text-center w-75 mx-auto mt-5 mb-5">
+        <!-- Card Header with Navigation Pills -->
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="#createUser">Create User</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#viewUsers">View Users</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body" id="createUser">
+            <div class="card-body w-75 mx-auto text-center">
+                <h5 class="card-title">Insert Username and Role</h5>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Username</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="username">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+                    <input type="password" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="password">
+                </div>
+                <select class="form-select" aria-label="Default select example" id="roleSelect">
+                    <option selected>Open this select menu</option>
+                    <!-- Options will be added here dynamically -->
+                </select>
+                <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                    <button type="button" class="btn btn-primary" id="submitUser">Submit User</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" id="viewUsers">
+            <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                <button type="button" class="btn btn-primary" id="loadUsers">Load Users</button>
+            </div>
+        </div>
+        <div class="card-body d-none" id="updateUser">
+            <div class="card-body w-75 mx-auto text-center">
+                <h5 class="card-title">Update User Details</h5>
+                <input type="hidden" id="updateUserId">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Username</span>
+                    <input type="text" class="form-control" id="updateUsername">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Role</span>
+                    <input type="text" class="form-control" id="updateRole">
+                </div>
+                <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                    <button type="button" class="btn btn-primary" id="updateUserButton">Update User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('.nav-link');
+        const createSection = document.getElementById('createCompany');
+        const viewSection = document.getElementById('viewCompanies');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Determine which link was clicked
+                if (this.getAttribute('href') === '#createCompany') {
+                    createSection.classList.remove('d-none');
+                    viewSection.classList.add('d-none');
+                } else if (this.getAttribute('href') === '#viewCompanies') {
+                    viewSection.classList.remove('d-none');
+                    createSection.classList.add('d-none');
+                }
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('.nav-link');
+        const createUserSection = document.getElementById('createUser');
+        const viewUsersSection = document.getElementById('viewUsers');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Determine which link was clicked
+                if (this.getAttribute('href') === '#createUser') {
+                    createUserSection.classList.remove('d-none');
+                    viewUsersSection.classList.add('d-none');
+                } else if (this.getAttribute('href') === '#viewUsers') {
+                    viewUsersSection.classList.remove('d-none');
+                    createUserSection.classList.add('d-none');
+                }
+            });
+        });
+    });
+    /////////////////////////////////////////////////////////////////////// fetch roles
+
+    function fetchAndPopulateRoles() {
+        fetch('http://localhost:8082/api/v1/user-roles', {
+            method: 'GET', // or 'POST'
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token') // Ensure the token is correctly retrieved
+
+                // Include other headers as required, such as Authorization
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                if ( response.status === 201){
+                    console.log('Success: ', response.status);
+                    successToast.show();
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                const selectElement = document.getElementById('roleSelect');
+                // Assuming the API returns an array of roles
+                data.forEach(role => {
+                    const option = document.createElement('option');
+                    option.value = role.id; // Assuming each role has an 'id'
+                    option.textContent = role.userRole; // Adjust based on your data structure
+                    selectElement.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching user roles:', error);
+            });
+    }
+
+    // Call the function when the document is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // First, ensure roles are fetched and populated
+        fetchAndPopulateRoles();
+
+        document.getElementById('submitUser').addEventListener('click', function () {
+            // Assuming you have corrected the ID inconsistencies
+            const username = document.getElementById('username').value.trim(); // Use 'email' if that's what your form uses
+            const password = document.getElementById('password').value.trim(); // Ensure you have an input with id="password"
+            const roleSelect = document.getElementById('roleSelect');
+            const role = roleSelect.value;
+
+            // Initialize toasts
+            var errorToastEl = document.getElementById('errorToast');
+            var errorToast = new bootstrap.Toast(errorToastEl);
+            var successToastEl = document.getElementById('successToast');
+            var successToast = new bootstrap.Toast(successToastEl);
+            var fetchErrorToastEl = document.getElementById('fetchErrorToast');
+            var fetchErrorToast = new bootstrap.Toast(fetchErrorToastEl);
+
+            if (!username || !password || !role) {
+                errorToast.show();
+            } else {
+                const data = { username, password, role }; // Adjust the object keys according to your API requirements
+
+                fetch('http://localhost:8082/api/v1/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token') // Ensure the token is correctly retrieved
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Success:', data);
+                        successToast.show();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        fetchErrorToast.show();
+                    });
+            }
+        });
+    });
+
+    //////// submit user
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('.nav-link');
+        const createSection = document.getElementById('createOffice');
+        const viewSection = document.getElementById('viewOffices');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Determine which link was clicked
+                if (this.getAttribute('href') === '#createOffice') {
+                    createSection.classList.remove('d-none');
+                    viewSection.classList.add('d-none');
+                } else if (this.getAttribute('href') === '#viewOffices') {
+                    viewSection.classList.remove('d-none');
+                    createSection.classList.add('d-none');
+                }
+            });
+        });
+    });
+
+    //GET COMPANIES
+    document.getElementById('loadCompanies').addEventListener('click', function () {
+        fetch('http://localhost:8082/api/v1/logistics-companies', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const viewCompanies = document.getElementById('viewCompanies');
+                const table = document.createElement('table');
+                table.classList.add('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                const trHead = document.createElement('tr');
+
+                // Define headers for the table
+                const headers = ['ID', 'Name', 'Income', 'Actions'];
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.setAttribute('scope', 'col');
+                    th.innerText = header;
+                    trHead.appendChild(th);
+                });
+                thead.appendChild(trHead);
+                table.appendChild(thead);
+
+                // Populate the table body with company data
+                data.forEach(company => {
+                    const tr = document.createElement('tr');
+                    const tdID = document.createElement('td');
+                    const tdName = document.createElement('td');
+                    const tdIncome = document.createElement('td');
+                    const tdActions = document.createElement('td');
+
+                    tdID.innerText = company.id;
+                    tdName.innerText = company.name;
+                    tdIncome.innerText = company.income;
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('btn', 'btn-danger');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.onclick = function () { deleteCompany(company.id); };
+
+                    const updateButton = document.createElement('button');
+                    updateButton.classList.add('btn', 'btn-info', 'me-2');
+                    updateButton.innerText = 'Update';
+                    updateButton.addEventListener('click', function () {
+                        document.getElementById('updateCompanyId').value = company.id; // Set the company ID in the hidden input
+                        document.getElementById('updateCompanyName').value = company.name; // Pre-fill the form with existing values
+                        document.getElementById('updateCompanyIncome').value = company.income;
+                        document.getElementById('updateCompany').classList.remove('d-none'); // Show the update form section
+                    });
+
+                    tdActions.appendChild(updateButton);
+                    tdActions.appendChild(deleteButton);
+
+                    // Append cells to the row
+                    tr.appendChild(tdID);
+                    tr.appendChild(tdName);
+                    tr.appendChild(tdIncome);
+                    tr.appendChild(tdActions);
+
+                    // Append row to the tbody
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                viewCompanies.appendChild(table);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+    //UPDATE company
+    document.getElementById('updateCompanyButton').addEventListener('click', function () {
+        // Get the values from the form fields
+        const id = document.getElementById('updateCompanyId').value.trim();
+        const name = document.getElementById('updateCompanyName').value.trim();
+        const income = document.getElementById('updateCompanyIncome').value.trim();
+
+        const url = 'http://localhost:8082/api/v1/logistics-companies';
+        const apiUrl = url.concat('/', id);
+
+        // Check if all fields are filled
+        if (!id || !name || !income) {
+            alert('Please fill in all the fields.');
+            return;
+        }
+
+        // Prepare the data to send in the request
+        const data = {id, name,  income };
+
+        // Send the PUT request to update the company
+        fetch(apiUrl, {
+        method: 'PUT',
+            headers: {
+            'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token') // Adjust this as per your auth setup
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (!response.ok) {
+                console.log('Error: ', response.status);
+                errorToast.show();
+            }
+            if ( response.status === 200){
+                console.log('Success: ', response.status);
+                successToast.show();
+                return;
+            }
+            return response.json();
+        })
+        .then(updatedCompany => {
+            console.log('Company updated successfully:', updatedCompany);
+            successToast.show();
+            const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+            successToast.show();
+        })
+        .catch(error => {
+            console.error('Error updating the company:', error);
+            fetchErrorToast.show();
+            const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+            errorToast.show();
+        });
+    });
+
+    //GET OFFICES
+
+    document.getElementById('loadOffices').addEventListener('click', function () {
+        fetch('http://localhost:8082/api/v1/offices', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const viewOffices = document.getElementById('viewOffices');
+                // viewOffices.innerHTML = ''; // Clear existing table/content
+                const table = document.createElement('table');
+                table.classList.add('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                const trHead = document.createElement('tr');
+
+                // Define headers for the table
+                const headers = ['ID', 'Address', 'City', 'Office Name', 'Postcode', 'Actions'];
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.setAttribute('scope', 'col');
+                    th.innerText = header;
+                    trHead.appendChild(th);
+                });
+                thead.appendChild(trHead);
+                table.appendChild(thead);
+
+                // Populate the table body with office data
+                data.forEach(office => {
+                    const tr = document.createElement('tr');
+                    const tdID = document.createElement('td');
+                    const tdAddress = document.createElement('td');
+                    const tdCity = document.createElement('td');
+                    const tdOfficeName =  document.createElement('td');
+                    const tdPostcode = document.createElement('td');
+                    const tdActions = document.createElement('td');
+
+                    tdID.innerText = office.id;
+                    tdAddress.innerText = office.address;
+                    tdCity.innerText = office.city;
+                    tdOfficeName.innerText = office.officeName;
+                    tdPostcode.innerText = office.postcode;
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('btn', 'btn-danger');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.onclick = function () { deleteOffice(office.id); };
+
+                    const updateButton = document.createElement('button');
+                    updateButton.classList.add('btn', 'btn-info', 'me-2');
+                    updateButton.innerText = 'Update';
+                    updateButton.addEventListener('click', function () {
+                        document.getElementById('updateOfficeId').value = office.id; // Set the office ID in the hidden input
+                        document.getElementById('updateOfficeAddress').value = office.address; // Pre-fill the form with existing values
+                        document.getElementById('updateOfficeCity').value = office.city;
+                        document.getElementById('updateOfficeName').value = office.officeName;
+                        document.getElementById('updateOfficePostcode').value = office.postcode;
+                        document.getElementById('updateOffice').classList.remove('d-none'); // Show the update form section
+                    });
+
+
+                    // Append buttons to the Actions cell
+                    tdActions.appendChild(updateButton);
+                    tdActions.appendChild(deleteButton);
+                    tdActions.appendChild(updateButton);
+
+                    // Append cells to the row
+                    tr.appendChild(tdID);
+                    tr.appendChild(tdAddress);
+                    tr.appendChild(tdCity);
+                    tr.appendChild(tdOfficeName)
+                    tr.appendChild(tdPostcode);
+                    tr.appendChild(tdActions);
+
+                    // Append row to the tbody
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                viewOffices.appendChild(table);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+
+    document.getElementById('submitButton').addEventListener('click', function () {
+        const name = document.getElementById('companyName').value.trim();
+        const income = document.getElementById('companyIncome').value.trim();
+
+
+        var errorToastEl = document.getElementById('errorToast');
+        var errorToast = new bootstrap.Toast(errorToastEl);
+        var successToastEl = document.getElementById('successToast');
+        var successToast = new bootstrap.Toast(successToastEl);
+        var fetchErrorToastEl = document.getElementById('fetchErrorToast');
+        var fetchErrorToast = new bootstrap.Toast(fetchErrorToastEl);
+
+
+        if (!name || !income) {
+            errorToast.show();
+        } else {
+            const data = { name, income };
+
+            fetch('http://localhost:8082/api/v1/logistics-companies', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    if ( response.status === 201){
+                        console.log('Success: ', response.status);
+                        successToast.show();
+                        return;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    successToast.show();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    fetchErrorToast.show();
+                });
+        }
+    });
+
+    //DELETE COMPANY
+
+    function deleteCompany(id) {
+        const url = 'http://localhost:8082/api/v1/logistics-companies';
+        const apiUrl = url.concat('/', id);
+        if (confirm('Are you sure you want to delete this company?')) {
+            fetch(apiUrl, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text(); // or .json() if your server responds with JSON
+                })
+                .then(() => {
+                    console.log('Company deleted successfully');
+                    // Optionally, reload the offices list to reflect the deletion
+                    document.getElementById('loadCompanies').click();
+                    const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+                    successToast.show();
+                })
+                .catch((error) => {
+                    console.error('Error deleting the company:', error);
+                    const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+                    errorToast.show();
+                });
+        }
+    }
+
+    document.getElementById('submitOffice').addEventListener('click', function () {
+        const address = document.getElementById('officeAddress').value.trim();
+        const city = document.getElementById('officeCity').value.trim();
+        const officeName = document.getElementById('officeName').value.trim();
+        const postcode = document.getElementById('officePostcode').value.trim();
+
+        // Initialize toasts
+        var errorToastEl = document.getElementById('errorToast');
+        var errorToast = new bootstrap.Toast(errorToastEl);
+        var successToastEl = document.getElementById('successToast');
+        var successToast = new bootstrap.Toast(successToastEl);
+        var fetchErrorToastEl = document.getElementById('fetchErrorToast');
+        var fetchErrorToast = new bootstrap.Toast(fetchErrorToastEl);
+
+        if (!address || !city || !officeName || !postcode) {
+            errorToast.show();
+        } else {
+            const data = { address, city, officeName, postcode };
+
+            // API request
+            fetch('http://localhost:8082/api/v1/offices', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    if ( response.status === 201){
+                        console.log('Success: ', response.status);
+                        successToast.show();
+                        return;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    successToast.show();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    fetchErrorToast.show();
+                });
+        }
+    });
+
+    //UPDATE OFFICES
+    document.getElementById('updateOfficeButton').addEventListener('click', function () {
+        // Get the values from the form fields
+        const id = document.getElementById('updateOfficeId').value; // Assuming this gets populated somewhere in your code
+        const address = document.getElementById('updateOfficeAddress').value.trim();
+        const city = document.getElementById('updateOfficeCity').value.trim();
+        const officeName = document.getElementById('updateOfficeName').value.trim();
+        const postcode = document.getElementById('updateOfficePostcode').value.trim();
+
+        const url = 'http://localhost:8082/api/v1/offices';
+        const apiUrl = url.concat('/', id);
+        // Check if all fields are filled
+        if (!address || !city  || !officeName || !postcode) {
+            alert('Please fill in all the fields.');
+            return;
+        }
+
+        // Prepare the data to send in the request
+        const data = { address, city, officeName, postcode };
+        console.log(apiUrl);
+
+        // Send the PUT request to update the office
+        fetch(apiUrl, {
+        method: 'PUT',
+            headers: {
+            'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token') // Adjust this as per your auth setup
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            if ( response.status === 200){
+                console.log('Success: ', response.status);
+                successToast.show();
+                return;
+            }
+            return response.json();
+        })
+        .then(updatedOffice => {
+            console.log('Office updated successfully:', updatedOffice);
+            successToast.show();
+        })
+        .catch(error => {
+            console.error('Error updating the office:', error);
+            fetchErrorToast.show();
+        });
+    });
+
+    //delete office
+
+    function deleteOffice(id) {
+        const url = 'http://localhost:8082/api/v1/offices';
+        const apiUrl = url.concat('/', id);
+        if (confirm('Are you sure you want to delete this office?')) {
+            fetch(apiUrl, {
+            method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+    .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // or .json() if your server responds with JSON
+        })
+            .then(() => {
+                console.log('Office deleted successfully');
+                // Optionally, reload the offices list to reflect the deletion
+                document.getElementById('loadOffices').click();
+                const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+                successToast.show();
+            })
+            .catch((error) => {
+                console.error('Error deleting the office:', error);
+                const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+                errorToast.show();
+            });
+    }
+    }
+
+//     VIEW USERS
+    document.getElementById('loadUsers').addEventListener('click', function () {
+        fetch('http://localhost:8082/api/v1/users', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const viewUsers = document.getElementById('viewUsers');
+                // viewUsers.innerHTML = ''; // Clear existing table/content
+                const table = document.createElement('table');
+                table.classList.add('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                const trHead = document.createElement('tr');
+
+                // Define headers for the table
+                const headers = ['ID', 'Username', 'Role', 'Actions'];
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.setAttribute('scope', 'col');
+                    th.innerText = header;
+                    trHead.appendChild(th);
+                });
+                thead.appendChild(trHead);
+                table.appendChild(thead);
+                // Populate the table body with user data
+                data.forEach(user => {
+                    const tr = document.createElement('tr');
+                    const tdID = document.createElement('td');
+                    const tdUsername = document.createElement('td');
+                    const tdRole = document.createElement('td');
+                    const tdActions = document.createElement('td');
+
+                    tdID.innerText = user.id;
+                    tdUsername.innerText = user.username;
+
+                    // Display roles
+                    if (user.userRoleList && user.userRoleList.length > 0) {
+                        const roles = user.userRoleList.map(roleObj => roleObj.userRole).join(', ');
+                        tdRole.innerText = roles;
+                    } else {
+                        tdRole.innerText = 'No Roles'; // Or handle as needed when no roles are found
+                    }
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('btn', 'btn-danger');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.onclick = function () { deleteUser(user.id); };
+
+                    const updateButton = document.createElement('button');
+                    updateButton.classList.add('btn', 'btn-info', 'me-2');
+                    updateButton.innerText = 'Update';
+                    updateButton.addEventListener('click', function () {
+                        document.getElementById('updateUserId').value = user.id; // Set the user ID in the hidden input
+                        document.getElementById('updateUsername').value = user.username; // Pre-fill the form with existing values
+                        document.getElementById('updateRole').value = user.userRoleList.map(roleObj => roleObj.userRole).join(',');
+                        document.getElementById('updateUser').classList.remove('d-none'); // Show the update form section
+                    });
+                    // Append buttons to the Actions cell
+                    tdActions.appendChild(updateButton);
+                    tdActions.appendChild(deleteButton);
+
+                    // Append cells to the row
+                    tr.appendChild(tdID);
+                    tr.appendChild(tdUsername);
+                    tr.appendChild(tdRole);
+                    tr.appendChild(tdActions);
+
+                    // Append row to the tbody
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                viewUsers.appendChild(table);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+    //TODO: UPDATE USERS FUNCTIONALITY WITH DROP DOWN MENU SHOWING THE AVAILABLE ROLE - WE MIGHT NEED CONTROLLER FOR FETCHING ALL THE AVAILABLE ROLES
+
+
+    //delete user
+    function deleteUser(id) {
+        const url = 'http://localhost:8082/api/v1/users';
+        const apiUrl = url.concat('/', id);
+        if (confirm('Are you sure you want to delete this user?')) {
+            // Send the PUT request to update the office
+            fetch(apiUrl, {
+            method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+    .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // or .json() if your server responds with JSON
+        })
+            .then(() => {
+                console.log('User deleted successfully');
+                // Optionally, reload the users list to reflect the deletion
+                document.getElementById('loadUsers').click();
+                const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+                successToast.show();
+            })
+            .catch((error) => {
+                console.error('Error deleting the user:', error);
+                const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+                errorToast.show();
+            });
+    }
+    }
+</script>
+</body>
+<!--TODO: FIX THE FETCHING OFFICE BUTTON: DISAPPEARS AFTER FIRST TIME
+TODO: UPDADE AND DELETE OFFICES-->
+<!--TODO: FIX DROP DOWN BOTH FOR CREATING AND UPDATING USER, ADD MORE THAN ONE ROLE-->
+<!--TODO: 5 A - H REQUESTS -->
+<!--TODO: USER & EMPLOYEE PAGE -->
+</html>
