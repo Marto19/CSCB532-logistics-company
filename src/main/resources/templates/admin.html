@@ -340,7 +340,7 @@
             const username = document.getElementById('username').value.trim(); // Use 'email' if that's what your form uses
             const password = document.getElementById('password').value.trim(); // Ensure you have an input with id="password"
             const roleSelect = document.getElementById('roleSelect');
-            const role = roleSelect.value;
+            const role = roleSelect.options[roleSelect.selectedIndex].text.trim();
 
             // Initialize toasts
             var errorToastEl = document.getElementById('errorToast');
@@ -355,11 +355,11 @@
             } else {
                 const data = { username, password, role }; // Adjust the object keys according to your API requirements
 
-                fetch('http://localhost:8082/api/v1/users', {
+                fetch('/api/v1/auth/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token') // Ensure the token is correctly retrieved
+                        // 'Authorization': 'Bearer ' + localStorage.getItem('token') // Ensure the token is correctly retrieved
                     },
                     body: JSON.stringify(data)
                 })
@@ -380,10 +380,6 @@
             }
         });
     });
-
-    //////// submit user
-
-
 
     document.addEventListener('DOMContentLoaded', function () {
         const navLinks = document.querySelectorAll('.nav-link');
@@ -905,7 +901,7 @@
                     updateButton.addEventListener('click', function () {
                         document.getElementById('updateUserId').value = user.id; // Set the user ID in the hidden input
                         document.getElementById('updateUsername').value = user.username; // Pre-fill the form with existing values
-                        document.getElementById('updateRole').value = user.userRoleList.map(roleObj => roleObj.userRole).join(',');
+                        document.getElementById('updateRole').value = user.userRoleList ? user.userRoleList.map(roleObj => roleObj.userRole).join(',') : '';
                         document.getElementById('updateUser').classList.remove('d-none'); // Show the update form section
                     });
                     // Append buttons to the Actions cell

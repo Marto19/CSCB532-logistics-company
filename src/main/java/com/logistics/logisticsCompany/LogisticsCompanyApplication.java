@@ -67,7 +67,7 @@ public class LogisticsCompanyApplication implements CommandLineRunner {
 
 
 		// Check if the role already exists
-		Optional<UserRole> existingRoleAdmin = userRoleRepository.findByUserRole(userRole.getUserRole());
+		Optional<UserRole> existingRoleAdmin = userRoleRepository.findByUserRole(userRoleADMIN.getUserRole());
 
 		if (existingRoleAdmin.isPresent()) {
 			System.out.println("Role already exists: " + existingRoleAdmin.get().getUserRole());
