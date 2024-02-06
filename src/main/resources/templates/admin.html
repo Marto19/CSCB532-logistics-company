@@ -163,27 +163,6 @@
         </div>
     </div>
 
-    <div class="card text-center w-75 mx-auto mb-5">
-        <div class="card-header">
-            <ul class="nav nav-pills card-header-pills">
-                <li class="nav-item">
-                    <a class="nav-link" href="#viewEmployees">View Employees</a>
-                </li>
-            </ul>
-        </div>
-        <div class="card-body" id="viewEmployees">
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Company ID</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="companyIdInput">
-            </div>
-            <button type="button" class="btn btn-primary" id="loadEmployees">Load Employees</button>
-        </div>
-    </div>
-
-    <div id="errorMessage" class="alert alert-danger" role="alert" style="display: none;"></div>
-
-
-
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="successToast" class="toast text-white bg-success" role="alert" aria-live="assertive"
              aria-atomic="true">
@@ -268,6 +247,26 @@
             </div>
         </div>
     </div>
+
+    <div class="card text-center w-75 mx-auto mb-5">
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="#viewEmployees">View Employees</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body" id="viewEmployees">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Company ID</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="companyIdInput">
+            </div>
+            <button type="button" class="btn btn-primary" id="loadEmployees">Load Employees</button>
+        </div>
+    </div>
+
+    <div id="errorMessage" class="alert alert-danger" role="alert" style="display: none;"></div>
+
 
 
 </main>
