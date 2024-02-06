@@ -13,6 +13,7 @@ import com.logistics.logisticsCompany.service.UserRoleServiceImpl;
 import com.logistics.logisticsCompany.service.UserService;
 import com.logistics.logisticsCompany.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,30 +24,40 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService userService;
     private final UserRoleServiceImpl userRoleService;
     private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;  // Add this line
+    private final UserRoleRepository userRoleRepository;
     private final EntityDtoMapper entityDtoMapper;
     
     @Autowired
     public UserController(UserServiceImpl userServiceImpl, UserRoleServiceImpl userRoleService, UserRepository userRepository, UserRoleRepository userRoleRepository, EntityDtoMapper entityDtoMapper) {
         this.userService = userServiceImpl;
         this.userRoleService = userRoleService;
-        this.userRepository = userRepository;  // Add this line
+        this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.entityDtoMapper = entityDtoMapper;
     }
-
+    
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        // Validate user data and register the user
-        User registeredUser = userService.registerUser(user);
-        return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserDTO userDTO) {
+        try {
+            User registeredUser = userService.registerUser(userDTO); // Adjust your service method accordingly
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("User registered successfully with ID: " + registeredUser.getId());
+            
+        }catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Registration failed: " + e.getRootCause().getMessage());
+        }  catch (RuntimeException e) {
+            // Handle other unexpected errors
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred: " + e.getMessage());
+        }
     }
 
     @PostMapping("/login")
@@ -75,7 +86,7 @@ public class UserController {
         System.out.println("Assign Roles method reached.");
         User user = userService.findUserByUsername(username);
         if (user == null) {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User not found.", HttpStatus.NOT_FOUND);
         }
 
         Set<UserRole> userRoles = roles.stream()

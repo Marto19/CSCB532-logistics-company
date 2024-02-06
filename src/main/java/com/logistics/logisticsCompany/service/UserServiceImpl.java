@@ -1,11 +1,13 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.DTO.UserDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.enums.UserRole;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.UserRepository;
 import com.logistics.logisticsCompany.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,9 +26,17 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public User registerUser(User user) {
-        // Implement registration logic, e.g., encrypt password
-        // Save the user to the database
+    public User registerUser(UserDTO registerDTO) {
+        if (userRepository.findByUsername(registerDTO.getUsername()).isPresent()) {
+            throw new DataIntegrityViolationException("Username already exists.");
+        }
+        
+        User user = new User();
+        user.setUsername(registerDTO.getUsername());
+        
+        //fixme idk how password is encoded -caki
+        user.setPassword(registerDTO.getPassword());
+        
         return userRepository.save(user);
     }
 

@@ -33,8 +33,8 @@ public class AuthenticationController {
      * @see AuthenticationResponse
      */
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> responseResponseEntity(@RequestBody RegisterRequest request
-    ){
+    public ResponseEntity<AuthenticationResponse> responseResponseEntity(@RequestBody RegisterRequest request)
+    {
         return ResponseEntity.ok(service.register(request));
     }
 

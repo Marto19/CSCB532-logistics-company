@@ -1,6 +1,7 @@
 package com.logistics.logisticsCompany.auth;
 
 import com.logistics.logisticsCompany.config.JwtService;
+import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.UserRepository;
 import com.logistics.logisticsCompany.repository.UserRoleRepository;
@@ -47,6 +48,11 @@ public class AuthenticationService {
      * @see AuthenticationResponse
      */
     public AuthenticationResponse register(RegisterRequest request) {
+        
+        //fixme added from caki - check if its ok
+        if (repository.findByUsername(request.getUsername()).isPresent()) {
+            throw new EntityNotFoundException("Username already taken"); // Use a more specific exception if you like
+        }
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))

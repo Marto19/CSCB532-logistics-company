@@ -51,8 +51,13 @@ public class CustomerServiceImpl implements CustomerService {
         User user = null;
         // If user id or username is entered, find the user and link the customer to the user
         if (customerDTO.getUserId() != null || customerDTO.getUsername() != null) {
+            
+            Long userIdValue = null;
+            if (customerDTO.getUserId() != null) {
+                userIdValue = Long.parseLong(customerDTO.getUserId());
+            }
             // Find and validate user for linkage
-            user = userLinkageService.findAndValidateUserForLinkage(customerDTO.getUserId(), customerDTO.getUsername());
+            user = userLinkageService.findAndValidateUserForLinkage(userIdValue, customerDTO.getUsername());
             if (user == null) {
                 throw new EntityNotFoundException("User not found with ID: " + customerDTO.getUserId() + " or username: " + customerDTO.getUsername());
             }

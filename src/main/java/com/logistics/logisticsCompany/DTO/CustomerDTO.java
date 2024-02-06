@@ -3,8 +3,10 @@ package com.logistics.logisticsCompany.DTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.validation.ValidPhoneNumber;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.NumberFormat;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,8 +25,12 @@ public class CustomerDTO {
     @ValidPhoneNumber
     private String phone;
     
+    
+    //TODO make it as string and then convert it to Long
+    //so there can be validation if string is entered instead of number (long cant be tracked)
     @JsonProperty("userId")
-    private Long userId; //user id input OPTIONAL
+    @Digits(integer = 10, fraction = 0, message = "User id must be a number")
+    private String userId;  //user id input OPTIONAL
     
     @JsonProperty("username")
     private String username; //username input OPTIONAL
@@ -40,18 +46,21 @@ public class CustomerDTO {
         this.firstName = customer.getFirstName();
         this.secondName = customer.getSecondName();
         this.phone = customer.getPhone();
-        this.userId = customer.getUsers().getId();
+        
         this.username = customer.getUsers().getUsername();
         
         // Map other necessary fields here
     }
 
-    public CustomerDTO(long id,BigDecimal balance, String firstName, String secondName, String phone) {
+    public CustomerDTO(long id,BigDecimal balance, String firstName, String secondName, String phone, String userId, String username) {
         this.id = id;
         this.balance = balance;
         this.firstName = firstName;
         this.secondName = secondName;
         this.phone = phone;
+        this.userId = userId;
+        this.username = username;
+        
     }
 
     // Getters and setters
@@ -73,7 +82,11 @@ public class CustomerDTO {
         this.id = id;
     }
     
-    public void setUserId(Long userId) {
+    public String getUserId() {
+        return userId;
+    }
+    
+    public void setUserId(String userId) {
         this.userId = userId;
     }
     
@@ -81,9 +94,6 @@ public class CustomerDTO {
         this.username = username;
     }
     
-    public Long getUserId() {
-        return userId;
-    }
     
     public String getUsername() {
         return username;
