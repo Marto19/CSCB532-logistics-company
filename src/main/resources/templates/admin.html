@@ -176,6 +176,12 @@
                 Please fill in all the fields.
             </div>
         </div>
+        <div id="fetchingDataErrorToast" class="toast text-white bg-danger" role="alert" aria-live="assertive"
+             aria-atomic="true">
+            <div class="toast-body">
+                Problem fetching data. Try again.
+            </div>
+        </div>
         <div id="fetchErrorToast" class="toast text-white bg-danger" role="alert" aria-live="assertive"
              aria-atomic="true">
             <div class="toast-body">
@@ -239,6 +245,95 @@
                     <button type="button" class="btn btn-primary" id="updateUserButton">Update User</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+<!--TODO BELOW-->
+    <div class="card text-center w-75 mx-auto mt-5 mb-5">
+        <!-- Card Header with Navigation Pills -->
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="#createEmployee">Create Employee</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#viewEmployees">View Employees</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body" id="createEmployee">
+            <div class="card-body w-75 mx-auto text-center">
+                <h5 class="card-title">Insert Employee Details</h5>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="employeeFirstName">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Second Name</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="employeeSecondName">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Current Office ID</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="employeeCurrentOfficeId">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Logistics Company ID</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="employeeLogisticsCompanyId">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">User ID</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="employeeUserId">
+                </div>
+                <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                    <button type="button" class="btn btn-primary" id="submitEmployee">Submit Employee</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" id="viewEmployees">
+            <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
+                <button type="button" class="btn btn-primary" id="loadEmployees">Load Employees</button>
+            </div>
+        </div>
+    </div>
+<!--    todo above fix-->
+
+<!--    5 a)-->
+
+    <div class="card text-center w-75 mx-auto mb-5">
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="#viewEmployees">View Employees</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body" id="viewEmployees">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Company ID</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="companyIdInput">
+            </div>
+            <button type="button" class="btn btn-primary" id="loadEmployees">Load Employees</button>
+        </div>
+    </div>
+
+    <div id="errorMessage" class="alert alert-danger" role="alert" style="display: none;"></div>
+
+
+<!--    5b-->
+    <div class="card text-center w-75 mx-auto mt-5 mb-5">
+        <div class="card-header">
+            <h5 class="card-title">Customers</h5>
+        </div>
+        <div class="card-body">
+            <button type="button" class="btn btn-primary" id="loadCustomers">Load Customers</button>
+        </div>
+        <div class="card-body" id="viewCustomers">
+            <!-- Table of customers will be displayed here -->
         </div>
     </div>
 
@@ -961,6 +1056,309 @@
                 });
         }
     }
+    document.getElementById('loadEmployees').addEventListener('click', function () {
+        const companyId = document.getElementById('companyIdInput').value;
+        const url = 'http://localhost:8082/api/v1/employees/';
+        const apiUrl = url.concat(companyId);
+
+        fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load employees. Please try again later.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const viewEmployees = document.getElementById('viewEmployees');
+                const table = document.createElement('table');
+                table.classList.add('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                const trHead = document.createElement('tr');
+
+                // Define headers for the table
+                const headers = ['ID', 'First Name', 'Second Name', 'CurrentOfficeName'];
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.setAttribute('scope', 'col');
+                    th.innerText = header;
+                    trHead.appendChild(th);
+                });
+                thead.appendChild(trHead);
+                table.appendChild(thead);
+
+                // Populate the table body with employee data
+                const tr = document.createElement('tr');
+                const tdID = document.createElement('td');
+                const tdFirstName = document.createElement('td');
+                const tdSecondName = document.createElement('td');
+                const tdCurrentOfficeName = document.createElement('td');
+
+                tdID.innerText = data.id;
+                tdFirstName.innerText = data.firstName;
+                tdSecondName.innerText = data.secondName;
+                tdCurrentOfficeName.innerText = data.currentOfficeName;
+
+                // Append cells to the row
+                tr.appendChild(tdID);
+                tr.appendChild(tdFirstName);
+                tr.appendChild(tdSecondName);
+                tr.appendChild(tdCurrentOfficeName);
+
+                // Append row to the tbody
+                tbody.appendChild(tr);
+
+                table.appendChild(tbody);
+                // viewEmployees.innerHTML = ''; // Clear previous content
+                viewEmployees.appendChild(table);
+            })
+            .catch((error) => {
+                console.error('Error fetching employee:', error);
+                const errorToast = new bootstrap.Toast(document.getElementById('fetchingDataErrorToast'));
+                errorToast.show();
+            });
+    });
+
+
+    // ///////////////////////////////////////TODO  //////////////////////////////////////////////////////////
+
+    // CREATE EMPLOYEE
+    document.getElementById('submitEmployee').addEventListener('click', function () {
+        const firstName = document.getElementById('employeeFirstName').value.trim();
+        const secondName = document.getElementById('employeeSecondName').value.trim();
+        const currentOfficeId = document.getElementById('employeeCurrentOfficeId').value.trim();
+        const logisticsCompanyId = document.getElementById('employeeLogisticsCompanyId').value.trim();
+        const userId = document.getElementById('employeeUserId').value.trim();
+
+        // Initialize toasts
+        var errorToastEl = document.getElementById('errorToast');
+        var errorToast = new bootstrap.Toast(errorToastEl);
+        var successToastEl = document.getElementById('successToast');
+        var successToast = new bootstrap.Toast(successToastEl);
+        var fetchErrorToastEl = document.getElementById('fetchErrorToast');
+        var fetchErrorToast = new bootstrap.Toast(fetchErrorToastEl);
+
+        if (!firstName || !secondName || !currentOfficeId || !logisticsCompanyId || !userId) {
+            errorToast.show();
+        } else {
+            const data = {
+                firstName,
+                secondName,
+                currentOfficeId: { id: currentOfficeId },
+                logisticsCompanyId: { id: logisticsCompanyId },
+                userId: { id: userId }
+            };
+
+            fetch('http://localhost:8082/api/v1/employees', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    successToast.show();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    fetchErrorToast.show();
+                });
+        }
+    });
+
+
+    // VIEW EMPLOYEES
+    document.getElementById('loadEmployees').addEventListener('click', function () {
+        fetch('http://localhost:8082/api/v1/employees', {       //TODO: fix this broke for no reason
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const viewEmployees = document.getElementById('viewEmployees');
+                const table = document.createElement('table');
+                table.classList.add('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                const trHead = document.createElement('tr');
+
+                // Define headers for the table
+                const headers = ['ID', 'First Name', 'Second Name', 'Current Office ID', 'Logistics Company ID', 'User ID', 'Actions'];
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.setAttribute('scope', 'col');
+                    th.innerText = header;
+                    trHead.appendChild(th);
+                });
+                thead.appendChild(trHead);
+                table.appendChild(thead);
+
+                // Populate the table body with employee data
+                data.forEach(employee => {
+                    const tr = document.createElement('tr');
+                    const tdID = document.createElement('td');
+                    const tdFirstName = document.createElement('td');
+                    const tdSecondName = document.createElement('td');
+                    const tdCurrentOfficeId = document.createElement('td');
+                    const tdLogisticsCompanyId = document.createElement('td');
+                    const tdUserId = document.createElement('td');
+                    const tdActions = document.createElement('td');
+
+                    tdID.innerText = employee.id;
+                    tdFirstName.innerText = employee.firstName;
+                    tdSecondName.innerText = employee.secondName;
+                    tdCurrentOfficeId.innerText = employee.currentOfficeId;
+                    tdLogisticsCompanyId.innerText = employee.logisticsCompanyId;
+                    tdUserId.innerText = employee.userId;
+
+                    // Append cells to the row
+                    tr.appendChild(tdID);
+                    tr.appendChild(tdFirstName);
+                    tr.appendChild(tdSecondName);
+                    tr.appendChild(tdCurrentOfficeId);
+                    tr.appendChild(tdLogisticsCompanyId);
+                    tr.appendChild(tdUserId);
+                    tr.appendChild(tdActions);
+
+                    // Append row to the tbody
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                viewEmployees.appendChild(table);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+
+    // DELETE EMPLOYEE
+    function deleteEmployee(id) {
+        const url = 'http://localhost:8082/api/v1/employees/';
+        const apiUrl = url.concat(id);
+
+        if (confirm('Are you sure you want to delete this employee?')) {
+            fetch(apiUrl, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text(); // or .json() if your server responds with JSON
+                })
+                .then(() => {
+                    console.log('Employee deleted successfully');
+                    // Optionally, reload the employees list to reflect the deletion
+                    document.getElementById('loadEmployees').click();
+                    const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+                    successToast.show();
+                })
+                .catch((error) => {
+                    console.error('Error deleting the employee:', error);
+                    const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+                    errorToast.show();
+                });
+        }
+    }
+    // ///////////////////////////////////////TODO  //////////////////////////////////////////////////////////
+
+
+    // 5b
+    //TO BE FIXED IN THE BACKEND: When fixed there, TODO: fix here
+    document.getElementById('loadCustomers').addEventListener('click', function () {
+        const url = 'http://localhost:8082/api/v1/customers';
+
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load customers. Please try again later.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const viewCustomers = document.getElementById('viewCustomers');
+                const table = document.createElement('table');
+                table.classList.add('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                const trHead = document.createElement('tr');
+
+                // Define headers for the table
+                const headers = ['ID', 'Name', 'Email', 'Phone'];
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.setAttribute('scope', 'col');
+                    th.innerText = header;
+                    trHead.appendChild(th);
+                });
+                thead.appendChild(trHead);
+                table.appendChild(thead);
+
+                // Populate the table body with customer data
+                data.forEach(customer => {
+                    const tr = document.createElement('tr');
+                    const tdID = document.createElement('td');
+                    const tdName = document.createElement('td');
+                    const tdEmail = document.createElement('td');
+                    const tdPhone = document.createElement('td');
+
+                    tdID.innerText = customer.id;
+                    tdName.innerText = customer.name;
+                    tdEmail.innerText = customer.email;
+                    tdPhone.innerText = customer.phone;
+
+                    // Append cells to the row
+                    tr.appendChild(tdID);
+                    tr.appendChild(tdName);
+                    tr.appendChild(tdEmail);
+                    tr.appendChild(tdPhone);
+
+                    // Append row to the tbody
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                viewCustomers.innerHTML = ''; // Clear previous content
+                viewCustomers.appendChild(table);
+            })
+            .catch((error) => {
+                console.error('Error fetching customers:', error);
+                const errorToast = new bootstrap.Toast(document.getElementById('fetchingCustomersErrorToast'));
+                errorToast.show();
+            });
+    });
+
+
+
 </script>
 </body>
 <!--TODO: FIX THE FETCHING OFFICE BUTTON: DISAPPEARS AFTER FIRST TIME
