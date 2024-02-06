@@ -163,6 +163,27 @@
         </div>
     </div>
 
+    <div class="card text-center w-75 mx-auto mb-5">
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="#viewEmployees">View Employees</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body" id="viewEmployees">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Company ID</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="companyIdInput">
+            </div>
+            <button type="button" class="btn btn-primary" id="loadEmployees">Load Employees</button>
+        </div>
+    </div>
+
+    <div id="errorMessage" class="alert alert-danger" role="alert" style="display: none;"></div>
+
+
+
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="successToast" class="toast text-white bg-success" role="alert" aria-live="assertive"
              aria-atomic="true">
@@ -174,6 +195,12 @@
              aria-atomic="true">
             <div class="toast-body">
                 Please fill in all the fields.
+            </div>
+        </div>
+        <div id="fetchingDataErrorToast" class="toast text-white bg-danger" role="alert" aria-live="assertive"
+             aria-atomic="true">
+            <div class="toast-body">
+                Problem fetching data. Try again.
             </div>
         </div>
         <div id="fetchErrorToast" class="toast text-white bg-danger" role="alert" aria-live="assertive"
@@ -961,6 +988,168 @@
                 });
         }
     }
+    // GET EMPLOYEES
+    // document.getElementById('loadEmployees').addEventListener('click', function () {
+    //     const companyId = document.getElementById('companyIdInput').value;
+    //     const url = 'http://localhost:8082/api/v1/employees/';
+    //     const apiUrl = url.concat(companyId);
+    //
+    //     fetch(apiUrl, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': 'Bearer ' + localStorage.getItem('token')
+    //         }
+    //     })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('Failed to load employees. Please try again later.');
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             const viewEmployees = document.getElementById('viewEmployees');
+    //             const table = document.createElement('table');
+    //             table.classList.add('table');
+    //             const thead = document.createElement('thead');
+    //             const tbody = document.createElement('tbody');
+    //             const trHead = document.createElement('tr');
+    //
+    //             // Define headers for the table
+    //             const headers = ['ID', 'First Name', 'Second Name', 'CurrentOfficeName'];
+    //             headers.forEach(header => {
+    //                 const th = document.createElement('th');
+    //                 th.setAttribute('scope', 'col');
+    //                 th.innerText = header;
+    //                 trHead.appendChild(th);
+    //             });
+    //             thead.appendChild(trHead);
+    //             table.appendChild(thead);
+    //
+    //             // Populate the table body with employee data
+    //             const tr = document.createElement('tr');
+    //             const tdID = document.createElement('td');
+    //             const tdFirstName = document.createElement('td');
+    //             const tdSecondName = document.createElement('td');
+    //             const tdCurrentOfficeName = document.createElement('td');
+    //             const tdActions = document.createElement('td');
+    //
+    //             tdID.innerText = data.id;
+    //             tdFirstName.innerText = data.firstName;
+    //             tdSecondName.innerText = data.secondName;
+    //             tdCurrentOfficeName.innerText = data.currentOfficeName;
+    //
+    //             const deleteButton = document.createElement('button');
+    //             deleteButton.classList.add('btn', 'btn-danger');
+    //             deleteButton.innerText = 'Delete';
+    //             deleteButton.onclick = function () { deleteEmployee(data.id); };
+    //
+    //             const updateButton = document.createElement('button');
+    //             updateButton.classList.add('btn', 'btn-info', 'me-2');
+    //             updateButton.innerText = 'Update';
+    //             updateButton.addEventListener('click', function () {
+    //                 document.getElementById('updateEmployeeId').value = data.id;
+    //                 document.getElementById('updateEmployeeName').value = data.firstName;
+    //                 document.getElementById('updateEmployeePosition').value = data.secondName;
+    //                 document.getElementById('updateEmployeeDepartment').value = data.currentOfficeName;
+    //                 document.getElementById('updateEmployee').classList.remove('d-none');
+    //             });
+    //
+    //             tdActions.appendChild(updateButton);
+    //             tdActions.appendChild(deleteButton);
+    //
+    //             // Append cells to the row
+    //             tr.appendChild(tdID);
+    //             tr.appendChild(tdFirstName);
+    //             tr.appendChild(tdSecondName);
+    //             tr.appendChild(tdCurrentOfficeName);
+    //             tr.appendChild(tdActions);
+    //
+    //             // Append row to the tbody
+    //             tbody.appendChild(tr);
+    //
+    //             table.appendChild(tbody);
+    //             // viewEmployees.innerHTML = '';
+    //             viewEmployees.appendChild(table);
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error fetching employee:', error);
+    //             const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+    //             errorToast.show();
+    //         }); //TODO: REMOVE ACTION BUTTONS
+    // });
+
+    document.getElementById('loadEmployees').addEventListener('click', function () {
+        const companyId = document.getElementById('companyIdInput').value;
+        const url = 'http://localhost:8082/api/v1/employees/';
+        const apiUrl = url.concat(companyId);
+
+        fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load employees. Please try again later.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const viewEmployees = document.getElementById('viewEmployees');
+                const table = document.createElement('table');
+                table.classList.add('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                const trHead = document.createElement('tr');
+
+                // Define headers for the table
+                const headers = ['ID', 'First Name', 'Second Name', 'CurrentOfficeName'];
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.setAttribute('scope', 'col');
+                    th.innerText = header;
+                    trHead.appendChild(th);
+                });
+                thead.appendChild(trHead);
+                table.appendChild(thead);
+
+                // Populate the table body with employee data
+                const tr = document.createElement('tr');
+                const tdID = document.createElement('td');
+                const tdFirstName = document.createElement('td');
+                const tdSecondName = document.createElement('td');
+                const tdCurrentOfficeName = document.createElement('td');
+
+                tdID.innerText = data.id;
+                tdFirstName.innerText = data.firstName;
+                tdSecondName.innerText = data.secondName;
+                tdCurrentOfficeName.innerText = data.currentOfficeName;
+
+                // Append cells to the row
+                tr.appendChild(tdID);
+                tr.appendChild(tdFirstName);
+                tr.appendChild(tdSecondName);
+                tr.appendChild(tdCurrentOfficeName);
+
+                // Append row to the tbody
+                tbody.appendChild(tr);
+
+                table.appendChild(tbody);
+                // viewEmployees.innerHTML = ''; // Clear previous content
+                viewEmployees.appendChild(table);
+            })
+            .catch((error) => {
+                console.error('Error fetching employee:', error);
+                const errorToast = new bootstrap.Toast(document.getElementById('fetchingDataErrorToast'));
+                errorToast.show();
+            });
+    });
+
+
+
 </script>
 </body>
 <!--TODO: FIX THE FETCHING OFFICE BUTTON: DISAPPEARS AFTER FIRST TIME
