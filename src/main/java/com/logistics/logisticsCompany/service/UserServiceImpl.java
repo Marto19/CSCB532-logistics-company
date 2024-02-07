@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
-
+    private final PasswordEncoder passwordEncoder;
     /**
      * Constructor for UserServiceImpl.
      *
@@ -36,9 +36,10 @@ public class UserServiceImpl implements UserService {
      * @param userRoleRepository Repository for managing user roles.
      */
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService {
         
         User user = new User();
         user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword()); // Encode the password
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Encode the password
         
         // Parse the userRoleBeingSet to a long
         long userRoleId;

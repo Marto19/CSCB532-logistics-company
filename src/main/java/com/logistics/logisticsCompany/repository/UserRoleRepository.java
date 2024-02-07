@@ -24,4 +24,6 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {  // 
      * @return True if a user role with the given ID exists, false otherwise.
      */
     UserRole findUserRoleById(long userRole);
+    
+
 }
