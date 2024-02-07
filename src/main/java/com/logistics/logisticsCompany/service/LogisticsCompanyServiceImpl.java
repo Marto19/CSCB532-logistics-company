@@ -1,5 +1,7 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
+import com.logistics.logisticsCompany.DTO.LogisticsCompanyDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
@@ -61,11 +63,13 @@ public class LogisticsCompanyServiceImpl implements LogisticsCompanyService {
      * @param logisticsCompany The logistics company to be created.
      */
     @Override
-    public void createLogisticsCompany(LogisticsCompany logisticsCompany) {
+    public void createLogisticsCompany(LogisticsCompanyDTO logisticsCompanyDTO) {
         //Check if a logistics company with the given phone already exists
-        if (logisticsCompanyRepository.existsByName(logisticsCompany.getName())) {
+        if (logisticsCompanyRepository.existsByName(logisticsCompanyDTO.getName())) {
             throw new IllegalArgumentException("Logistics company with the same name already exists");
         }
+
+        LogisticsCompany logisticsCompany = EntityDtoMapper.convertLogisticsCompanyDtoToEntity(logisticsCompanyDTO);
 
         logisticsCompanyRepository.save(logisticsCompany);
     }

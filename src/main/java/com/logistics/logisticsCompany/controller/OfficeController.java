@@ -51,7 +51,8 @@ public class OfficeController {
     @PostMapping
     public ResponseEntity<String> createOffice(@RequestBody OfficeDTO officeDTO) {
             officeService.createOffice(officeDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Office created successfully");
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Office created successfully with ID: " + officeDTO.getId());
     }
 
     /**

@@ -2,7 +2,6 @@ package com.logistics.logisticsCompany.service;
 
 import com.logistics.logisticsCompany.DTO.CustomerDTO;
 import com.logistics.logisticsCompany.entities.users.Customer;
-import com.logistics.logisticsCompany.entities.users.Employee;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +9,7 @@ import java.util.Optional;
 public interface CustomerService {
     
     
-    Customer createCustomer(CustomerDTO customerDTO);
+    void createCustomer(CustomerDTO customerDTO);
     
     List<Customer> getAllCustomers();
     

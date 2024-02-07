@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface EmployeeService {
 
-    public Employee createEmployee(EmployeeDTO employeeDTO);
+    public void createEmployee(EmployeeDTO employeeDTO);
 
     List<Employee> getAllEmployees();
 	

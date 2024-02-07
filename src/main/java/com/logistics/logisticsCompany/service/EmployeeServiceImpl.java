@@ -50,11 +50,12 @@ public class EmployeeServiceImpl implements EmployeeService {
  
     /**
      * Creates a new employee.
+     *
      * @param employeeDTO the employee to create
      */
     
     @Override
-    public Employee createEmployee(EmployeeDTO employeeDTO) {
+    public void createEmployee(EmployeeDTO employeeDTO) {
         Employee employee = EntityDtoMapper.convertEmployeeDtoToEntity(employeeDTO);
 
         
@@ -79,7 +80,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employee.setCurrentOffice(office);
         }
         
-        return employeeRepository.save(employee);
+        employeeRepository.save(employee);
     }
 
     /**

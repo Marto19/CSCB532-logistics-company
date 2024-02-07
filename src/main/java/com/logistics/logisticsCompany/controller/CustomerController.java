@@ -64,9 +64,9 @@ public class CustomerController {
 	 */
 	@PostMapping
 	public ResponseEntity<String> createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
-		Customer createdCustomer = customerService.createCustomer(customerDTO);
+		customerService.createCustomer(customerDTO);
 		return ResponseEntity.status(HttpStatus.CREATED)
-				.body("Customer created successfully with ID: " + createdCustomer.getId());
+				.body("Customer created successfully with ID: " + customerDTO.getId());
 	}
 
 	/**

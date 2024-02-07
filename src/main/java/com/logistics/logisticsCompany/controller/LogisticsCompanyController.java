@@ -62,10 +62,10 @@ public class LogisticsCompanyController {
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> createLogisticsCompany(@Valid @RequestBody LogisticsCompanyDTO logisticsCompanyDTO) {
-            LogisticsCompany logisticsCompany = EntityDtoMapper.convertLogisticsCompanyDtoToEntity(logisticsCompanyDTO);
-            
-            logisticsCompanyService.createLogisticsCompany(logisticsCompany);
-            return ResponseEntity.status(HttpStatus.CREATED).body("LogisticsCompany created successfully");
+            logisticsCompanyService.createLogisticsCompany(logisticsCompanyDTO);
+
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Logistics company created successfully with ID: " + logisticsCompanyDTO.getId());
     }
 
     /**
