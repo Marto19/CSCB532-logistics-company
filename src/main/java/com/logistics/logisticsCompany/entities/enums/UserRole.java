@@ -7,17 +7,32 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The UserRole class is used to represent a user role entity.
+ * It contains the id and user role of the user role.
+ * Its supposed to be an enum but I made it an entity to be able to add more user roles in the future.
+ */
 @Entity
 @Table(name = "user_role")
 public class UserRole {
+    /**
+     * The id of the user role.
+     * It is a unique identifier for the user role.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    /**
+     * The user role of the user role.
+     */
     @Column(name = "user_role", nullable = false, length = 255)
     private String userRole;
 
     ////////////////////////////////////making  relationships   //////////////////////////////
+    /**
+     * The set of users of the user role.
+     */
     @ManyToMany
     @JsonIgnore  // Add this annotation to break the loop
     private Set<User> userList;

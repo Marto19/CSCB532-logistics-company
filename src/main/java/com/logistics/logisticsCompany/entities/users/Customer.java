@@ -10,39 +10,75 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+/**
+ * The Customer class is used to represent a customer entity.
+ * It contains the id, first name, second name, phone, balance, user, last office, sent shipments, and received shipments of the customer.
+ */
 @Entity
 @Table(name = "customer")
 public class Customer {
-    
+
+    /**
+     * The id of the customer.
+     * It is a unique identifier for the customer.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    
+
+    /**
+     * The first name of the customer.
+     */
     @Column(name = "first_name", nullable = false, length = 25)
     private String firstName;
-    
+
+    /**
+     * The second name of the customer.
+     */
     @Column(name = "second_name", nullable = false, length = 25)
     private String secondName;
-    
+
+    /**
+     * The phone of the customer.
+     */
     @Column(name = "phone", nullable = false, length = 13)
     private String phone;
-    
+
+    /**
+     * The balance of the customer.
+     */
     @Column(name = "balance", nullable = false, precision = 19, scale = 2)
     private BigDecimal balance;
 
     // Many-to-One relationship with User
+    /**
+     * The user of the customer.
+     * It is a many-to-one relationship between customer and user.
+     */
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User users;
     
     // Many-to-One relationship with Office
+    /**
+     * The last office of the customer.
+     * It is a many-to-one relationship between customer and office.
+     */
     @ManyToOne
     @JoinColumn(name = "last_office_id")
     private Office lastOffice;
-    
+
+    /**
+     * The set of sent shipments of the customer.
+     * It is a one-to-many relationship between customer and shipment.
+     */
     @OneToMany(mappedBy = "senderCustomer")
     private Set<Shipment> sentShipments = new HashSet<>();
-    
+
+    /**
+     * The set of received shipments of the customer.
+     * It is a one-to-many relationship between customer and shipment.
+     */
     @OneToMany(mappedBy = "receiverCustomer")
     private Set<Shipment> receivedShipments = new HashSet<>();
     

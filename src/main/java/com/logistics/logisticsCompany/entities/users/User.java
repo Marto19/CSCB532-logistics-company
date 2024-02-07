@@ -14,28 +14,50 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The User class is used to represent a user entity.
+ * It contains the id, username, password, employees, customers, and user role list of the user.
+ */
 @Entity
 @Data
 @Table(name = "user")
 public class User implements UserDetails {
 
+	/**
+	 * The id of the user.
+	 * It is a unique identifier for the user.
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	/**
+	 * The username of the user.
+	 */
 	@Column(name = "username", unique = true, nullable = false, length = 50)
 
+	/**
+	 * The password of the user.
+	 */
 	private String username;
 	@Column(name = "password", nullable = false, length = 256)
 	private String password;
 
 
 	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
+	/**
+	 * The set of employees of the user.
+	 * It is a one-to-many relationship between user and employee.
+	 */
 	//  relationship user/employee - 1:n
 	@OneToMany(mappedBy = "users")
 	private Set<Employee> employees = new HashSet<>();
 
 	//relationship user/customer - 1:n
+	/**
+	 * The set of customers of the user.
+	 * It is a one-to-many relationship between user and customer.
+	 */
 	@OneToMany(mappedBy = "users")
 	private Set<Customer> customers = new HashSet<>();
 	//TODO: think whether List or Set (martin)
@@ -43,6 +65,10 @@ public class User implements UserDetails {
 
 	//creating relationship between the enum-entity table - user_role and user
 	//lets consider that one user can have many roles and backwards
+	/**
+	 * The set of user roles of the user.
+	 * It is a many-to-many relationship between user and user role.
+	 */
 	@ManyToMany(mappedBy = "userList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)//TODO: think about changing from EAGER to a DTO
 	private Set<UserRole> userRoleList;
 

@@ -9,37 +9,71 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+/**
+ * The Employee class is used to represent an employee entity.
+ * It contains the id, first name, second name, user, current office, sent shipments, received shipments, and logistics company of the employee.
+ */
 @Entity
 @Table(name = "employee")
 public class Employee {
 
+    /**
+     * The id of the employee.
+     * It is a unique identifier for the employee.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    /**
+     * The first name of the employee.
+     */
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
+    /**
+     * The second name of the employee.
+     */
     @Column(name = "second_name", nullable = false, length = 50)
     private String secondName;
 
     //Many-to-One relationships with User and Office
+    /**
+     * The user of the employee.
+     * It is a many-to-one relationship between employee and user.
+     */
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User users;
 
+    /**
+     * The current office of the employee.
+     * It is a many-to-one relationship between employee and office.
+     */
     @ManyToOne
     @JoinColumn(name = "current_office_id")
     private Office currentOffice;
     
     //One-to-Many relationships with Shipment (sender and receiver)
+    /**
+     * The set of sent shipments of the employee.
+     * It is a one-to-many relationship between employee and shipment.
+     */
     @OneToMany(mappedBy = "senderEmployee")
     private Set<Shipment> sentShipments = new HashSet<>();
-    
+
+    /**
+     * The set of received shipments of the employee.
+     * It is a one-to-many relationship between employee and shipment.
+     */
     @OneToMany(mappedBy = "receiverEmployee")
     private Set<Shipment> receivedShipments = new HashSet<>();
 
     //adding relationship between employee-company n:1
+    /**
+     * The logistics company of the employee.
+     * It is a many-to-one relationship between employee and logistics company.
+     */
     @ManyToOne
     @JoinColumn(name = "company_id")
     private LogisticsCompany logisticsCompany;
