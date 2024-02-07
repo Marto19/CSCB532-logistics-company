@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.entities.users;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.logistics.logisticsCompany.entities.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -75,7 +76,9 @@ public class User implements UserDetails {
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id")
 	)
+	@JsonManagedReference
 	private Set<UserRole> userRoleList = new HashSet<>();
+	
 	public User() {
 	}
 

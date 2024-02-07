@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.entities.enums;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.logistics.logisticsCompany.entities.users.User;
 import jakarta.persistence.*;
@@ -35,6 +36,7 @@ public class UserRole {
      * The set of users of the user role.
      */
     @ManyToMany(mappedBy = "userRoleList")
+    @JsonBackReference
     private Set<User> userList = new HashSet<>();
 
     public UserRole(String userRole) {
