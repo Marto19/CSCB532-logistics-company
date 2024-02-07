@@ -102,9 +102,41 @@ public class Office {
 		this.postcode = postcode;
 		this.address = address;
 	}
-
+	
+	public Office(String officeName, String city, int postcode, String address, Set<Employee> employees, Set<Customer> customers, Set<Shipment> sentFromOffice, Set<Shipment> receivedInOffice, LogisticsCompany logisticsCompany) {
+		this.officeName = officeName;
+		this.city = city;
+		this.postcode = postcode;
+		this.address = address;
+		this.employees = employees;
+		this.customers = customers;
+		this.sentFromOffice = sentFromOffice;
+		this.receivedInOffice = receivedInOffice;
+		this.logisticsCompany = logisticsCompany;
+	}
+	
+	public Office(long id, String officeName, String city, int postcode, String address, Set<Employee> employees, Set<Customer> customers, Set<Shipment> sentFromOffice, Set<Shipment> receivedInOffice, LogisticsCompany logisticsCompany) {
+		this.id = id;
+		this.officeName = officeName;
+		this.city = city;
+		this.postcode = postcode;
+		this.address = address;
+		this.employees = employees;
+		this.customers = customers;
+		this.sentFromOffice = sentFromOffice;
+		this.receivedInOffice = receivedInOffice;
+		this.logisticsCompany = logisticsCompany;
+	}
 	//Getters and setters
-
+	
+	public LogisticsCompany getLogisticsCompany() {
+		return logisticsCompany;
+	}
+	
+	public void setLogisticsCompany(LogisticsCompany logisticsCompany) {
+		this.logisticsCompany = logisticsCompany;
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -176,7 +208,7 @@ public class Office {
 	public void setReceivedInOffice(Set<Shipment> receivedInOffice) {
 		this.receivedInOffice = receivedInOffice;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Office{" +
@@ -185,6 +217,11 @@ public class Office {
 				", city='" + city + '\'' +
 				", postcode=" + postcode +
 				", address='" + address + '\'' +
+				", employees=" + employees +
+				", customers=" + customers +
+				", sentFromOffice=" + sentFromOffice +
+				", receivedInOffice=" + receivedInOffice +
+				", logisticsCompany=" + logisticsCompany +
 				'}';
 	}
 }

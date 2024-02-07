@@ -118,7 +118,14 @@ public class EntityDtoMapper {
 		return dto;
 	}
 
-
+	public Office convertOfficeDtoToEntity(OfficeDTO officeDTO) {
+		Office office = new Office();
+		office.setOfficeName(officeDTO.getOfficeName());
+		office.setCity(officeDTO.getCity());
+		office.setPostcode(officeDTO.getPostcode());
+		office.setAddress(officeDTO.getAddress());
+		return office;
+	}
 	/**
 	 * Converts the specified user to a user data transfer object.
 	 * @param user the user

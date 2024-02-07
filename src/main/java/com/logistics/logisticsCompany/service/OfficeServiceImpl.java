@@ -1,10 +1,14 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
+import com.logistics.logisticsCompany.DTO.OfficeDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.offices.Office;
+import com.logistics.logisticsCompany.repository.LogisticsCompanyRepository;
 import com.logistics.logisticsCompany.repository.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,21 +23,32 @@ public class OfficeServiceImpl implements OfficeService {
     /**
      * The {@code OfficeRepository} instance used for office-related database operations.
      */
+
+    private final OfficeRepository officeRepository;
+    private final LogisticsCompanyRepository logisticsCompanyRepository;
+    private final EntityDtoMapper entityDtoMapper;
+    
     @Autowired
-    private OfficeRepository officeRepository;
-
-    /**
-     * Creates a new office.
-     * @param office the office to create
-     */
+    public OfficeServiceImpl(OfficeRepository officeRepository, EntityDtoMapper entityDtoMapper, LogisticsCompanyRepository logisticsCompanyRepository){
+        this.officeRepository = officeRepository;
+        this.entityDtoMapper = entityDtoMapper;
+        this.logisticsCompanyRepository = logisticsCompanyRepository;
+    }
+    
+    @Transactional
     @Override
-    public void createOffice(Office office) {
-        //Checks if office with the given address already exists
-        if (officeRepository.existsByAddress(office.getAddress())) {
-            throw new IllegalArgumentException("Office with the provided address already exists");
+    public Office createOffice(OfficeDTO officeDTO) {
+        
+        if (officeRepository.existsByAddress(officeDTO.getAddress())) {
+            throw new IllegalArgumentException("Office with the provided address already exists.");
         }
-
-        officeRepository.save(office);
+        
+        Office office = entityDtoMapper.convertOfficeDtoToEntity(officeDTO);
+        long companyId = Long.parseLong(officeDTO.getCompanyId());
+        office.setLogisticsCompany(logisticsCompanyRepository.getLogisticsCompanyById(companyId)
+                .orElseThrow(() -> new EntityNotFoundException("Logistics company not found for user ID: " + officeDTO.getCompanyId())));
+        
+        return officeRepository.save(office);
     }
 
     /**

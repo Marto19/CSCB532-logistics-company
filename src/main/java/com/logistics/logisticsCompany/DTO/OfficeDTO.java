@@ -39,7 +39,9 @@ public class OfficeDTO {
     @JsonProperty("address")
     private String address;
 
-
+    @JsonProperty("companyId")
+    private String companyId;
+    
     /**
      * Default constructor for the {@code OfficeDTO} class.
      * It is used to create an empty office data transfer object.
@@ -58,16 +60,25 @@ public class OfficeDTO {
      * @param postcode the postcode
      * @param address the address
      */
-    public OfficeDTO(long id, String officeName, String city, int postcode, String address) {
+    public OfficeDTO(long id, String officeName, String city, int postcode, String address, String companyName) {
         this.id = id;
         this.officeName = officeName;
         this.city = city;
         this.postcode = postcode;
         this.address = address;
+        this.companyId = companyName;
     }
 
     // Getters and setters
     
+    
+    public String getCompanyId() {
+        return companyId;
+    }
+    
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
     
     public void setId(long id) {
         this.id = id;
