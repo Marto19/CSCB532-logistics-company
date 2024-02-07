@@ -17,10 +17,24 @@ import org.springframework.stereotype.Service;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import java.util.List;
 import java.util.Optional;
+
+
+/**
+ * The {@code EmployeeServiceImpl} class implements the {@code EmployeeService} interface.
+ * It provides the business logic for managing employees.
+ */
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-
+    /**
+     * The {@code EmployeeRepository} instance used for employee-related database operations.
+     */
     private final EmployeeRepository employeeRepository;
+
+    /**
+     * Constructs an {@code EmployeeServiceImpl} with the specified {@code EmployeeRepository}.
+     * @param employeeRepository the {@code EmployeeRepository}
+     */
 
     private final LogisticsCompanyRepository logisticsCompanyRepository;
     
@@ -35,6 +49,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.userLinkageService = userLinkageService;
         this.officeRepository = officeRepository;
     }
+ 
+    /**
+     * Creates a new employee.
+     * @param employeeDTO the employee to create
+     */
     
     @Override
     public Employee createEmployee(EmployeeDTO employeeDTO) {
@@ -65,16 +84,28 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    /**
+     * Retrieves all employees.
+     * @return a list of all employees
+     */
     @Override
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
-    
+    /**
+     * Retrieves all employees by company id.
+     * @param companyId the id of the company
+     * @return a list of all employees by company id
+     */
     @Override
     public List<Employee> getAllEmployeesByCompanyId(Long companyId) {
         return employeeRepository.findAllByLogisticsCompanyId(companyId);
     }
-    
+    /**
+     * Updates an existing employee.
+     * @param employeeId the id of the employee to update
+     * @param updatedEmployee the updated employee
+     */
     @Override
     public void updateEmployee(long employeeId, Employee updatedEmployee) {
         if (!employeeRepository.existsById(employeeId)) {
@@ -83,7 +114,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         updatedEmployee.setId(employeeId);
         employeeRepository.save(updatedEmployee);
     }
-
+    /**
+     * Deletes an existing employee.
+     * @param employeeId the id of the employee to delete
+     */
     @Override
     public void deleteEmployee(long employeeId) {
         if (!employeeRepository.existsById(employeeId)) {
@@ -92,6 +126,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.deleteById(employeeId);
     }
 
+    /**
+     * Assigns an office to an employee.
+     * @param employeeId the id of the employee
+     * @param office the office to assign
+     */
     // Additional method for assigning an office to an employee
     @Override
     public void assignOfficeToEmployee(long employeeId, Office office) {
@@ -100,7 +139,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCurrentOffice(office);
         employeeRepository.save(employee);
     }
-
+    /**
+     * Assigns a logistics company to an employee.
+     * @param employeeId the id of the employee
+     * @param logisticsCompany the logistics company to assign
+     */
     // Additional method for assigning a logistics company to an employee
     @Override
     public void assignLogisticsCompanyToEmployee(long employeeId, LogisticsCompany logisticsCompany) {
@@ -109,7 +152,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setLogisticsCompany(logisticsCompany);
         employeeRepository.save(employee);
     }
-
+    /**
+     * Retrieves an employee by id.
+     * @param emplpoyeeId the id of the employee
+     * @return an Optional containing the employee if it exists, or an empty Optional otherwise
+     */
     @Override
     public Optional<Employee> getEmployeeById(long emplpoyeeId) {
         return employeeRepository.findById(emplpoyeeId);

@@ -13,14 +13,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The Shipment class is used to represent a shipment entity.
+ * It contains the id, shipment date, weight, price, is paid, total price, received date, sender office, sender customer, sender employee, receiver office, receiver customer, receiver employee, and status histories of the shipment.
+ */
 @Entity
 @Table(name = "shipment")
 public class Shipment {
 
+	/**
+	 * The id of the shipment.
+	 * It is a unique identifier for the shipment.
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	/**
+	 * The shipment date of the shipment.
+	 */
 	@Column(name = "shipment_date", nullable = false)
 	private LocalDate shipmentDate;
 
@@ -28,42 +39,82 @@ public class Shipment {
 //	@Enumerated(EnumType.STRING)	//todo. update 27.01 : new table was created for shipment status (goods status)
 //	private ShipmentStatus shipmentStatus;
 
+	/**
+	 * The weight of the shipment.
+	 */
 	@Column(name = "weight", nullable = false,  precision = 10, scale = 2)
 	private BigDecimal weight;
 
+	/**
+	 * The price of the shipment.
+	 */
 	@Column(name = "is_paid_delivery", nullable = false)
 	private boolean isPaidDelivery;
-	
+
+	/**
+	 * The price of the shipment.
+	 */
 	@Column(name = "price_delivery", nullable = true, precision= 10, scale = 2)
 	private BigDecimal priceDelivery;
-	
+
+	/**
+	 * The price of the shipment.
+	 */
 	@Column(name = "price", nullable = true,precision= 10, scale = 2)
 	private BigDecimal price;
 
+	/**
+	 * The is paid of the shipment.
+	 */
 	@Column(name = "is_paid", nullable = false)
 	private boolean isPaid;
 
+	/**
+	 * The total price of the shipment.
+	 */
 	@Column(name = "total_price", nullable = true, precision= 10, scale = 2)
 	private BigDecimal totalPrice;
-	
+
+	/**
+	 * The status of the shipment.
+	 */
 	@Column(name = "status", nullable = true)
 	private String status;
+
+	/**
+	 * The received date of the shipment.
+	 */
 	@Column(name = "received_date", nullable = true)
 	private LocalDate receivedDate;
 
+	/**
+	 * The notes of the shipment.
+	 */
 	@Column(name = "notes", nullable = true)
 	private String notes;
 	/*
 		SENDER RELATIONSHIPS - OFFICE, CUSTOMER, EMPLOYEE
 	*/
+	/**
+	 * The sender office of the shipment.
+	 * It is a many-to-one relationship between shipment and office.
+	 */
 	@ManyToOne
 	@JoinColumn(name = "sender_office_id", nullable = true)
 	private Office senderOffice;
 
+	/**
+	 * The sender customer of the shipment.
+	 * It is a many-to-one relationship between shipment and customer.
+	 */
 	@ManyToOne
 	@JoinColumn(name = "sender_customer_id", nullable = true)
 	private Customer senderCustomer;
 
+	/**
+	 * The sender employee of the shipment.
+	 * It is a many-to-one relationship between shipment and employee.
+	 */
 	@ManyToOne
 	@JoinColumn(name = "sender_Employee_id", nullable = true)
 	private Employee senderEmployee;
@@ -72,27 +123,51 @@ public class Shipment {
 		RECEIVER RELATIONSHIPS - OFFICE, CUSTOMER, EMPLOYEE
 	*/
 
+	/**
+	 * The receiver office of the shipment.
+	 * It is a many-to-one relationship between shipment and office.
+	 */
 	@ManyToOne
 	@JoinColumn(name = "receiver_office_id", nullable = false)
 	private Office receiverOffice;
 
+	/**
+	 * The receiver customer of the shipment.
+	 * It is a many-to-one relationship between shipment and customer.
+	 */
 	@ManyToOne
 	@JoinColumn(name = "receiver_customer_id", nullable = false)
 	private Customer receiverCustomer;
 
+	/**
+	 * The receiver employee of the shipment.
+	 * It is a many-to-one relationship between shipment and employee.
+	 */
 	@ManyToOne
 	@JoinColumn(name = "receiver_employee_id", nullable = true)
 	private Employee receiverEmployee;
 
 	////////////////////////////////CREATING THE RELATIONSHIPS/////////////////////////
 	//relationship shipment/order_history - 1:n
+	/**
+	 * The set of status histories of the shipment.
+	 * It is a one-to-many relationship between shipment and shipment status history.
+	 */
 	@OneToMany(mappedBy = "shipment")
 	private List<ShipmentStatusHistory> statusHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
 
+	/**
+	 * The goods type of the shipment.
+	 * It is a many-to-one relationship between shipment and goods type.
+	 */
 	@ManyToOne
 	@JoinColumn(name = "goods_type_id", nullable = true)
 	private GoodsType goodsType;
-	
+
+	/**
+	 * The delivery payment type of the shipment.
+	 * It is a many-to-one relationship between shipment and delivery payment type.
+	 */
 	@ManyToOne
 	@JoinColumn(name = "delivery_payment_type_id", nullable = true)
 	private DeliveryPaymentType deliveryPaymentType;
@@ -102,7 +177,26 @@ public class Shipment {
 	//Constructors
 	public Shipment() {
 	}
-	
+
+	/**
+	 *
+	 * @param shipmentDate
+	 * @param weight
+	 * @param isPaidDelivery
+	 * @param priceDelivery
+	 * @param price
+	 * @param isPaid
+	 * @param receivedDate
+	 * @param senderOffice
+	 * @param senderCustomer
+	 * @param senderEmployee
+	 * @param receiverOffice
+	 * @param receiverCustomer
+	 * @param receiverEmployee
+	 * @param statusHistories
+	 * @param goodsType
+	 * @param deliveryPaymentType
+	 */
 	public Shipment(LocalDate shipmentDate, BigDecimal weight, boolean isPaidDelivery, BigDecimal priceDelivery, BigDecimal price, boolean isPaid, LocalDate receivedDate, Office senderOffice, Customer senderCustomer, Employee senderEmployee, Office receiverOffice, Customer receiverCustomer, Employee receiverEmployee, List<ShipmentStatusHistory> statusHistories, GoodsType goodsType, DeliveryPaymentType deliveryPaymentType) {
 		this.shipmentDate = shipmentDate;
 		this.weight = weight;

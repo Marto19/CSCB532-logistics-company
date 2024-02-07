@@ -7,25 +7,48 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Set;
 
+/**
+ * The LogisticsCompany class is used to represent a logistics company entity.
+ * It contains the id, name, and income of the logistics company.
+ */
 @Entity
 @Table(name = "logistics_company")
 public class LogisticsCompany {     //creating this entity in order to satisfy  3. a)
+    /**
+     * The id of the logistics company.
+     * It is a unique identifier for the logistics company.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    /**
+     * The name of the logistics company.
+     */
     @Column(name = "company_name")
     private String name;
 
+    /**
+     * The income of the logistics company.
+     */
     @Column(name = "income")
     private BigDecimal income;
 
+    /**
+     * The set of offices of the logistics company.
+     */
     @OneToMany(mappedBy = "logisticsCompany")
     private Set<Office> officeSet;
 
+    /**
+     * The set of employees of the logistics company.
+     */
     @OneToMany(mappedBy = "logisticsCompany")
     private Set<Employee> employeeSet;
-    
+
+    /**
+     * The set of income histories of the logistics company.
+     */
     @OneToMany(mappedBy = "logisticsCompany")
     private Set<IncomeHistory> incomeHistories;
     

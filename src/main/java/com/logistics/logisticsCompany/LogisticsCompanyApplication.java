@@ -11,23 +11,42 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Optional;
 
-
+/**
+ * Main application class for the logistics company.
+ */
 @SpringBootApplication
 public class LogisticsCompanyApplication implements CommandLineRunner {
 
 	private final UserRoleRepository userRoleRepository;
 
+	/**
+	 * Constructor for LogisticsCompanyApplication.
+	 *
+	 * @param userRoleRepository Repository for managing user roles.
+	 */
 	@Autowired
 	public LogisticsCompanyApplication(UserRoleRepository userRoleRepository) {
 		this.userRoleRepository = userRoleRepository;
 	}
-//
-//	@Autowired
-//  	private OfficeServiceImpl officeService;
+
+	/**
+	 * Method that is run after the application has started.
+	 *
+	 * @param args Command line arguments.
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(LogisticsCompanyApplication.class, args);
 	}
 
+	/**
+	 * This method is executed after the application has started. It creates three user roles: "ROLE_CUSTOMER",
+	 * "ROLE_EMPLOYEE", and "ROLE_ADMIN". If a role already exists in the repository, it prints a message indicating
+	 * that the role already exists. Otherwise, it saves the new role in the repository and prints a message indicating
+	 * that the role was created.
+	 *
+	 * @param args Command line arguments.
+	 * @throws Exception if an error occurs during execution.
+	 */
 	@Override
 	public void run(String... args) throws Exception {
 		// Create a new UserRole

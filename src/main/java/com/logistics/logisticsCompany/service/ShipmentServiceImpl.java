@@ -26,6 +26,10 @@ import com.logistics.logisticsCompany.entities.offices.Office;
 import java.util.Optional;
 import java.util.Optional;
 
+
+/**
+ * Service for managing shipments.
+ */
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
 
@@ -48,7 +52,22 @@ public class ShipmentServiceImpl implements ShipmentService {
     
     private final IncomeHistoryService incomeHistoryService;
     private final ShipmentStatusHistoryService shipmentStatusHistoryService;
-    
+
+
+    /**
+     * Constructs a new ShipmentServiceImpl with the given parameters.
+     *
+     * @param shipmentRepository The repository for shipments.
+     * @param entityDtoMapper The mapper for converting entities to DTOs and vice versa.
+     * @param deliveryPaymentTypeRepository The repository for delivery payment types.
+     * @param customerService The service for managing customers.
+     * @param employeeService The service for managing employees.
+     * @param shipmentStatusHistoryRepository The repository for shipment status histories.
+     * @param shipmentStatusRepository The repository for shipment statuses.
+     * @param officeService The service for managing offices.
+     * @param incomeHistoryService The service for managing income histories.
+     * @param shipmentStatusHistoryService The service for managing shipment status histories.
+     */
     @Autowired
     public ShipmentServiceImpl(ShipmentRepository shipmentRepository, EntityDtoMapper entityDtoMapper, DeliveryPaymentTypeRepository deliveryPaymentTypeRepository,
                                CustomerService customerService, EmployeeService employeeService, ShipmentStatusHistoryRepository shipmentStatusHistoryRepository,
@@ -79,6 +98,28 @@ public class ShipmentServiceImpl implements ShipmentService {
     *ReceiverCustomer
     *
     * --------------CREATING SHIPMENT LOGIC --------------*/
+
+    /**
+     * Creates a new shipment based on the provided DTO.
+     *
+     * The shipment date is set to the current date.
+     * The priceDelivery is calculated based on the weight.
+     * The totalPrice is calculated based on the price and isPaidDelivery.
+     * The deliveryPaymentType is determined based on the price and isPaidDelivery.
+     * The sender and receiver customers are set based on the phone numbers.
+     * The sender employee and office are set based on the logged-in employee's information.
+     * The receiver office is set based on the provided office ID.
+     * The shipment is saved to the repository.
+     * If the delivery is paid, the daily income is recorded.
+     * The initial shipment status history is created as 'REGISTERED'.
+     *
+     * @param shipmentDto The DTO containing the shipment details.
+     * @return The created shipment.
+     * @throws EntityNotFoundException if the sender or receiver customer is not found.
+     * @throws EntityNotFoundException if the sender employee is not found.
+     * @throws EntityNotFoundException if the receiver office is not found.
+     *
+     */
     @Override
     @Transactional
     public Shipment createShipment(ShipmentDTO shipmentDto) {
@@ -154,6 +195,20 @@ public class ShipmentServiceImpl implements ShipmentService {
     
     //three variants of "DeliveryPaymentType" - "Cash-On-Delivery", "Paid-Delivery", "Not-Paid-Delivery".
     //based on logic whether price>0 and isPaidDelivery=true or false we determine the type
+
+    /**
+     * Determines the delivery payment type based on the provided shipment details.
+     *
+     * If the price is provided and greater than 0, it's "Cash-On-Delivery".
+     * If isPaidDelivery is true, it's "Paid-Delivery".
+     * If isPaidDelivery is false, it's "Not-Paid-Delivery".
+     *
+     * @param shipmentDto The DTO containing the shipment details.
+     * @return The determined delivery payment type.
+     * @throws EntityNotFoundException if the delivery payment type is not found.
+     * @throws IllegalArgumentException if the shipment price is negative.
+     *
+     */
     private DeliveryPaymentType determineDeliveryPaymentType(ShipmentDTO shipmentDto) {
         if (shipmentDto.getPrice() != null && shipmentDto.getPrice().compareTo(BigDecimal.ZERO) > 0) {
             // If price is provided and greater than 0, it's "Cash-On-Delivery"
@@ -174,6 +229,20 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
     
     // logic to calculate priceDelivery based on weight (if weight is null, return 0)
+
+    /**
+     * Calculates the delivery price based on the provided weight.
+     *
+     * The base delivery price is $5.00.
+     * If the weight is greater than 5 kg, the price is increased by $2.00 per kg.
+     *
+     * @param weight The weight of the shipment.
+     *               If null, the price is 0.
+     *               If greater than 5 kg, the price is increased by $2.00 per kg.
+     *               If less than or equal to 5 kg, the price is $5.00.
+     * @return The calculated delivery price.
+     *
+     */
     private BigDecimal calculatePriceDelivery(BigDecimal weight) {
         BigDecimal baseDeliveryPrice = new BigDecimal("5.00"); // Base delivery price
         BigDecimal pricePerKg = new BigDecimal("2.00"); // Price per kilogram
@@ -191,8 +260,26 @@ public class ShipmentServiceImpl implements ShipmentService {
         
         return baseDeliveryPrice;
     }
-    
 
+
+    /**
+     * Marks the shipment as delivered.
+     *
+     * The received date is set to the current date.
+     * The receiver employee is set based on the provided employee ID.
+     * If the delivery is cash-on-delivery, the customer balance is updated.
+     * If the delivery is not paid, the isPaidDelivery is set to true and the daily income is recorded.
+     * The updated shipment is saved to the repository.
+     * The shipment status history is updated to 'DELIVERED'.
+     *
+     * @param shipmentId The ID of the shipment to mark as delivered.
+     * @param employeeId The ID of the employee marking the shipment as delivered.
+     *                   If null, the currently logged-in employee is used.
+     *                   If the employee is not found, an exception is thrown.
+     *                   If the shipment is not found, an exception is thrown.
+     *                   If the shipment is already delivered, an exception is thrown.
+     *                   If the shipment is not paid and the price is null, an exception is thrown.
+     */
     @Override
     @Transactional
     public void markShipmentAsDelivered(Long shipmentId, Long employeeId) {
@@ -245,7 +332,17 @@ public class ShipmentServiceImpl implements ShipmentService {
         
         // Other shipment processing logic...
     }
-    
+
+    /**
+     * Registers a sent shipment.
+     *
+     * The shipment date is set to the current date.
+     * The received date is reset to null.
+     * The updated shipment is saved to the repository.
+     *
+     * @param shipment The shipment to register as sent.
+     *                 If the shipment has a predefined ID, an exception is thrown.
+     */
     @Override
     public void registerSentShipment(Shipment shipment) {
         // Check if the shipment has a predefined ID
@@ -263,6 +360,15 @@ public class ShipmentServiceImpl implements ShipmentService {
         shipmentRepository.save(shipment);
     }
 
+    /**
+     * Registers a received shipment.
+     *
+     * The received date is set to the current date.
+     * The updated shipment is saved to the repository.
+     *
+     * @param shipment The shipment to register as received.
+     *                 If the shipment has a predefined ID, an exception is thrown.
+     */
     @Override
     public void registerReceivedShipment(Shipment shipment) {
         // Check if the shipment has a predefined ID
@@ -286,17 +392,36 @@ public class ShipmentServiceImpl implements ShipmentService {
 //        shipmentRepository.save(shipment);
 //    }
 
+    /**
+     * Retrieves all shipments from the repository.
+     *
+     * @return A list of all shipments.
+     */
     @Override
     public List<Shipment> getAllShipments() {
         return shipmentRepository.findAll();
     }
 
+    /**
+     * Retrieves a shipment by its ID.
+     *
+     * @param shipmentId The ID of the shipment to retrieve.
+     * @return The retrieved shipment.
+     * @throws EntityNotFoundException if the shipment is not found.
+     */
     @Override
     public Shipment getShipmentById(long shipmentId) {
         return shipmentRepository.findById(shipmentId)
                 .orElseThrow(() -> new EntityNotFoundException("Shipment with the provided id doesn't exist"));
     }
 
+    /**
+     * Updates an existing shipment.
+     *
+     * @param shipmentId The ID of the shipment to update.
+     * @param updatedShipment The updated shipment.
+     * @throws EntityNotFoundException if the shipment is not found.
+     */
     @Override
     public void updateShipment(long shipmentId, Shipment updatedShipment) {
         if(!shipmentRepository.existsById(shipmentId)){
@@ -306,6 +431,12 @@ public class ShipmentServiceImpl implements ShipmentService {
         shipmentRepository.save(updatedShipment);
     }
 
+    /**
+     * Deletes an existing shipment.
+     *
+     * @param shipmentId The ID of the shipment to delete.
+     * @throws EntityNotFoundException if the shipment is not found.
+     */
     @Override
     public void deleteShipment(long shipmentId) {
         if (!shipmentRepository.existsById(shipmentId)) {
@@ -314,8 +445,14 @@ public class ShipmentServiceImpl implements ShipmentService {
         shipmentRepository.deleteById(shipmentId);
     }
     
-    
+
     //5.d.------------------------
+    /**
+     * Retrieves all shipments sent by a specific employee.
+     *
+     * @param employeeId The ID of the employee.
+     * @return A list of all shipments sent by the employee.
+     */
     @Override
     public List<ShipmentDTO> getAllSentShipmentsByEmployeeId(Long employeeId) {
         List<Shipment> shipments = shipmentRepository.findBySenderEmployeeId(employeeId);
@@ -326,6 +463,12 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     
     //5.e.------------------------
+
+    /**
+     * Retrieves all shipments that are sent but not received.
+     *
+     * @return A list of all shipments that are sent but not received.
+     */
     @Override
     public List<ShipmentDTO> getShipmentsSentButNotReceived() {
         // If there are more statuses in the future, you might want to handle them here
@@ -336,6 +479,13 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
     
     //5.f.------------------------
+
+    /**
+     * Retrieves all shipments that are sent but not received by a specific employee.
+     *
+     * @param customerId The ID of the customer.
+     * @return A list of all shipments that are sent but not received by the employee.
+     */
     @Override
     public List<ShipmentDTO> getShipmentsBySenderCustomerId(Long customerId) {
         List<Shipment> shipments = shipmentRepository.findBySenderCustomerId(customerId);
@@ -345,6 +495,13 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
     
     // Alternatively, if using phone number
+
+    /**
+     * Retrieves a list of shipments based on the sender's phone number.
+     *
+     * @param phone The phone number of the sender.
+     * @return A list of ShipmentDTOs.
+     */
     @Override
     public List<ShipmentDTO> getShipmentsBySenderCustomerPhone(String phone) {
         List<Shipment> shipments = shipmentRepository.findBySenderCustomerPhone(phone);
@@ -352,8 +509,14 @@ public class ShipmentServiceImpl implements ShipmentService {
                 .map(entityDtoMapper::convertToShipmentDTO)
                 .collect(Collectors.toList());
     }
-    
+
     //5.g.------------------------
+    /**
+     * Retrieves a list of shipments based on the receiver's customer ID.
+     *
+     * @param customerId The ID of the receiver customer.
+     * @return A list of ShipmentDTOs.
+     */
     @Override
     public List<ShipmentDTO> getShipmentsByReceiverCustomerId(Long customerId) {
         List<Shipment> shipments = shipmentRepository.findByReceiverCustomerId(customerId);

@@ -12,19 +12,34 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * Service class for managing users.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
 
+    /**
+     * Constructor for UserServiceImpl.
+     *
+     * @param userRepository Repository for managing users.
+     * @param userRoleRepository Repository for managing user roles.
+     */
     @Autowired
     public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
     }
-    
+
+    /**
+     * Registers a new user.
+     *
+     * @param registerDTO Data transfer object containing the new user's details.
+     * @return The newly registered user.
+     * @throws DataIntegrityViolationException if a user with the same username already exists.
+     */
     @Override
     public User registerUser(UserDTO registerDTO) {
         if (userRepository.findByUsername(registerDTO.getUsername()).isPresent()) {
@@ -40,6 +55,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * Finds a user by their username.
+     *
+     * @param username The username of the user to find.
+     * @return The found user, or null if no user was found.
+     */
     @Override
     public User findUserByUsername(String username) {
         System.out.println("Searching for user with username: " + username);
@@ -51,39 +72,81 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
-    
+
+    /**
+     * Finds a user by their ID.
+     *
+     * @param id The ID of the user to find.
+     * @return An Optional containing the found user, or empty if no user was found.
+     */
     @Override
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
-    
+
+    /**
+     * Finds a user by their username.
+     *
+     * @param username The username of the user to find.
+     * @return An Optional containing the found user, or empty if no user was found.
+     */
     @Override
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
+    /**
+     * Assigns a user role to a user.
+     *
+     * @param user The user to assign the role to.
+     * @param userRole The role to assign to the user.
+     */
     @Override
     public void assignUserRole(User user, UserRole userRole) {
         user.getUserRoleList().add(userRole);
         userRepository.save(user);
     }
 
+    /**
+     * Creates a new user.
+     *
+     * @param user The user to create.
+     */
     @Override
     public void createUser(User user) {
         userRepository.save(user);
     }
 
+    /**
+     * Retrieves all users.
+     *
+     * @return A list of all users.
+     */
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-    
+
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id The ID of the user to retrieve.
+     * @return The found user.
+     * @throws EntityNotFoundException if no user was found with the provided ID.
+     */
     @Override
     public User getUserById(long id) {
         return userRepository.getUserById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Shipment not found with id: " + id));
     }
 
+
+    /**
+     * Updates a user.
+     *
+     * @param userId The ID of the user to update.
+     * @param updatedUser The updated user.
+     */
     @Override
     public void updateUser(long userId, User updatedUser) {
         if (userRepository.existsById(userId)) {
@@ -94,6 +157,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Deletes a user.
+     *
+     * @param userId The ID of the user to delete.
+     */
     @Override
     public void deleteUser(long userId) {
         if (userRepository.existsById(userId)) {

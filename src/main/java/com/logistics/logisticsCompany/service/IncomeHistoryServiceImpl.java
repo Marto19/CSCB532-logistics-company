@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Service for managing income history.
+ */
 @Service
 public class IncomeHistoryServiceImpl implements IncomeHistoryService{
 	
@@ -22,8 +25,14 @@ public class IncomeHistoryServiceImpl implements IncomeHistoryService{
 	
 	@Autowired
 	private IncomeHistoryRepository incomeHistoryRepository;
-	
-	
+
+	/**
+	 * Records the daily income for a logistics company.
+	 *
+	 * @param income The income to be recorded.
+	 * @param logisticsCompanyId The ID of the logistics company.
+	 * @throws RuntimeException if the logistics company is not found.
+	 */
 	@Override
 	public void recordDailyIncome(BigDecimal income, Long logisticsCompanyId) {
 		LocalDate today = LocalDate.now();
@@ -38,7 +47,15 @@ public class IncomeHistoryServiceImpl implements IncomeHistoryService{
 		incomeHistory.setTotalIncome(incomeHistory.getTotalIncome().add(income));
 		incomeHistoryRepository.save(incomeHistory);
 	}
-	
+
+	/**
+	 * Calculates the total income for a logistics company within a specific period.
+	 *
+	 * @param startDate The start date of the period.
+	 * @param endDate The end date of the period.
+	 * @param logisticsCompanyId The ID of the logistics company.
+	 * @return The total income for the period.
+	 */
 	@Override
 	public BigDecimal calculatePeriodIncome(LocalDate startDate, LocalDate endDate, Long logisticsCompanyId) {
 		return incomeHistoryRepository.findTotalIncomeByDateRangeAndLogisticsCompanyId(startDate, endDate, logisticsCompanyId)
