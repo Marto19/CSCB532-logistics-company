@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.logistics.logisticsCompany.entities.users.User;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,9 +34,8 @@ public class UserRole {
     /**
      * The set of users of the user role.
      */
-    @ManyToMany
-    @JsonIgnore  // Add this annotation to break the loop
-    private Set<User> userList;
+    @ManyToMany(mappedBy = "userRoleList")
+    private Set<User> userList = new HashSet<>();
 
     public UserRole(String userRole) {
         this.userRole = userRole;

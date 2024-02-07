@@ -2,6 +2,7 @@ package com.logistics.logisticsCompany.DTO;
 
 import com.logistics.logisticsCompany.entities.users.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 
 /**
@@ -26,6 +27,7 @@ public class UserDTO {
 
 	
 	@JsonProperty("userRoleBeingSet")
+	@Digits(integer = 10, fraction = 0, message = "userrolebeingset must be a number")
 	private String userRoleBeingSet;
 	
 	/**

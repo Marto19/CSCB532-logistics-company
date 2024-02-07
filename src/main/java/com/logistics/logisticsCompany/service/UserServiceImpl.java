@@ -63,16 +63,16 @@ public class UserServiceImpl implements UserService {
         try {
             userRoleId = Long.parseLong(userDTO.getUserRoleBeingSet());
         } catch (NumberFormatException e) {
-          //  throw new IllegalArgumentException("UserRole must be a valid number.");
+            throw new IllegalArgumentException("UserRole must be a valid number.");
         }
         
         // Fetch the UserRole from the database
-        //UserRole userRole = userRoleRepository.findById(userRoleId)
-          //      .orElseThrow(() -> new IllegalArgumentException("Invalid role ID: " + userRoleId));
+        UserRole userRole = userRoleRepository.findById(userRoleId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid role ID: " + userRoleId));
         
         // Set the userRoleList
         Set<UserRole> userRoles = new HashSet<>();
-      //  userRoles.add(userRole);
+        userRoles.add(userRole);
         user.setUserRoleList(userRoles);
         
         // Save the user

@@ -69,9 +69,13 @@ public class User implements UserDetails {
 	 * The set of user roles of the user.
 	 * It is a many-to-many relationship between user and user role.
 	 */
-	@ManyToMany(mappedBy = "userList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)//TODO: think about changing from EAGER to a DTO
-	private Set<UserRole> userRoleList;
-
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinTable(
+			name = "user_role_user_list",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id")
+	)
+	private Set<UserRole> userRoleList = new HashSet<>();
 	public User() {
 	}
 
