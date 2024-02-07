@@ -8,10 +8,18 @@ import com.logistics.logisticsCompany.repository.UserRepository;
 import com.logistics.logisticsCompany.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.logging.Logger;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Service class for managing users.
  */
@@ -36,25 +44,43 @@ public class UserServiceImpl implements UserService {
     /**
      * Registers a new user.
      *
-     * @param registerDTO Data transfer object containing the new user's details.
+     * @param userDTO Data transfer object containing the new user's details.
      * @return The newly registered user.
      * @throws DataIntegrityViolationException if a user with the same username already exists.
      */
-    @Override
-    public User registerUser(UserDTO registerDTO) {
-        if (userRepository.findByUsername(registerDTO.getUsername()).isPresent()) {
+    @Transactional
+    public User registerUser(UserDTO userDTO) {
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
             throw new DataIntegrityViolationException("Username already exists.");
         }
         
         User user = new User();
-        user.setUsername(registerDTO.getUsername());
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword()); // Encode the password
         
-        //fixme idk how password is encoded -caki
-        user.setPassword(registerDTO.getPassword());
+        // Parse the userRoleBeingSet to a long
+        long userRoleId;
+        try {
+            userRoleId = Long.parseLong(userDTO.getUserRoleBeingSet());
+        } catch (NumberFormatException e) {
+          //  throw new IllegalArgumentException("UserRole must be a valid number.");
+        }
         
+        // Fetch the UserRole from the database
+        //UserRole userRole = userRoleRepository.findById(userRoleId)
+          //      .orElseThrow(() -> new IllegalArgumentException("Invalid role ID: " + userRoleId));
+        
+        // Set the userRoleList
+        Set<UserRole> userRoles = new HashSet<>();
+      //  userRoles.add(userRole);
+        user.setUserRoleList(userRoles);
+        
+        // Save the user
         return userRepository.save(user);
     }
-
+    
+    
+    
     /**
      * Finds a user by their username.
      *

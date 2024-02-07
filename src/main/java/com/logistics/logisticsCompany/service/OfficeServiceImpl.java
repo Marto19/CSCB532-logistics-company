@@ -4,8 +4,6 @@ import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.repository.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -81,5 +79,11 @@ public class OfficeServiceImpl implements OfficeService {
     @Override
     public Optional<Office> getOfficeById(Long id) {
         return officeRepository.findById(id);
+    }
+    
+    @Override
+    public Office getOfficeByEmployeeId(Long employeeId) {
+        return officeRepository.findByEmployeesId(employeeId)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found for user ID: " + employeeId));
     }
 }

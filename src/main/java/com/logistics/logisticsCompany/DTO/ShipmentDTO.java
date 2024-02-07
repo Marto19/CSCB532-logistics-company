@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.logistics.logisticsCompany.DTO.CustomerDTO;
 import com.logistics.logisticsCompany.DTO.EmployeeDTO;
 import com.logistics.logisticsCompany.DTO.OfficeDTO;
+import com.logistics.logisticsCompany.validation.ValidPhoneNumber;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -23,6 +24,7 @@ public class ShipmentDTO {
      */
     @JsonProperty("senderCustomerPhoneNumber")
     @NotNull(message = "SenderCustomerPhoneNumber cannot be null")
+    @ValidPhoneNumber(message = "Sender's phone number must be valid form.")
     private String senderCustomerPhoneNumber;
 
     /**
@@ -31,6 +33,7 @@ public class ShipmentDTO {
      */
     @JsonProperty("receiverCustomerPhoneNumber")
     @NotNull(message = "ReceiverCustomerPhoneNumber cannot be null")
+    @ValidPhoneNumber(message = "Reciever's phone number must be valid form.")
     private String receiverCustomerPhoneNumber;
 
     /**

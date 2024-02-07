@@ -186,12 +186,15 @@ public class User implements UserDetails {
 	public void setUserRoleList(Set<UserRole> userRoleList) {
 		this.userRoleList = userRoleList;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "User{" +
 				"id=" + id +
 				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", employees=" + employees +
+				", customers=" + customers +
 				", userRoleList=" + userRoleList +
 				'}';
 	}

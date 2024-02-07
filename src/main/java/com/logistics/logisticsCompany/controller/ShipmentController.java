@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
  * It uses Spring's @RestController annotation to indicate that it is a controller and the response bodies should be bound to the web response body.
  * It also uses @RequestMapping to map the web requests.
  */
+@Validated
 @RestController
 @RequestMapping("/api/v1/shipments")
 public class ShipmentController {
@@ -68,13 +69,12 @@ public class ShipmentController {
     /**
      * This method handles the POST requests for marking a shipment as delivered.
      * @param shipmentId the id of the shipment to mark as delivered
-     * @param employeeId the id of the employee who delivered the shipment
      * @return a ResponseEntity with the status and a message
      */
     @PostMapping("/mark-as-delivered/{shipmentId}")//enter shipmentid and employeeid in the url
-    public ResponseEntity<?> markAsDelivered(@PathVariable Long shipmentId, @RequestParam Long employeeId) {
+    public ResponseEntity<?> markAsDelivered(@PathVariable Long shipmentId) {
         try {
-            shipmentService.markShipmentAsDelivered(shipmentId, employeeId);
+            shipmentService.markShipmentAsDelivered(shipmentId);
             return ResponseEntity.ok().body("Shipment marked as delivered successfully");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

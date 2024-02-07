@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
@@ -31,6 +32,7 @@ import jakarta.validation.Valid;
  * The UserController class handles HTTP requests related to user operations.
  * It provides endpoints for registering, logging in, and managing users.
  */
+@Validated
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -69,19 +71,10 @@ public class UserController {
      */
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@Valid @RequestBody UserDTO userDTO) {
-        try {
             User registeredUser = userService.registerUser(userDTO); // Adjust your service method accordingly
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body("User registered successfully with ID: " + registeredUser.getId());
             
-        }catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Registration failed: " + e.getRootCause().getMessage());
-        }  catch (RuntimeException e) {
-            // Handle other unexpected errors
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An unexpected error occurred: " + e.getMessage());
-        }
     }
 
     /**

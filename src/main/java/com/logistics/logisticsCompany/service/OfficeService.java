@@ -16,4 +16,6 @@ public interface OfficeService {
     void deleteOffice(long officeId);
 	
 	Optional<Office> getOfficeById(Long id);
+	
+	Office getOfficeByEmployeeId(Long employeeId);
 }

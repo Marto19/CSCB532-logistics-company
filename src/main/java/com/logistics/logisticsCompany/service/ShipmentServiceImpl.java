@@ -172,7 +172,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         System.out.println("Current employee id: " + currentSenderEmployee.getId());//todo remove (temporary debug checks)
         
         shipment.setSenderEmployee(currentSenderEmployee);
-        
+        shipment.setSenderOffice(officeService.getOfficeByEmployeeId((currentSenderEmployee.getId())));
         
         // Set receiver office
         if (shipmentDto.getReceiverOfficeId() != null) {
@@ -283,7 +283,7 @@ public class ShipmentServiceImpl implements ShipmentService {
      */
     @Override
     @Transactional
-    public void markShipmentAsDelivered(Long shipmentId, Long employeeId) {
+    public void markShipmentAsDelivered(Long shipmentId) {
         Shipment shipment = shipmentRepository.findById(shipmentId)
                 .orElseThrow(() -> new EntityNotFoundException("Shipment not found"));
         
@@ -292,11 +292,16 @@ public class ShipmentServiceImpl implements ShipmentService {
         
       /*  Employee receiverEmployee = employeeService.getCurrentlyLoggedInEmployee(); //!!!!!!!!!!!!!!!!!!!!!!!!!!FIXME Implement this method!!!!!!!!!!!!!!!!!!!!!!!!!!!
         shipment.setReceiverEmployee(receiverEmployee);*/
-        Employee receiverEmployee = employeeService.getEmployeeById(employeeId)
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found with ID: " + employeeId));//todo fix upper method
-        shipment.setReceiverEmployee(receiverEmployee);
         
-        //Update customer balance if cash on delivery
+        //Get senderEmployeeId from authenticationService
+        Long currentReceiverEmployeeUserId = authenticationService.getCurrentUserId();
+        Employee currentReceiverEmployee = employeeService.getEmployeeByUserId(currentReceiverEmployeeUserId);
+        System.out.println("Current employee id: " + currentReceiverEmployee.getId());//todo remove (temporary debug checks)
+        
+        shipment.setReceiverEmployee(currentReceiverEmployee);
+        
+        
+        //Update customer balance if cash on delivery (add to balance)
         processPaymentToCustomerBalance(shipmentId);
         
         // Update isPaidDelivery TO TRUE, because shipment is supposed to be paid when delivered

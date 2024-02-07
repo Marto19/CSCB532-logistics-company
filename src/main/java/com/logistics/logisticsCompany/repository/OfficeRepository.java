@@ -48,5 +48,6 @@ public interface OfficeRepository extends JpaRepository<Office, Long> {
      * @return
      */
     Optional<Office> findById(Long id);//i want to use this..
-
+    
+    Optional<Office> findByEmployeesId(Long employeeId);
 }

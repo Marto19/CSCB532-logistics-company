@@ -38,6 +38,7 @@ public class EmployeeDTO {
     
     
     @JsonProperty("userId")
+    @NotBlank(message = "User id cannot be null")
     @Digits(integer = 10, fraction = 0, message = "User id must be a number")
     private String userId;  //user id input OPTIONAL
     

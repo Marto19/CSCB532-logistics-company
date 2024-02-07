@@ -24,6 +24,10 @@ public class UserDTO {
 	@NotBlank(message = "Password is required.")
 	private String password;
 
+	
+	@JsonProperty("userRoleBeingSet")
+	private String userRoleBeingSet;
+	
 	/**
 	 * Default constructor for the {@code UserDTO} class.
 	 * It is used to create an empty user data transfer object.
@@ -41,6 +45,15 @@ public class UserDTO {
 	public UserDTO(long id, String username) {
 		this.id = id;
 		this.username = username;
+	}
+	
+	
+	public String getUserRoleBeingSet() {
+		return userRoleBeingSet;
+	}
+	
+	public void setUserRoleBeingSet(String userRoleBeingSet) {
+		this.userRoleBeingSet = userRoleBeingSet;
 	}
 	
 	public String getPassword() {
