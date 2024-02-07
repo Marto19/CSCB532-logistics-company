@@ -45,6 +45,14 @@ public class ValidationExceptionHandler {
 		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<ApiErrorResponse> handleRuntimeException(RuntimeException ex, WebRequest request) {
+		ApiErrorResponse response = new ApiErrorResponse("Internal server error",
+				Collections.singletonMap("error", "An unexpected error occurred. Please try again later."));
+		
+		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 	// Example for handling a generic exception
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex, WebRequest request) {
