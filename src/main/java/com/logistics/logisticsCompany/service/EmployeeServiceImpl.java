@@ -1,22 +1,29 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.DTO.EmployeeDTO;
+import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.users.Employee;
+import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.EmployeeRepository;
+import com.logistics.logisticsCompany.repository.LogisticsCompanyRepository;
+import com.logistics.logisticsCompany.repository.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import java.util.List;
 import java.util.Optional;
+
 
 /**
  * The {@code EmployeeServiceImpl} class implements the {@code EmployeeService} interface.
  * It provides the business logic for managing employees.
  */
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     /**
@@ -28,21 +35,53 @@ public class EmployeeServiceImpl implements EmployeeService {
      * Constructs an {@code EmployeeServiceImpl} with the specified {@code EmployeeRepository}.
      * @param employeeRepository the {@code EmployeeRepository}
      */
+
+    private final LogisticsCompanyRepository logisticsCompanyRepository;
+    
+    private final OfficeRepository officeRepository;
+    
+    private final UserLinkageService userLinkageService;
+    
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, LogisticsCompanyRepository logisticsCompanyRepository, UserLinkageService userLinkageService, OfficeRepository officeRepository){
         this.employeeRepository = employeeRepository;
+        this.logisticsCompanyRepository = logisticsCompanyRepository;
+        this.userLinkageService = userLinkageService;
+        this.officeRepository = officeRepository;
     }
+ 
     /**
      * Creates a new employee.
-     * @param employee the employee to create
+     * @param employeeDTO the employee to create
      */
+    
     @Override
-    public void createEmployee(Employee employee) {
-        if (employee.getFirstName() == null || employee.getFirstName().isEmpty() || employee.getSecondName() == null || employee.getSecondName().isEmpty()) {
-            throw new IllegalArgumentException("Employee name must not be null or empty");
+    public Employee createEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        EntityDtoMapper.convertEmployeeDtoToEntity(employeeDTO); // Ensure this method sets names etc.
+        
+        // Link User
+        if (employeeDTO.getUserId() != null || employeeDTO.getUsername() != null) {
+            User user = userLinkageService.findAndValidateUserForLinkage(employeeDTO.getUserId(), employeeDTO.getUsername());
+            employee.setUsers(user);
         }
-
-        employeeRepository.save(employee);
+        
+        // Link Company
+        if (employeeDTO.getCompanyId() != null) {
+            Long companyId = Long.parseLong(employeeDTO.getCompanyId());
+            LogisticsCompany company = logisticsCompanyRepository.findById(companyId)
+                    .orElseThrow(() -> new EntityNotFoundException("Company not found with ID: " + companyId));
+            employee.setLogisticsCompany(company);
+        }
+        // Link Office
+        if (employeeDTO.getCurrentOfficeId() != null) {
+            Long officeId = Long.parseLong(employeeDTO.getCurrentOfficeId());
+            Office office = officeRepository.findById(officeId)
+                    .orElseThrow(() -> new EntityNotFoundException("Office not found with ID: " + officeId));
+            employee.setCurrentOffice(office);
+        }
+        
+        return employeeRepository.save(employee);
     }
 
     /**
@@ -115,7 +154,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     /**
      * Retrieves an employee by id.
-     * @param employeeId the id of the employee
+     * @param emplpoyeeId the id of the employee
      * @return an Optional containing the employee if it exists, or an empty Optional otherwise
      */
     @Override

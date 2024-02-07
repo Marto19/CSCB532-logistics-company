@@ -8,6 +8,7 @@ import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.users.Employee;
 import com.logistics.logisticsCompany.repository.EmployeeRepository;
 import com.logistics.logisticsCompany.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  * It uses Spring's @RestController annotation to indicate that it is a controller and the response bodies should be bound to the web response body.
  * It also uses @RequestMapping to map the web requests.
  */
+
 @RestController
 @RequestMapping("/api/v1/employees")
 public class EmployeeController {
@@ -53,13 +55,13 @@ public class EmployeeController {
 
     /**
      * This method handles the POST requests for creating an employee.
-     * @param employee the employee to create
+     * @param employeeDTO the employee to create
      * @return a ResponseEntity with the status and a message
      */
     @PostMapping
-    public ResponseEntity<String> createEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<String> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         try {
-            employeeService.createEmployee(employee);
+            employeeService.createEmployee(employeeDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body("Employee added successfully");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

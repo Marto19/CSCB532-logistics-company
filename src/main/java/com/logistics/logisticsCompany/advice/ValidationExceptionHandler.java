@@ -1,12 +1,17 @@
 package com.logistics.logisticsCompany.advice;
 
+import com.logistics.logisticsCompany.DTO.ApiErrorResponse;
+import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,5 +37,26 @@ public class ValidationExceptionHandler {
 			errorMap.put(error.getField(),error.getDefaultMessage());
 		});
 		return errorMap;
+	}
+	
+	@ExceptionHandler(EntityNotFoundException.class)
+	public ResponseEntity<ApiErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
+		ApiErrorResponse response = new ApiErrorResponse("Entity Not Found", Collections.singletonMap("error", ex.getMessage()));
+		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<ApiErrorResponse> handleRuntimeException(RuntimeException ex, WebRequest request) {
+		ApiErrorResponse response = new ApiErrorResponse("Internal server error",
+				Collections.singletonMap("error", "An unexpected error occurred. Please try again later."));
+		
+		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	// Example for handling a generic exception
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex, WebRequest request) {
+		ApiErrorResponse response = new ApiErrorResponse("An unexpected error occurred", Collections.singletonMap("error", ex.getMessage()));
+		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

@@ -64,15 +64,9 @@ public class CustomerController {
 	 */
 	@PostMapping
 	public ResponseEntity<String> createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
-		try {
-			Customer createdCustomer = customerService.createCustomer(customerDTO);
-			return ResponseEntity.status(HttpStatus.CREATED)
-					.body("Customer created successfully with ID: " + createdCustomer.getId());
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + e.getMessage());
-		}
+		Customer createdCustomer = customerService.createCustomer(customerDTO);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body("Customer created successfully with ID: " + createdCustomer.getId());
 	}
 
 	/**
