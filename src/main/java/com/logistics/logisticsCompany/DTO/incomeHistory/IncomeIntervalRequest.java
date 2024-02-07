@@ -2,6 +2,10 @@ package com.logistics.logisticsCompany.DTO.incomeHistory;
 
 import java.time.LocalDate;
 
+/**
+ * The IncomeIntervalRequest class is used to represent a request for retrieving income history within a specified interval.
+ * It contains the start date, end date, and logistics company ID.
+ */
 public class IncomeIntervalRequest {
 	private LocalDate startDate;
 	private LocalDate endDate;
@@ -11,7 +15,13 @@ public class IncomeIntervalRequest {
 	
 public IncomeIntervalRequest() {
 	}
-	
+
+	/**
+	 * Constructs an IncomeIntervalRequest with the specified start date, end date, and logistics company ID.
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @param logisticsCompanyId the logistics company ID
+	 */
 	public IncomeIntervalRequest(LocalDate startDate, LocalDate endDate, Long logisticsCompanyId) {
 		this.startDate = startDate;
 		this.endDate = endDate;

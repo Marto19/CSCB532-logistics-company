@@ -4,25 +4,51 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.logistics.logisticsCompany.entities.users.Employee;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * The EmployeeDTO class is used to represent an employee data transfer object.
+ * It contains the employee's id, first name, second name, and current office name.
+ */
 public class EmployeeDTO {
-
+    /**
+     * The id of the employee.
+     */
     private long id;
-    
+
+    /**
+     * The first name of the employee.
+     */
     @NotNull(message = "First name cannot be null")
     @JsonProperty("firstName")
     private String firstName;
-    
+
+    /**
+     * The second name of the employee.
+     */
     @NotNull(message = "Second name cannot be null")
     @JsonProperty("secondName")
     private String secondName;
-    
+
+    /**
+     * The name of the current office of the employee.
+     */
     @NotNull(message = "Current office name cannot be null")
     @JsonProperty("currentOfficeName")
     private String currentOfficeName;
 
     // Other fields if needed
-    
+
+    /**
+     * Default constructor for the {@code EmployeeDTO} class.
+     * It is used to create an empty employee data transfer object.
+     * This constructor is used by the Jackson library to create an empty employee data transfer object during deserialization.
+     * It should not be used explicitly.
+     */
     public EmployeeDTO() {}
+
+    /**
+     * Constructs an EmployeeDTO with the specified employee.
+     * @param employee the employee
+     */
     public EmployeeDTO(Employee employee) {
         this.id = employee.getId();
         this.firstName = employee.getFirstName();
@@ -35,6 +61,12 @@ public class EmployeeDTO {
         // Add other fields as needed
     }
 
+    /**
+     * Constructs an EmployeeDTO with the specified id, first name, and second name.
+     * @param id the id
+     * @param firstName the first name
+     * @param secondName the second name
+     */
     public EmployeeDTO(long id, String firstName, String secondName) {
         this.id = id;
         this.firstName = firstName;

@@ -12,10 +12,26 @@ import com.logistics.logisticsCompany.entities.users.User;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-
+/**
+ * The EntityDtoMapper class is used to convert entities to DTOs and vice versa.
+ * It contains methods for converting shipments, customers, offices, users, logistics companies, employees, delivery payment types, and shipment statuses.
+ * @see ShipmentDTO
+ * @see CustomerDTO
+ * @see OfficeDTO
+ * @see UserDTO
+ * @see LogisticsCompanyDTO
+ * @see EmployeeDTO
+ * @see DeliveryPaymentTypeDTO
+ * @see ShipmentStatusDTO
+ */
 @Service
 public class EntityDtoMapper {
-	
+
+	/**
+	 * Converts the specified shipment to a shipment data transfer object.
+	 * @param shipment the shipment
+	 * @return the shipment data transfer object
+	 */
 	public ShipmentDTO convertToShipmentDTO(Shipment shipment) {
 		ShipmentDTO dto = new ShipmentDTO();
 		
@@ -39,7 +55,12 @@ public class EntityDtoMapper {
 		
 		return dto;
 	}
-	
+
+	/**
+	 * Converts the specified shipment data transfer object to a shipment.
+	 * @param shipmentDTO the shipment data transfer object
+	 * @return the shipment
+	 */
 	public Shipment convertShipmentDtoToEntity(ShipmentDTO shipmentDTO) {
 		Shipment shipment = new Shipment();
 		shipment.setWeight(shipmentDTO.getWeight());
@@ -47,7 +68,12 @@ public class EntityDtoMapper {
 		shipment.setIsPaidDelivery(shipmentDTO.getIsPaidDelivery());
 		return shipment;
 	}
-	
+
+	/**
+	 * Converts the specified customer to a customer data transfer object.
+	 * @param customer the customer
+	 * @return the customer data transfer object
+	 */
 	public CustomerDTO convertToCustomerDTO(Customer customer) {
 		CustomerDTO dto = new CustomerDTO();
 		dto.setId(customer.getId());
@@ -57,6 +83,12 @@ public class EntityDtoMapper {
 		dto.setBalance(customer.getBalance());
 		return dto;
 	}
+
+	/**
+	 * Converts the specified customer data transfer object to a customer.
+	 * @param customerDTO the customer data transfer object
+	 * @return the customer
+	 */
 	public Customer convertCustomerDtoToEntity(CustomerDTO customerDTO) {
 		Customer customer = new Customer();
 		customer.setId(customerDTO.getId());
@@ -69,7 +101,12 @@ public class EntityDtoMapper {
 		
 		return customer;
 	}
-	
+
+	/**
+	 * Converts the specified office to an office data transfer object.
+	 * @param office the office
+	 * @return the office data transfer object
+	 */
 	public OfficeDTO convertToOfficeDTO(Office office) {
 		OfficeDTO dto = new OfficeDTO();
 		dto.setId(office.getId());
@@ -79,7 +116,13 @@ public class EntityDtoMapper {
 		dto.setAddress(office.getAddress());
 		return dto;
 	}
-	
+
+
+	/**
+	 * Converts the specified user to a user data transfer object.
+	 * @param user the user
+	 * @return the user data transfer object
+	 */
 	public UserDTO convertToUserDTO(User user) {
 		UserDTO dto = new UserDTO();
 		
@@ -89,7 +132,12 @@ public class EntityDtoMapper {
 		
 		return dto;
 	}
-	
+
+	/**
+	 * Converts the specified logistics company to a logistics company data transfer object.
+	 * @param logisticsCompany the logistics company
+	 * @return the logistics company data transfer object
+	 */
 	public LogisticsCompanyDTO convertToLogisticsCompanyDTO(LogisticsCompany logisticsCompany) {
 		LogisticsCompanyDTO dto = new LogisticsCompanyDTO();
 		dto.setId(logisticsCompany.getId());
@@ -98,7 +146,12 @@ public class EntityDtoMapper {
 		return dto;
 	}
 	
-	
+
+	/**
+	 * Converts the specified logistics company data transfer object to a logistics company.
+	 * @param logisticsCompanyDTO the logistics company data transfer object
+	 * @return the logistics company
+	 */
 	//name, income -> LogisticsCompany
 	public static LogisticsCompany convertLogisticsCompanyDtoToEntity(LogisticsCompanyDTO logisticsCompanyDTO) {
 		LogisticsCompany logisticsCompany = new LogisticsCompany();
@@ -108,8 +161,11 @@ public class EntityDtoMapper {
 	}
 	
 	
-
-	
+	/**
+	 * Converts the specified employee to an employee data transfer object.
+	 * @param employee the employee
+	 * @return the employee data transfer object
+	 */
 	public EmployeeDTO convertToEmployeeDTO(Employee employee) {
 		if (employee == null) {
 			return null;
@@ -120,14 +176,24 @@ public class EntityDtoMapper {
 		dto.setSecondName(employee.getSecondName());
 		return dto;
 	}
-	
+
+	/**
+	 * Converts the specified delivery payment type to a delivery payment type data transfer object.
+	 * @param deliveryPaymentType the delivery payment type
+	 * @return the delivery payment type data transfer object
+	 */
 	public DeliveryPaymentTypeDTO convertToDeliveryPaymentTypeDTO(DeliveryPaymentType deliveryPaymentType) {
 		DeliveryPaymentTypeDTO dto = new DeliveryPaymentTypeDTO();
 		dto.setId(deliveryPaymentType.getId());
 		dto.setPaymentType(deliveryPaymentType.getPaymentType());
 		return dto;
 	}
-	
+
+	/**
+	 * Converts the specified shipment status to a shipment status data transfer object.
+	 * @param shipmentStatus the shipment status
+	 * @return the shipment status data transfer object
+	 */
 	public ShipmentStatusDTO convertToShipmentStatusDTO(ShipmentStatus shipmentStatus) {
 		ShipmentStatusDTO dto = new ShipmentStatusDTO();
 		dto.setId(shipmentStatus.getId());
