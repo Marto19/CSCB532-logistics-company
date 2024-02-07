@@ -70,7 +70,7 @@ public class AuthenticationService {
         
         //fixme added from caki - check if its ok
         if (repository.findByUsername(request.getUsername()).isPresent()) {
-            throw new EntityNotFoundException("Username already taken"); // Use a more specific exception if you like
+            throw new EntityNotFoundException("Username already taken"); // maybe more specific exception should be thrown
         }
         var user = User.builder()
                 .username(request.getUsername())

@@ -35,6 +35,7 @@ public class EntityDtoMapper {
 	public ShipmentDTO convertToShipmentDTO(Shipment shipment) {
 		ShipmentDTO dto = new ShipmentDTO();
 		
+		dto.setShipmentDate(shipment.getShipmentDate());
 		dto.setWeight(shipment.getWeight());
 		dto.setPrice(shipment.getPrice());
 		dto.setIsPaidDelivery(shipment.getIsPaidDelivery());
@@ -161,11 +162,22 @@ public class EntityDtoMapper {
 	}
 	
 	
+
+
+		public static Employee convertEmployeeDtoToEntity(EmployeeDTO employeeDTO) {
+		Employee employee = new Employee();
+		employee.setFirstName(employeeDTO.getFirstName());
+		employee.setSecondName(employeeDTO.getSecondName());
+
+		return employee;
+	}
+	
 	/**
 	 * Converts the specified employee to an employee data transfer object.
 	 * @param employee the employee
 	 * @return the employee data transfer object
 	 */
+
 	public EmployeeDTO convertToEmployeeDTO(Employee employee) {
 		if (employee == null) {
 			return null;

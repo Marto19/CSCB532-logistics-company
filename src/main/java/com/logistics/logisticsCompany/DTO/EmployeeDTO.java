@@ -2,6 +2,8 @@ package com.logistics.logisticsCompany.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.logistics.logisticsCompany.entities.users.Employee;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -27,22 +29,38 @@ public class EmployeeDTO {
     @NotNull(message = "Second name cannot be null")
     @JsonProperty("secondName")
     private String secondName;
-
+    
     /**
      * The name of the current office of the employee.
      */
-    @NotNull(message = "Current office name cannot be null")
+    @NotBlank(message = "Current office name cannot be null")
     @JsonProperty("currentOfficeName")
     private String currentOfficeName;
-
-    // Other fields if needed
-
+    
+    
+    @JsonProperty("userId")
+    @Digits(integer = 10, fraction = 0, message = "User id must be a number")
+    private String userId;  //user id input OPTIONAL
+    
+    @JsonProperty("username")
+    private String username; //username input OPTIONAL
+    
+    @JsonProperty("companyId")
+    @NotBlank
+    @Digits(integer = 10, fraction = 0, message = "Company id must be a number")
+    private String companyId;  //company must
+    
+    @JsonProperty("currentOfficeId")
+    @Digits(integer = 10, fraction = 0, message = "Office id must be a number")
+    private String currentOfficeId;  //office id
+    
     /**
      * Default constructor for the {@code EmployeeDTO} class.
      * It is used to create an empty employee data transfer object.
      * This constructor is used by the Jackson library to create an empty employee data transfer object during deserialization.
      * It should not be used explicitly.
      */
+    
     public EmployeeDTO() {}
 
     /**
@@ -74,7 +92,40 @@ public class EmployeeDTO {
     }
 
     // Getters and setters for the DTO fields
-
+    
+    
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+    
+    public void setCurrentOfficeId(String currentOfficeId) {
+        this.currentOfficeId = currentOfficeId;
+    }
+    
+    public String getUserId() {
+        return userId;
+    }
+    
+    public String getUsername() {
+        return username;
+    }
+    
+    public String getCompanyId() {
+        return companyId;
+    }
+    
+    public String getCurrentOfficeId() {
+        return currentOfficeId;
+    }
+    
     public long getId() {
         return id;
     }

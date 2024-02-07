@@ -68,6 +68,10 @@ public class ShipmentDTO {
     @JsonProperty("senderEmployeeId")
     @NotNull(message = "SenderEmployeeId cannot be null")
     private Long senderEmployeeId;
+    
+    
+    @JsonProperty("shipmentDate")
+    private LocalDate shipmentDate;
 
 
     /**
@@ -108,6 +112,15 @@ public class ShipmentDTO {
         this.receiverCustomerPhoneNumber = receiverCustomerPhoneNumber;
         this.senderEmployeeId = senderEmployeeId;
         this.receiverOfficeId = receiverOfficeId;
+    }
+    
+    
+    public LocalDate getShipmentDate() {
+        return shipmentDate;
+    }
+    
+    public void setShipmentDate(LocalDate shipmentDate) {
+        this.shipmentDate = shipmentDate;
     }
     
     public void setWeight(BigDecimal weight) {
@@ -171,4 +184,5 @@ public class ShipmentDTO {
         return receiverOfficeId;
     }
     
+
 }

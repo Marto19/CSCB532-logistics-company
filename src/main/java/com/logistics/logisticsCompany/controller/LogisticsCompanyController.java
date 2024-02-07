@@ -62,16 +62,10 @@ public class LogisticsCompanyController {
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> createLogisticsCompany(@Valid @RequestBody LogisticsCompanyDTO logisticsCompanyDTO) {
-        try {
             LogisticsCompany logisticsCompany = EntityDtoMapper.convertLogisticsCompanyDtoToEntity(logisticsCompanyDTO);
             
             logisticsCompanyService.createLogisticsCompany(logisticsCompany);
             return ResponseEntity.status(HttpStatus.CREATED).body("LogisticsCompany created successfully");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
-        }
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.DTO.EmployeeDTO;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.users.Employee;
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public interface EmployeeService {
 
-    void createEmployee(Employee employee);
+    public Employee createEmployee(EmployeeDTO employeeDTO);
 
     List<Employee> getAllEmployees();
 	

@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.service;
 
+import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.CustomerRepository;
 import com.logistics.logisticsCompany.repository.EmployeeRepository;
@@ -22,8 +23,17 @@ public class UserLinkageServiceImpl implements UserLinkageService {
 	}
 	
 	@Override
-	public User findAndValidateUserForLinkage(Long userId, String username) {
-		User user = findUser(userId, username);
+	public User findAndValidateUserForLinkage(String userId, String username) {
+		Long userIdValue = null;
+		if (userId != null) {
+			try {
+				userIdValue = Long.parseLong(userId);
+			} catch (NumberFormatException e) {
+				throw new IllegalArgumentException("User ID must be a valid number");
+			}
+		}
+		
+		User user = findUser(userIdValue, username);
 		
 		// Ensure user is not linked to another Customer or Employee
 		if (user != null && (customerRepository.existsByUsers_Id(user.getId()) || employeeRepository.existsByUsers_Id(user.getId()))) {
@@ -34,9 +44,13 @@ public class UserLinkageServiceImpl implements UserLinkageService {
 	}
 	
 	private User findUser(Long userId, String username) {
-		return userId != null ? userService.findById(userId).orElseThrow(() ->
-				new IllegalArgumentException("Invalid userId: User does not exist")) :
-				username != null ? userService.findByUsername(username).orElseThrow(() ->
-						new IllegalArgumentException("Invalid username: User does not exist")) : null;
+		if (userId != null) {
+			return userService.findById(userId).orElseThrow(() ->
+					new EntityNotFoundException("Invalid userId: User does not exist"));
+		} else if (username != null) {
+			return userService.findByUsername(username).orElseThrow(() ->
+					new EntityNotFoundException("Invalid username: User does not exist"));
+		}
+		throw new EntityNotFoundException("Both userId and username cannot be null");
 	}
 }

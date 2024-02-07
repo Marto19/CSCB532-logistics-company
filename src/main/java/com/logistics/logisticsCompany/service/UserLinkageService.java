@@ -5,5 +5,5 @@ import com.logistics.logisticsCompany.entities.users.User;
 
 public interface UserLinkageService {
 	
-	User findAndValidateUserForLinkage(Long userId, String username);
+	User findAndValidateUserForLinkage(String userId, String username);
 }
