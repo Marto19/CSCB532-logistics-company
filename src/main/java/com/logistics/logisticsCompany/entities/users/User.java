@@ -1,5 +1,6 @@
 package com.logistics.logisticsCompany.entities.users;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.logistics.logisticsCompany.entities.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -69,9 +70,15 @@ public class User implements UserDetails {
 	 * The set of user roles of the user.
 	 * It is a many-to-many relationship between user and user role.
 	 */
-	@ManyToMany(mappedBy = "userList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)//TODO: think about changing from EAGER to a DTO
-	private Set<UserRole> userRoleList;
-
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinTable(
+			name = "user_role_user_list",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id")
+	)
+	@JsonManagedReference
+	private Set<UserRole> userRoleList = new HashSet<>();
+	
 	public User() {
 	}
 
@@ -186,12 +193,15 @@ public class User implements UserDetails {
 	public void setUserRoleList(Set<UserRole> userRoleList) {
 		this.userRoleList = userRoleList;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "User{" +
 				"id=" + id +
 				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", employees=" + employees +
+				", customers=" + customers +
 				", userRoleList=" + userRoleList +
 				'}';
 	}

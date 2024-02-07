@@ -47,16 +47,11 @@ public class OfficeController {
      * @param office The office to create.
      * @return A ResponseEntity indicating the result of the operation.
      */
+    
     @PostMapping
-    public ResponseEntity<String> createOffice(@RequestBody Office office) {
-        try {
-            officeService.createOffice(office);
+    public ResponseEntity<String> createOffice(@RequestBody OfficeDTO officeDTO) {
+            officeService.createOffice(officeDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body("Office created successfully");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
-        }
     }
 
     /**

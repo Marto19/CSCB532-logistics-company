@@ -2,6 +2,7 @@ package com.logistics.logisticsCompany.advice;
 
 import com.logistics.logisticsCompany.DTO.ApiErrorResponse;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,6 +44,29 @@ public class ValidationExceptionHandler {
 	public ResponseEntity<ApiErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
 		ApiErrorResponse response = new ApiErrorResponse("Entity Not Found", Collections.singletonMap("error", ex.getMessage()));
 		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+		Map<String, Object> body = new HashMap<>();
+		body.put("error", "Bad Request");
+		body.put("message", ex.getMessage());
+		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+	}
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+		Map<String, Object> body = new HashMap<>();
+		body.put("error", "Conflict");
+		body.put("message", ex.getMessage());
+		return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+	}
+	
+	@ExceptionHandler(IllegalStateException.class)
+	public ResponseEntity<Object> handleIllegalStateException(IllegalStateException ex) {
+		Map<String, Object> body = new HashMap<>();
+		body.put("error", "Conflict");
+		body.put("message", ex.getMessage());
+		return new ResponseEntity<>(body, HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler(RuntimeException.class)

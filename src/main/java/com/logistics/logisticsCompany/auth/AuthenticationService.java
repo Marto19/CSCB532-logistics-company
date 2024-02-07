@@ -2,10 +2,12 @@ package com.logistics.logisticsCompany.auth;
 
 import com.logistics.logisticsCompany.config.JwtService;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
+import com.logistics.logisticsCompany.entities.enums.UserRole;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.UserRepository;
 import com.logistics.logisticsCompany.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 /**
@@ -69,23 +72,35 @@ public class AuthenticationService {
      * @see RegisterRequest
      * @see AuthenticationResponse
      */
+    @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
-        
-        //fixme added from caki - check if its ok
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new EntityNotFoundException("Username already taken"); // maybe more specific exception should be thrown
+            throw new DataIntegrityViolationException("Username already exists.");
         }
+        
+        // method for role
+        Set<UserRole> defaultRoles = getDefaultRolesForNewUser();
+        
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .userRoleList(Set.of(userRoleRepository.findUserRoleById(1))) // Add the desired role to the set// todo: find a way to put
+                //marto - Add the desired role to the set// todo: find a way to put
+                //caki - found way to put.
+                .userRoleList(defaultRoles)//user role put.
                 .build();
         userRepository.save(user);
+        
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
-                .token(jwtToken)        //1:52:21
+                .token(jwtToken)  //1:52:21
                 .build();
-
+    }
+    
+    private Set<UserRole> getDefaultRolesForNewUser() {
+        // Example: Fetching default role by name or id, here assuming a role name 'USER'
+        UserRole defaultRole = userRoleRepository.findByUserRole("ROLE_CUSTOMER")
+                .orElseThrow(() -> new IllegalArgumentException("Default user role not found."));
+        return Set.of(defaultRole);
     }
     /**
      * Authenticates a user with the provided credentials during login.

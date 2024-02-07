@@ -14,7 +14,7 @@ public interface ShipmentService {
 	
     //marking shipment as delivered
 	@Transactional
-	void markShipmentAsDelivered(Long shipmentId, Long employeeId);
+	void markShipmentAsDelivered(Long shipmentId);
 	
     
     //todo: remove this method
