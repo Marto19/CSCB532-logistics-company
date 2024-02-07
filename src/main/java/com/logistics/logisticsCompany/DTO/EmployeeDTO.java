@@ -33,7 +33,6 @@ public class EmployeeDTO {
     /**
      * The name of the current office of the employee.
      */
-    @NotBlank(message = "Current office name cannot be null")
     @JsonProperty("currentOfficeName")
     private String currentOfficeName;
     
@@ -51,6 +50,7 @@ public class EmployeeDTO {
     private String companyId;  //company must
     
     @JsonProperty("currentOfficeId")
+    @NotBlank
     @Digits(integer = 10, fraction = 0, message = "Office id must be a number")
     private String currentOfficeId;  //office id
     

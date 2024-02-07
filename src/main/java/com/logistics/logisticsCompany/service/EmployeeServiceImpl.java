@@ -38,8 +38,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     
     @Override
     public Employee createEmployee(EmployeeDTO employeeDTO) {
-        Employee employee = new Employee();
-        EntityDtoMapper.convertEmployeeDtoToEntity(employeeDTO); // Ensure this method sets names etc.
+        Employee employee = EntityDtoMapper.convertEmployeeDtoToEntity(employeeDTO);
+
         
         // Link User
         if (employeeDTO.getUserId() != null || employeeDTO.getUsername() != null) {

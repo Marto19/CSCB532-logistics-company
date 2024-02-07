@@ -60,14 +60,9 @@ public class EmployeeController {
      */
     @PostMapping
     public ResponseEntity<String> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
-        try {
             employeeService.createEmployee(employeeDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body("Employee added successfully");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
-        }
+
     }
 
     /**
