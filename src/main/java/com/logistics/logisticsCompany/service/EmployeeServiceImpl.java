@@ -11,10 +11,8 @@ import com.logistics.logisticsCompany.repository.EmployeeRepository;
 import com.logistics.logisticsCompany.repository.LogisticsCompanyRepository;
 import com.logistics.logisticsCompany.repository.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -139,6 +137,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCurrentOffice(office);
         employeeRepository.save(employee);
     }
+
+    
     /**
      * Assigns a logistics company to an employee.
      * @param employeeId the id of the employee
@@ -160,5 +160,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Optional<Employee> getEmployeeById(long emplpoyeeId) {
         return employeeRepository.findById(emplpoyeeId);
+    }
+    
+    /**
+     * Retrieves an employee by user id.
+     * @param userId the id of the user
+     * @return the employee with the provided user id
+     */
+    @Override
+    public Employee getEmployeeByUserId(Long userId) {
+        return employeeRepository.findByUsersId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found for user ID: " + userId));
     }
 }

@@ -66,7 +66,8 @@ public class ShipmentDTO {
      * The sender employee id of the shipment.
      */
     @JsonProperty("senderEmployeeId")
-    @NotNull(message = "SenderEmployeeId cannot be null")
+    //todo remove if shipment creation is fixed
+    //@NotNull(message = "SenderEmployeeId cannot be null")
     private Long senderEmployeeId;
     
     

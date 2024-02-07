@@ -4,6 +4,8 @@ import com.logistics.logisticsCompany.entities.users.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
+
 /**
  * Repository interface for Employee entities.
  */
@@ -43,4 +45,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
      * @return True if an employee with the given user ID exists, false otherwise.
      */
     boolean existsByUsers_Id(Long userId);
+    
+    Optional<Employee> findByUsersId(Long userId);
 }

@@ -57,8 +57,15 @@ public class JwtService {
      * @return the JWT token
      */
     public String generateToken(UserDetails userDetails){
+        if (!(userDetails instanceof User)) {
+            throw new IllegalArgumentException("UserDetails is not an instance of User");
+        }
+        User user = (User) userDetails;
+        
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", ((User) userDetails).getUserRoleList());
+        claims.put("role", user.getUserRoleList());
+        claims.put("userId", user.getId());
+        
         return generateToken(claims, userDetails.getUsername());
     }
 
@@ -119,4 +126,10 @@ public class JwtService {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+    
+    public Long getUserIdFromToken(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return Long.parseLong(claims.get("userId").toString());
+    }
+
 }

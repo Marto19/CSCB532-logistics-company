@@ -2,6 +2,8 @@
 package com.logistics.logisticsCompany.service;
 
 import com.logistics.logisticsCompany.DTO.*;
+import com.logistics.logisticsCompany.auth.AuthenticationService;
+import com.logistics.logisticsCompany.config.JwtService;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.enums.DeliveryPaymentType;
 import com.logistics.logisticsCompany.entities.orders.Shipment;
@@ -52,7 +54,10 @@ public class ShipmentServiceImpl implements ShipmentService {
     
     private final IncomeHistoryService incomeHistoryService;
     private final ShipmentStatusHistoryService shipmentStatusHistoryService;
+    
+    private final JwtService jwtService;
 
+    private final AuthenticationService authenticationService;
 
     /**
      * Constructs a new ShipmentServiceImpl with the given parameters.
@@ -71,7 +76,8 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Autowired
     public ShipmentServiceImpl(ShipmentRepository shipmentRepository, EntityDtoMapper entityDtoMapper, DeliveryPaymentTypeRepository deliveryPaymentTypeRepository,
                                CustomerService customerService, EmployeeService employeeService, ShipmentStatusHistoryRepository shipmentStatusHistoryRepository,
-                               ShipmentStatusRepository shipmentStatusRepository, OfficeService officeService, IncomeHistoryService incomeHistoryService, ShipmentStatusHistoryService shipmentStatusHistoryService){
+                               ShipmentStatusRepository shipmentStatusRepository, OfficeService officeService, IncomeHistoryService incomeHistoryService,
+                               ShipmentStatusHistoryService shipmentStatusHistoryService, JwtService jwtService, AuthenticationService authenticationService){
         this.shipmentRepository = shipmentRepository;
         this.entityDtoMapper = entityDtoMapper;
         this.deliveryPaymentTypeRepository = deliveryPaymentTypeRepository;
@@ -82,6 +88,8 @@ public class ShipmentServiceImpl implements ShipmentService {
         this.officeService = officeService;
         this.incomeHistoryService = incomeHistoryService;
         this.shipmentStatusHistoryService = shipmentStatusHistoryService;
+        this.jwtService = jwtService;
+        this.authenticationService = authenticationService;
     }
     
     /*
@@ -156,20 +164,15 @@ public class ShipmentServiceImpl implements ShipmentService {
         shipment.setSenderCustomer(senderCustomer);
         shipment.setReceiverCustomer(receiverCustomer);
         
-        // Set sender employee and office from the logged-in employee's information
-        //this is getting the employee by id from the shipmentDto
-        Employee senderEmployee = employeeService.getEmployeeById(shipmentDto.getSenderEmployeeId())
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found with ID: " + shipmentDto.getSenderEmployeeId()));
-        shipment.setSenderEmployee(senderEmployee);
-        shipment.setSenderOffice(senderEmployee.getCurrentOffice());
         
-        //fixme - set receiver employee and office from the logged-in employee's information - waiting for marto to implement authentication
-        //   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //    String currentUsername = authentication.getName();
-        //    Employee senderEmployee = employeeService.getEmployeeByUsername(currentUsername)
-        //            .orElseThrow(() -> new EntityNotFoundException("Employee not found for username: " + currentUsername));
-        //    shipment.setSenderEmployee(senderEmployee);
-        //    shipment.setSenderOffice(senderEmployee.getCurrentOffice());
+        
+        //Get senderEmployeeId from authenticationService
+        Long currentSenderEmployeeUserId = authenticationService.getCurrentUserId();
+        Employee currentSenderEmployee = employeeService.getEmployeeByUserId(currentSenderEmployeeUserId);
+        System.out.println("Current employee id: " + currentSenderEmployee.getId());//todo remove (temporary debug checks)
+        
+        shipment.setSenderEmployee(currentSenderEmployee);
+        
         
         // Set receiver office
         if (shipmentDto.getReceiverOfficeId() != null) {
@@ -177,8 +180,6 @@ public class ShipmentServiceImpl implements ShipmentService {
                     .orElseThrow(() -> new EntityNotFoundException("Office not found with ID: " + shipmentDto.getReceiverOfficeId()));
             shipment.setReceiverOffice(receiverOffice);
         }
-        
-        
         //Save shipment entity
         shipmentRepository.save(shipment);
         

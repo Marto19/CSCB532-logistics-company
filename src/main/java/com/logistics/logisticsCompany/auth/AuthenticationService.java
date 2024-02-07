@@ -8,6 +8,9 @@ import com.logistics.logisticsCompany.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +38,7 @@ public class AuthenticationService {
     /**
      * The {@link UserRepository} instance used for user-related operations.
      */
-    private final UserRepository repository;
+    private final UserRepository userRepository;
 
     /**
      * The {@link PasswordEncoder} instance used for password encoding and validation.
@@ -69,7 +72,7 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         
         //fixme added from caki - check if its ok
-        if (repository.findByUsername(request.getUsername()).isPresent()) {
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new EntityNotFoundException("Username already taken"); // maybe more specific exception should be thrown
         }
         var user = User.builder()
@@ -77,7 +80,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .userRoleList(Set.of(userRoleRepository.findUserRoleById(1))) // Add the desired role to the set// todo: find a way to put
                 .build();
-        repository.save(user);
+        userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)        //1:52:21
@@ -102,10 +105,20 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = repository.findByUsername(request.getUsername()).orElseThrow();
+        var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+    }
+    
+    public Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            User user = (User) authentication.getPrincipal();
+            return user.getId();
+        }
+        // Consider your strategy for unauthenticated requests
+        throw new IllegalStateException("User is not authenticated");
     }
 }

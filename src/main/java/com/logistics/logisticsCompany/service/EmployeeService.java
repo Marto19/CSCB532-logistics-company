@@ -21,8 +21,10 @@ public interface EmployeeService {
     void deleteEmployee(long employeeId);
 
     void assignOfficeToEmployee(long employeeId, Office office);
-
-    void assignLogisticsCompanyToEmployee(long employeeId, LogisticsCompany logisticsCompany);
+	
+	Employee getEmployeeByUserId(Long userId);
+	
+	void assignLogisticsCompanyToEmployee(long employeeId, LogisticsCompany logisticsCompany);
 
     Optional<Employee> getEmployeeById(long emplpoyeeId);
 
