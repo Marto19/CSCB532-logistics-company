@@ -31,11 +31,30 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+
+    /**
+     * The {@link UserRepository} instance used for user-related operations.
+     */
     private final UserRepository repository;
+
+    /**
+     * The {@link PasswordEncoder} instance used for password encoding and validation.
+     */
     private final PasswordEncoder passwordEncoder;  //todo: add a bean -fixed - the bean wasn't public in ApplicationConfig
+
+    /**
+     * The {@link JwtService} instance used for JWT-related operations.
+     */
     private  final JwtService jwtService;
+
+    /**
+     * The {@link AuthenticationManager} instance used for user authentication.
+     */
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * The {@link UserRoleRepository} instance used for user role-related operations.
+     */
     private final UserRoleRepository userRoleRepository;
 
     /**

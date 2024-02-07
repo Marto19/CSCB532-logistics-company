@@ -25,6 +25,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import jakarta.validation.Valid;
+
+
+/**
+ * The UserController class handles HTTP requests related to user operations.
+ * It provides endpoints for registering, logging in, and managing users.
+ */
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -33,7 +39,18 @@ public class UserController {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final EntityDtoMapper entityDtoMapper;
-    
+
+
+     /**
+      * Constructs a UserController with the specified dependencies.
+      *
+      * @param userServiceImpl The service for handling user-related operations.
+      * @param userRoleService The service for handling user role-related operations.
+      * @param userRepository The repository for accessing user data.
+      * @param userRoleRepository The repository for accessing user role data.
+      * @param entityDtoMapper The mapper for converting between entities and DTOs.
+      */
+
     @Autowired
     public UserController(UserServiceImpl userServiceImpl, UserRoleServiceImpl userRoleService, UserRepository userRepository, UserRoleRepository userRoleRepository, EntityDtoMapper entityDtoMapper) {
         this.userService = userServiceImpl;
@@ -42,7 +59,14 @@ public class UserController {
         this.userRoleRepository = userRoleRepository;
         this.entityDtoMapper = entityDtoMapper;
     }
-    
+
+
+    /**
+     * Handles the HTTP POST request to register a new user.
+     *
+     * @param userDTO The user to register.
+     * @return A ResponseEntity indicating the result of the operation.
+     */
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@Valid @RequestBody UserDTO userDTO) {
         try {
@@ -60,6 +84,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Handles the HTTP POST request to log in a user.
+     *
+     * @param loginRequest The user to log in.
+     * @return A ResponseEntity indicating the result of the operation.
+     */
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody User loginRequest) {
         // Implement login logic using loginRequest.getUsername() and loginRequest.getPassword()
@@ -67,6 +97,11 @@ public class UserController {
         return new ResponseEntity<>("Login successful", HttpStatus.OK);
     }
 
+
+    /**
+     * Handles the HTTP GET request to show the login page.
+     * @return A ModelAndView containing the login page.
+     */
     @GetMapping("/login")
     public ModelAndView showLoginPage() {
         return new ModelAndView("login");
@@ -78,9 +113,13 @@ public class UserController {
 //        return "index"; // Assuming you have a login.html page
 //    }
 
-
-
-
+    /**
+     * Handles the HTTP POST request to assign roles to a user.
+     *
+     * @param username The username of the user to assign roles to.
+     * @param roles    The roles to assign to the user.
+     * @return A ResponseEntity indicating the result of the operation.
+     */
     @PostMapping("/assign-roles")
     public ResponseEntity<String> assignRoles(@RequestParam String username, @RequestParam Set<String> roles) {
         System.out.println("Assign Roles method reached.");
@@ -115,6 +154,16 @@ public class UserController {
     }
 
     //////////////////////CRUD OPERATIONS 3. b)///////////
+
+    /**
+     * Handles the HTTP POST request to create a new user.
+     * @param user The user to create.
+     * @return
+     * A ResponseEntity indicating the result of the operation.
+     * If the username already exists, return a BAD_REQUEST status with a message "Username already exists".
+     * If the user is created successfully, return a CREATED status with a message "User created successfully".
+     * If an unexpected error occurs, return an INTERNAL_SERVER_ERROR status with a message "An unexpected error occurred: " followed by the error message.
+     */
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody User user) {
         // Check if the username already exists
@@ -129,7 +178,18 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("User created successfully");
     }   //todo: add protection in other places too
-    
+
+
+    /**
+     * Handles the HTTP GET request to retrieve all users.
+     *
+     *
+     * @return
+     * A ResponseEntity containing the list of users or a NO_CONTENT status if the list is empty.
+     * If the list is not empty, return an OK status with the list of users.
+     * If an unexpected error occurs, return an INTERNAL_SERVER_ERROR status with a message "An unexpected error occurred: " followed by the error message.
+     * If the list is empty, return a NO_CONTENT status.
+     */
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<User> registeredUsers = userService.getAllUsers();
@@ -141,7 +201,19 @@ public class UserController {
                 .collect(Collectors.toList());
         return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
-    
+
+    /**
+     * Handles the HTTP GET request to retrieve a user by ID.
+     *
+     * @param userId The ID of the user to retrieve.
+     *               If the user with the provided ID doesn't exist, return a NOT_FOUND status.
+     *               If the user with the provided ID exists, return an OK status with the user.
+     *               If an unexpected error occurs, return an INTERNAL_SERVER_ERROR status with a message "An unexpected error occurred: " followed by the error message.
+     * @return
+     * A ResponseEntity containing the user or a NOT_FOUND status if the user doesn't exist.
+     * If the user exists, return an OK status with the user.
+     * If an unexpected error occurs, return an INTERNAL_SERVER_ERROR status with a message "An unexpected error occurred: " followed by the error message.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable(value = "id") long userId) {
         if (!userRepository.existsById(userId)){
@@ -153,6 +225,23 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
+    /**
+     * Handles the HTTP PUT request to update a user.
+     *
+     * @param userId The ID of the user to update.
+     *               If the user with the provided ID doesn't exist, return a NOT_FOUND status with a message "User with the provided id doesn't exist".
+     *               If the user with the provided ID exists, proceed with updating the user.
+     *               If the user is updated successfully, return an OK status with a message "User updated successfully".
+     *               If an unexpected error occurs, return a BAD_REQUEST status with a message "An unexpected error occurred: " followed by the error message.
+     *               If the user with the provided ID doesn't exist, return a NOT_FOUND status with a message "User with the provided id doesn't exist".
+     * @param updatedUser The updated user details.
+     *
+     * @return
+     * A ResponseEntity indicating the result of the operation.
+     * If the user is updated successfully, return an OK status with a message "User updated successfully".
+     * If the user with the provided ID doesn't exist, return a NOT_FOUND status with a message "User with the provided id doesn't exist".
+     * If an unexpected error occurs, return a BAD_REQUEST status with a message "An unexpected error occurred: " followed by the error message.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable(value = "id") long userId, @RequestBody User updatedUser){
         if(!userRepository.existsById(userId)){
@@ -169,6 +258,15 @@ public class UserController {
         }
     }
 
+    /**
+     * Handles the HTTP DELETE request to delete a user.
+     * @param userId The ID of the user to delete.
+     * @return
+     * A ResponseEntity indicating the result of the operation.
+     * If the user is deleted successfully, return an OK status with a message "User deleted successfully".
+     * If the user with the provided ID doesn't exist, return a NOT_FOUND status with a message "User with the provided id doesn't exist".
+     * If an unexpected error occurs, return a BAD_REQUEST status with a message "An unexpected error occurred: " followed by the error message.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable(value = "id") long userId){
         try {

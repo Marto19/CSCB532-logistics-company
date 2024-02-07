@@ -8,9 +8,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 //controller to test secured endpoint
+
+/**
+ * This class is a controller for handling requests related to the demo page.
+ * It uses Spring's @RestController annotation to indicate that it is a controller and the response bodies should be bound to the web response body.
+ * It also uses @RequestMapping to map the web requests.
+ */
 @RestController
 @RequestMapping("/api/v1/demo-controller")
 public class DemoController {
+
+    /**
+     * This method handles the GET requests for the demo page.
+     * @return the response entity with the message "Hello from secured endpoint"
+     */
     @GetMapping
     public ResponseEntity<String> sayHello(){
         return ResponseEntity.ok("Hello from secured endpoint");

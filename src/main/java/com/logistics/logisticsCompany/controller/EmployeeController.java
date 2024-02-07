@@ -17,13 +17,33 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * This class is a controller for handling requests related to Employee.
+ * It uses Spring's @RestController annotation to indicate that it is a controller and the response bodies should be bound to the web response body.
+ * It also uses @RequestMapping to map the web requests.
+ */
 @RestController
 @RequestMapping("/api/v1/employees")
 public class EmployeeController {
+    /**
+     * The EmployeeService instance used for employee-related operations.
+     */
     private final EmployeeService employeeService;
+    /**
+     * The EmployeeRepository instance used for employee-related operations.
+     */
     private final EmployeeRepository employeeRepository;
+    /**
+     * The EntityDtoMapper instance used for converting entities to DTOs and vice versa.
+     */
     private final EntityDtoMapper entityDtoMapper;
 
+    /**
+     * Constructs an EmployeeController with the specified EmployeeService, EmployeeRepository, and EntityDtoMapper.
+     * @param employeeService the EmployeeService
+     * @param employeeRepository the EmployeeRepository
+     * @param entityDtoMapper the EntityDtoMapper
+     */
     @Autowired
     public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository, EntityDtoMapper entityDtoMapper) {
         this.employeeService = employeeService;
@@ -31,6 +51,11 @@ public class EmployeeController {
         this.entityDtoMapper = entityDtoMapper;
     }
 
+    /**
+     * This method handles the POST requests for creating an employee.
+     * @param employee the employee to create
+     * @return a ResponseEntity with the status and a message
+     */
     @PostMapping
     public ResponseEntity<String> createEmployee(@RequestBody Employee employee) {
         try {
@@ -43,6 +68,10 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * This method handles the GET requests for getting all employees.
+     * @return a ResponseEntity with the list of EmployeeDTO if it exists, or a not found status
+     */
     @GetMapping
     public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
         //Convert to List<EmployeeDTO>
@@ -56,6 +85,11 @@ public class EmployeeController {
     }
     
     //todo decide whether we have 1 or more companies
+    /**
+     * This method handles the GET requests for getting all employees by company id.
+     * @param companyId the id of the company
+     * @return a ResponseEntity with the list of EmployeeDTO if it exists, or a not found status
+     */
     @GetMapping("/by-company-id/{companyId}")
     public ResponseEntity<List<EmployeeDTO>> getAllEmployeesByCompanyId(@PathVariable Long companyId) {
         List<EmployeeDTO> employeeDTOs = employeeService.getAllEmployeesByCompanyId(companyId).stream()
@@ -65,7 +99,12 @@ public class EmployeeController {
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(employeeDTOs, HttpStatus.OK);
     }
-    
+
+    /**
+     * This method handles the GET requests for getting an employee by id.
+     * @param employeeId the id of the employee
+     * @return a ResponseEntity with the EmployeeDTO if it exists, or a not found status
+     */
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable(value = "id") long employeeId) {
         return employeeService.getEmployeeById(employeeId)
@@ -74,6 +113,12 @@ public class EmployeeController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * This method handles the PUT requests for updating an employee.
+     * @param employeeId the id of the employee to update
+     * @param updatedEmployee the updated employee
+     * @return a ResponseEntity with the status and a message
+     */
     @PutMapping("/{id}")
     public ResponseEntity<String> updateEmployee(@PathVariable(value = "id") long employeeId,
                                                  @RequestBody Employee updatedEmployee) {
@@ -97,6 +142,11 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * This method handles the DELETE requests for deleting an employee.
+     * @param employeeId the id of the employee to delete
+     * @return a ResponseEntity with the status and a message
+     */
     @PostMapping("/{id}/assign-office")
     public ResponseEntity<String> assignOfficeToEmployee(@PathVariable(value = "id") long employeeId,
                                                          @RequestBody Office office) {
@@ -110,6 +160,12 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * This method handles the POST requests for assigning a logistics company to an employee.
+     * @param employeeId the id of the employee
+     * @param logisticsCompany the logistics company to assign
+     * @return a ResponseEntity with the status and a message
+     */
     @PostMapping("/{id}/assign-logistics-company")
     public ResponseEntity<String> assignLogisticsCompanyToEmployee(@PathVariable(value = "id") long employeeId,
                                                                    @RequestBody LogisticsCompany logisticsCompany) {

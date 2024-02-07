@@ -17,15 +17,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
+/**
+ * This class is a filter that authenticates JWT tokens. It extends {@link OncePerRequestFilter} to ensure a single execution per request dispatch.
+ * It uses Spring's @Component and @Service annotations to indicate that it is a bean and it should be automatically detected by spring-boot's @ComponentScan.
+ * It also uses Lombok's @RequiredArgsConstructor to generate a constructor that initializes final fields.
+ */
 @Component
 @Service
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+    /**
+     * The JwtService instance used for JWT-related operations.
+     */
     private final JwtService jwtService;
+    /**
+     * The UserDetailsService instance used for user-related operations.
+     */
     private final UserDetailsService userDetailsService;
-
+    /**
+     * This method attempts to authenticate the JWT token in the request. If the token is valid, it sets the authentication in the context.
+     * It is called once per request.
+     *
+     * @param request the HttpServletRequest
+     * @param response the HttpServletResponse
+     * @param filterChain the FilterChain
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doFilterInternal(
             @NotNull HttpServletRequest request,

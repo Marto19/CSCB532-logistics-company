@@ -15,17 +15,29 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-
+/**
+ * This class is a controller for handling requests related to ShipmentStatus.
+ * It uses Spring's @RestController annotation to indicate that it is a controller and the response bodies should be bound to the web response body.
+ * It also uses @RequestMapping to map the web requests.
+ */
 @RestController
 @RequestMapping("/api/v1/shipment-statuses")
 public class ShipmentStatusController {
-	
+	/**
+	 * The ShipmentStatusService instance used for shipment status-related operations.
+	 */
 	@Autowired
 	private ShipmentStatusService shipmentStatusService;
-	
+	/**
+	 * The ShipmentStatusRepository instance used for shipment status-related operations.
+	 */
 	@Autowired
 	private ShipmentStatusRepository shipmentStatusRepository;
-	
+	/**
+	 * This method handles the POST requests for creating a shipment status.
+	 * @param shipmentStatus the shipment status to create
+	 * @return a ResponseEntity with the status and a message
+	 */
 	@PostMapping
 	public ResponseEntity<String> createShipmentStatus(@RequestBody ShipmentStatus shipmentStatus) {
 		// Check if a customer with the given phone already exists
@@ -38,6 +50,12 @@ public class ShipmentStatusController {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body("Shipment status created successfully");
 	}
+
+	/**
+	 * This method handles the DELETE requests for deleting a shipment status.
+	 * @param shipmentStatusId the id of the shipment status to delete
+	 * @return a ResponseEntity with the status and a message
+	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteShipmentStatus(@PathVariable(value = "id") long shipmentStatusId) {
 		if (!shipmentStatusRepository.existsById(shipmentStatusId)){
@@ -48,7 +66,11 @@ public class ShipmentStatusController {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body("Shipment status deleted successfully");
 	}
-	
+
+	/**
+	 * This method handles the GET requests for getting all shipment statuses.
+	 * @return a list of ShipmentStatusDTO
+	 */
 	@GetMapping
 	public List<ShipmentStatusDTO> getAllCustomers() {
 		List<ShipmentStatus> shipmentStatuses = shipmentStatusService.getAllShipmentStatuses();

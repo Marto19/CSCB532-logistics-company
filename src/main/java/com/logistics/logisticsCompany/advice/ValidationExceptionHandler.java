@@ -10,9 +10,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Global exception handler for handling validation errors in RESTful endpoints.
+ * This class is responsible for intercepting MethodArgumentNotValidException
+ * instances thrown during request processing and returning appropriate error responses.
+ */
 @RestControllerAdvice
 public class ValidationExceptionHandler {
-	
+	/**
+	 * Handles MethodArgumentNotValidException thrown during request processing
+	 * and returns a map containing field-level validation errors.
+	 *
+	 * @param ex The MethodArgumentNotValidException instance representing the validation error.
+	 * @return A map containing field names as keys and error messages as values.
+	 */
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public Map<String, String> handleInvalidArgument(MethodArgumentNotValidException ex){

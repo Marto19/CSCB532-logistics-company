@@ -15,15 +15,30 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+/**
+ * This class is a configuration class for the application's security.
+ * It uses Spring's @Configuration, @EnableWebSecurity, and @EnableGlobalMethodSecurity annotations to configure the security settings.
+ * It also uses Lombok's @RequiredArgsConstructor to generate a constructor that initializes final fields.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-
+    /**
+     * The JwtAuthenticationFilter instance used for JWT authentication.
+     */
     private final JwtAuthenticationFilter jwtAuthFilter;
+    /**
+     * The AuthenticationProvider instance used for authentication.
+     */
     private final AuthenticationProvider authenticationProvider;
+    /**
+     * This bean provides a SecurityFilterChain that configures the security settings.
+     * @param http the HttpSecurity instance
+     * @return the SecurityFilterChain
+     * @throws Exception if an error occurs when building the SecurityFilterChain
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{ //1:55:40
         http

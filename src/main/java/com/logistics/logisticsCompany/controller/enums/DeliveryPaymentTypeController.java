@@ -12,16 +12,29 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import com.logistics.logisticsCompany.repository.DeliveryPaymentTypeRepository;
-
+/**
+ * This class is a controller for handling requests related to DeliveryPaymentType.
+ * It uses Spring's @RestController annotation to indicate that it is a controller and the response bodies should be bound to the web response body.
+ * It also uses @RequestMapping to map the web requests.
+ */
 @RestController
 @RequestMapping("/api/v1/delivery-payment-types")
 public class DeliveryPaymentTypeController {
+	/**
+	 * The DeliveryPaymentTypeService instance used for delivery payment type-related operations.
+	 */
 	@Autowired
 	private DeliveryPaymentTypeService deliveryPaymentTypeService;
-	
+	/**
+	 * The DeliveryPaymentTypeRepository instance used for delivery payment type-related operations.
+	 */
 	@Autowired
 	private DeliveryPaymentTypeRepository deliveryPaymentTypeRepository;
-	
+	/**
+	 * This method handles the POST requests for creating a delivery payment type.
+	 * @param deliveryPaymentType the delivery payment type to create
+	 * @return a ResponseEntity with the status and a message
+	 */
 	@PostMapping
 	public ResponseEntity<String> createDeliveryPaymentType(@RequestBody DeliveryPaymentType deliveryPaymentType) {
 		
@@ -33,6 +46,11 @@ public class DeliveryPaymentTypeController {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body("Delivery payment type created successfully");
 	}
+	/**
+	 * This method handles the DELETE requests for deleting a delivery payment type.
+	 * @param deliveryPaymentTypeId the id of the delivery payment type to delete
+	 * @return a ResponseEntity with the status and a message
+	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteDeliveryPaymentType(@PathVariable(value = "id") long deliveryPaymentTypeId) {
 		if (!deliveryPaymentTypeRepository.existsById(deliveryPaymentTypeId)){
@@ -43,7 +61,10 @@ public class DeliveryPaymentTypeController {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body("Delivery payment type deleted successfully");
 	}
-	
+	/**
+	 * This method handles the GET requests for getting all delivery payment types.
+	 * @return a list of DeliveryPaymentTypeDTO
+	 */
 	@GetMapping
 	public List<DeliveryPaymentTypeDTO> getAllCustomers() {
 		List<DeliveryPaymentType> deliveryPaymentTypes = deliveryPaymentTypeService.getAllDeliveryPaymentType();

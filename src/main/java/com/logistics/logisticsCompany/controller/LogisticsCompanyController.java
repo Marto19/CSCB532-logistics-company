@@ -16,20 +16,49 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
+
+/**
+ * This class is a controller for handling requests related to logistics companies.
+ * It uses Spring's @RestController annotation to indicate that it is a controller and the response bodies should be bound to the web response body.
+ * It also uses @RequestMapping to map the web requests.
+ */
 @RestController
 @RequestMapping("/api/v1/logistics-companies")
 public class LogisticsCompanyController {
+
+    /**
+     * The LogisticsCompanyService instance used for logistics company-related operations.
+     */
     private final LogisticsCompanyService logisticsCompanyService;
+
+    /**
+     * The LogisticsCompanyRepository instance used for logistics company-related operations.
+     */
     private final LogisticsCompanyRepository logisticsCompanyRepository;
+
+    /**
+     * The EntityDtoMapper instance used for mapping entities to DTOs and vice versa.
+     */
     private final EntityDtoMapper entityDtoMapper;
 
+    /**
+     * This constructor is used to inject the LogisticsCompanyService, LogisticsCompanyRepository and EntityDtoMapper instances.
+     * @param logisticsCompanyService the LogisticsCompanyService instance
+     * @param logisticsCompanyRepository the LogisticsCompanyRepository instance
+     * @param entityDtoMapper the EntityDtoMapper instance
+     */
     @Autowired
     public LogisticsCompanyController(LogisticsCompanyService logisticsCompanyService, LogisticsCompanyRepository logisticsCompanyRepository, EntityDtoMapper entityDtoMapper) {
         this.logisticsCompanyService = logisticsCompanyService;
         this.logisticsCompanyRepository = logisticsCompanyRepository;
         this.entityDtoMapper= entityDtoMapper;
     }
-    
+
+    /**
+     * This method handles the POST requests for creating a logistics company.
+     * @param logisticsCompanyDTO the logistics company to create
+     * @return a ResponseEntity with the status and a message
+     */
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> createLogisticsCompany(@Valid @RequestBody LogisticsCompanyDTO logisticsCompanyDTO) {
@@ -44,7 +73,11 @@ public class LogisticsCompanyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
-    
+
+    /**
+     * This method handles the GET requests for getting all logistics companies.
+     * @return a ResponseEntity with the status and a message
+     */
     @GetMapping
     public ResponseEntity<List<LogisticsCompanyDTO>> getAllLogisticsCompanies() {
         //Convert to List<LogisticsCompanyDTO>
@@ -57,6 +90,11 @@ public class LogisticsCompanyController {
                 : new ResponseEntity<>(logisticsCompanyDTOs, HttpStatus.OK);
     }
 
+    /**
+     * This method handles the GET requests for getting a logistics company by id.
+     * @param companyId the id of the logistics company
+     * @return a ResponseEntity with the status and a message
+     */
     @GetMapping("/{id}")
     public ResponseEntity<LogisticsCompanyDTO> getLogisticsCompanyById(@PathVariable(value = "id") long companyId) {
         return logisticsCompanyService.getLogisticsCompanyById(companyId)
@@ -65,6 +103,12 @@ public class LogisticsCompanyController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * This method handles the PUT requests for updating a logistics company.
+     * @param companyId the id of the logistics company
+     * @param updatedCompany the updated logistics company
+     * @return a ResponseEntity with the status and a message
+     */
     @PutMapping("/{id}")
     public ResponseEntity<String> updateLogisticsCompany(@PathVariable(value = "id") long companyId,
                                                          @RequestBody LogisticsCompany updatedCompany) {
@@ -78,6 +122,11 @@ public class LogisticsCompanyController {
         }
     }
 
+    /**
+     * This method handles the DELETE requests for deleting a logistics company.
+     * @param companyId the id of the logistics company
+     * @return a ResponseEntity with the status and a message
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLogisticsCompany(@PathVariable(value = "id") long companyId) {
         try {

@@ -15,6 +15,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The OfficeController class handles HTTP requests related to office operations.
+ * It provides endpoints for creating, retrieving, updating, and deleting offices.
+ */
 @RestController
 @RequestMapping("/api/v1/offices")
 public class OfficeController {
@@ -23,6 +27,13 @@ public class OfficeController {
     private final OfficeRepository officeRepository;
     private final EntityDtoMapper entityDtoMapper;
 
+    /**
+     * Constructs an OfficeController with the specified dependencies.
+     *
+     * @param officeService    The service for handling office-related operations.
+     * @param officeRepository The repository for accessing office data.
+     * @param entityDtoMapper  The mapper for converting between entities and DTOs.
+     */
     @Autowired
     public OfficeController(OfficeService officeService, OfficeRepository officeRepository, EntityDtoMapper entityDtoMapper) {
         this.officeService = officeService;
@@ -30,6 +41,12 @@ public class OfficeController {
         this.entityDtoMapper = entityDtoMapper;
     }
 
+    /**
+     * Handles the HTTP POST request to create a new office.
+     *
+     * @param office The office to create.
+     * @return A ResponseEntity indicating the result of the operation.
+     */
     @PostMapping
     public ResponseEntity<String> createOffice(@RequestBody Office office) {
         try {
@@ -42,6 +59,11 @@ public class OfficeController {
         }
     }
 
+    /**
+     * Handles the HTTP GET request to retrieve all offices.
+     *
+     * @return A ResponseEntity containing the list of offices or an error status.
+     */
     @GetMapping
     public ResponseEntity<List<OfficeDTO>> getAllOffices() {
         //Convert to List<officeDTO>
@@ -54,6 +76,12 @@ public class OfficeController {
                 : new ResponseEntity<>(officeDTOs, HttpStatus.OK);
     }
 
+    /**
+     * Handles the HTTP GET request to retrieve an office by ID.
+     *
+     * @param officeId The ID of the office to retrieve.
+     * @return A ResponseEntity containing the office DTO or an error status.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<OfficeDTO> getOfficeById(@PathVariable(value = "id") long officeId) {
         return officeService.getOfficeById(officeId)
@@ -62,6 +90,13 @@ public class OfficeController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * Handles the HTTP PUT request to update an office.
+     *
+     * @param officeId      The ID of the office to update.
+     * @param updatedOffice The updated office details.
+     * @return A ResponseEntity indicating the result of the operation.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<String> updateOffice(@PathVariable(value = "id") long officeId,
                                                @RequestBody Office updatedOffice) {
@@ -75,6 +110,12 @@ public class OfficeController {
         }
     }
 
+    /**
+     * Handles the HTTP DELETE request to delete an office.
+     *
+     * @param officeId The ID of the office to delete.
+     * @return A ResponseEntity indicating the result of the operation.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteOffice(@PathVariable(value = "id") long officeId) {
         try {
