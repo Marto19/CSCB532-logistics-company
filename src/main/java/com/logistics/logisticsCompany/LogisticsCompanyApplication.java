@@ -50,19 +50,19 @@ public class LogisticsCompanyApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// Create a new UserRole
-		UserRole userRole = new UserRole("ROLE_CUSTOMER");
-		userRole.setId(1);
+		UserRole userRoleCustomer = new UserRole("ROLE_CUSTOMER");
+		userRoleCustomer.setId(1);
 
 
 		// Check if the role already exists
-		Optional<UserRole> existingRole = userRoleRepository.findByUserRole(userRole.getUserRole());
+		Optional<UserRole> existingRole = userRoleRepository.findByUserRole(userRoleCustomer.getUserRole());
 
 		if (existingRole.isPresent()) {
 			System.out.println("Role already exists: " + existingRole.get().getUserRole());
 		} else {
 			// Save the UserRole
-			userRoleRepository.save(userRole);
-			System.out.println("Role created: " + userRole.getUserRole());
+			userRoleRepository.save(userRoleCustomer);
+			System.out.println("Role created: " + userRoleCustomer.getUserRole());
 		}
 
 		// Create a new UserRole for ROLE_EMPLOYEE
@@ -81,19 +81,19 @@ public class LogisticsCompanyApplication implements CommandLineRunner {
 		}
 
 		// Create a new UserRole
-		UserRole userRoleADMIN = new UserRole("ROLE_ADMIN");
-		userRole.setId(3);
+		UserRole userRoleAdmin = new UserRole("ROLE_ADMIN");
+		userRoleAdmin.setId(3);
 
 
 		// Check if the role already exists
-		Optional<UserRole> existingRoleAdmin = userRoleRepository.findByUserRole(userRoleADMIN.getUserRole());
+		Optional<UserRole> existingRoleAdmin = userRoleRepository.findByUserRole(userRoleAdmin.getUserRole());
 
 		if (existingRoleAdmin.isPresent()) {
 			System.out.println("Role already exists: " + existingRoleAdmin.get().getUserRole());
 		} else {
 			// Save the UserRole
-			userRoleRepository.save(userRole);
-			System.out.println("Role created: " + userRoleADMIN.getUserRole());
+			userRoleRepository.save(userRoleAdmin);
+			System.out.println("Role created: " + userRoleAdmin.getUserRole());
 		}
 	}
 	//TODO:fix mappings - done
