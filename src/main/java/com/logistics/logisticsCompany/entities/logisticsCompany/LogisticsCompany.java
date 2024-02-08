@@ -37,13 +37,13 @@ public class LogisticsCompany {     //creating this entity in order to satisfy  
     /**
      * The set of offices of the logistics company.
      */
-    @OneToMany(mappedBy = "logisticsCompany")
+    @OneToMany(mappedBy = "logisticsCompany",cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Office> officeSet;
 
     /**
      * The set of employees of the logistics company.
      */
-    @OneToMany(mappedBy = "logisticsCompany")
+    @OneToMany(mappedBy = "logisticsCompany",cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Employee> employeeSet;
 
     /**
@@ -60,6 +60,8 @@ public class LogisticsCompany {     //creating this entity in order to satisfy  
 
     }
 
+    
+    
     public long getId() {
         return id;
     }

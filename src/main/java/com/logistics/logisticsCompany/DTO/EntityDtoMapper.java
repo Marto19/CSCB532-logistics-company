@@ -193,6 +193,28 @@ public class EntityDtoMapper {
 		dto.setId(employee.getId());
 		dto.setFirstName(employee.getFirstName());
 		dto.setSecondName(employee.getSecondName());
+		
+		// Check if the current office is not null before accessing its name
+		if (employee.getCurrentOffice() != null) {
+			dto.setCurrentOfficeName(employee.getCurrentOffice().getOfficeName());
+		} else {
+			dto.setCurrentOfficeName(null); // Or set a default value or leave it unset
+		}
+		
+		// Check if the logistics company is not null before accessing its details
+		if (employee.getLogisticsCompany() != null) {
+			dto.setCompanyName(employee.getLogisticsCompany().getName()); // Assuming you have a getCompanyName() method
+		} else {
+			dto.setCompanyName(null); // Or set a default value or leave it unset
+		}
+		
+		// Assuming you want to set the username of the associated user
+		if (employee.getUsers() != null) {
+			dto.setUsername(employee.getUsers().getUsername()); // Assuming the Users entity has a getUsername() method
+		} else {
+			dto.setUsername(null); // Or set a default value or leave it unset
+		}
+		
 		return dto;
 	}
 

@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,6 +76,12 @@ public class ValidationExceptionHandler {
 		
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@ExceptionHandler(value = {AccessDeniedException.class})
+	protected ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
+	}
+
 	
 	// Example for handling a generic exception
 	@ExceptionHandler(Exception.class)

@@ -89,7 +89,7 @@ public class UserController {
         // Return a token or session information upon successful login
         return new ResponseEntity<>("Login successful", HttpStatus.OK);
     }
-
+    
 
     /**
      * Handles the HTTP GET request to show the login page.

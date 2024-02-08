@@ -41,13 +41,14 @@ public class OfficeController {
         this.entityDtoMapper = entityDtoMapper;
     }
 
-    /**
+   
+   /**
      * Handles the HTTP POST request to create a new office.
      *
-     * @param office The office to create.
+     * @param officeDTO The DTO containing the details of the new office.
      * @return A ResponseEntity indicating the result of the operation.
      */
-    
+   
     @PostMapping
     public ResponseEntity<String> createOffice(@RequestBody OfficeDTO officeDTO) {
             officeService.createOffice(officeDTO);
