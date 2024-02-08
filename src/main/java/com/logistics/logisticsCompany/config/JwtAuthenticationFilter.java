@@ -57,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String requestURI = request.getRequestURI();
         
         // List of paths to allow without authentication
-        List<String> allowedPaths = Arrays.asList("/api/v1/auth/register", "/api/v1/auth/login");
+        List<String> allowedPaths = Arrays.asList("/api/v1/auth/register", "/api/v1/auth/authenticate", "/login", "/register");
         
         // Check if the request URI is in the list of allowed paths
         if (allowedPaths.stream().anyMatch(path -> requestURI.startsWith(path))) {
