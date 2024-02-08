@@ -4,6 +4,7 @@ import com.logistics.logisticsCompany.DTO.EmployeeDTO;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
 import com.logistics.logisticsCompany.entities.users.Employee;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +18,11 @@ public interface EmployeeService {
 	List<Employee> getAllEmployeesByCompanyId(Long companyId);
 	
 	void updateEmployee(long employeeId, Employee updatedEmployee);
-
-    void deleteEmployee(long employeeId);
-
-    void assignOfficeToEmployee(long employeeId, Office office);
+	
+	@Transactional
+	void deleteEmployee(long employeeId);
+	
+	void assignOfficeToEmployee(long employeeId, Office office);
 	
 	Employee getEmployeeByUserId(Long userId);
 	

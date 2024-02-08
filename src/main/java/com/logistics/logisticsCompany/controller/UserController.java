@@ -264,7 +264,7 @@ public class UserController {
     public ResponseEntity<String> deleteUser(@PathVariable(value = "id") long userId){
         try {
             userService.deleteUser(userId);
-            return ResponseEntity.ok("Shipment deleted successfully");
+            return ResponseEntity.ok("User deleted successfully.");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with the provided id doesn't exist");
         }

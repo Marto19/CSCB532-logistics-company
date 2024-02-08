@@ -4,6 +4,8 @@ import com.logistics.logisticsCompany.DTO.UserDTO;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.enums.UserRole;
 import com.logistics.logisticsCompany.entities.users.User;
+import com.logistics.logisticsCompany.repository.CustomerRepository;
+import com.logistics.logisticsCompany.repository.EmployeeRepository;
 import com.logistics.logisticsCompany.repository.UserRepository;
 import com.logistics.logisticsCompany.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +13,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.logging.Logger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -29,6 +29,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
+    
+    private final CustomerRepository customerRepository;
+    
+    private final EmployeeRepository employeeRepository;
     /**
      * Constructor for UserServiceImpl.
      *
@@ -36,10 +40,12 @@ public class UserServiceImpl implements UserService {
      * @param userRoleRepository Repository for managing user roles.
      */
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, CustomerRepository customerRepository, EmployeeRepository employeeRepository) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.customerRepository = customerRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     /**
@@ -190,11 +196,24 @@ public class UserServiceImpl implements UserService {
      * @param userId The ID of the user to delete.
      */
     @Override
-    public void deleteUser(long userId) {
-        if (userRepository.existsById(userId)) {
-            userRepository.deleteById(userId);
-        } else {
-            //TODO: THROW CUSTOM EXCEPTION
-        }
+    @Transactional
+    public void deleteUser(Long userId) {
+        // Fetch the user along with all associated customers and employees
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        
+        // Dissociate customers
+        user.getCustomers().forEach(customer -> {
+            customer.setUsers(null);
+            customerRepository.save(customer);
+        });
+        
+        // Dissociate employees
+        user.getEmployees().forEach(employee -> {
+            employee.setUsers(null);
+            employeeRepository.save(employee);
+        });
+        
+        // Now safe to delete the user
+        userRepository.delete(user);
     }
 }

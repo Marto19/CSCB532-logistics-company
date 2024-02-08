@@ -5,13 +5,16 @@ import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
+import com.logistics.logisticsCompany.entities.orders.Shipment;
 import com.logistics.logisticsCompany.entities.users.Employee;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.EmployeeRepository;
 import com.logistics.logisticsCompany.repository.LogisticsCompanyRepository;
 import com.logistics.logisticsCompany.repository.OfficeRepository;
+import com.logistics.logisticsCompany.repository.ShipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,12 +43,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     
     private final UserLinkageService userLinkageService;
     
+    private final ShipmentRepository shipmentRepository;
+    
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, LogisticsCompanyRepository logisticsCompanyRepository, UserLinkageService userLinkageService, OfficeRepository officeRepository){
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, LogisticsCompanyRepository logisticsCompanyRepository, UserLinkageService userLinkageService, OfficeRepository officeRepository, ShipmentRepository shipmentRepository){
         this.employeeRepository = employeeRepository;
         this.logisticsCompanyRepository = logisticsCompanyRepository;
         this.userLinkageService = userLinkageService;
         this.officeRepository = officeRepository;
+        this.shipmentRepository = shipmentRepository;
     }
  
     /**
@@ -117,14 +123,28 @@ public class EmployeeServiceImpl implements EmployeeService {
      * Deletes an existing employee.
      * @param employeeId the id of the employee to delete
      */
+    @Transactional
     @Override
     public void deleteEmployee(long employeeId) {
-        if (!employeeRepository.existsById(employeeId)) {
-            throw new EntityNotFoundException("Employee with the provided id doesn't exist");
-        }
+        // Fetch shipments where the employee is the receiver
+        List<Shipment> receivedShipments = shipmentRepository.findByReceiverEmployeeId(employeeId);
+        receivedShipments.forEach(shipment -> {
+            shipment.setReceiverEmployee(null);
+            shipmentRepository.save(shipment);
+        });
+        
+        // Fetch shipments where the employee is the sender
+        List<Shipment> sentShipments = shipmentRepository.findBySenderEmployeeId(employeeId);
+        sentShipments.forEach(shipment -> {
+            shipment.setSenderEmployee(null);
+            shipmentRepository.save(shipment);
+        });
+        
+        // After dissociating the employee from all shipments, delete the employee
         employeeRepository.deleteById(employeeId);
     }
-
+    
+    
     /**
      * Assigns an office to an employee.
      * @param employeeId the id of the employee

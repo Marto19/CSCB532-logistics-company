@@ -20,9 +20,9 @@ public interface CustomerService {
     Customer getCustomerByPhoneNumber(String phoneNumber);
     
     void updateCustomer(long customerId, Customer updatedCustomer);
-
-    void deleteCustomer(long customerId);
-
+    
+    void deleteCustomer(Long customerId);
+    
     boolean existsByPhone(String phone);
 
     boolean existsByPhoneAndIdNot(String phone, long customerId);

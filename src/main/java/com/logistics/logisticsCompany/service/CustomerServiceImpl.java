@@ -144,11 +144,15 @@ public class CustomerServiceImpl implements CustomerService {
      * @throws EntityNotFoundException If no customer exists with the provided ID.
      */
     @Override
-    public void deleteCustomer(long customerId) {
-        if (!customerRepository.existsById(customerId)){
-            throw new EntityNotFoundException("Customer with the provided id doesn't exist");
-        }
-        customerRepository.deleteById(customerId);
+    public void deleteCustomer(Long customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found with id: " + customerId));
+        
+        customer.getSentShipments().forEach(shipment -> shipment.setSenderCustomer(null));
+        customer.getReceivedShipments().forEach(shipment -> shipment.setReceiverCustomer(null));
+        customerRepository.save(customer); // Save the state if necessary
+        
+        customerRepository.delete(customer);
     }
 
     /**
