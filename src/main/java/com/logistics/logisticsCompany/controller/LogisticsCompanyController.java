@@ -65,7 +65,7 @@ public class LogisticsCompanyController {
             logisticsCompanyService.createLogisticsCompany(logisticsCompanyDTO);
 
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Logistics company created successfully with ID: " + logisticsCompanyDTO.getId());
+                    .body("Logistics company created successfully");
     }
 
     /**

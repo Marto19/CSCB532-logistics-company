@@ -62,7 +62,7 @@ public class EmployeeController {
     public ResponseEntity<String> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
             employeeService.createEmployee(employeeDTO);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Employee created successfully with ID: " + employeeDTO.getId());
+                    .body("Employee created successfully");
 
     }
 
