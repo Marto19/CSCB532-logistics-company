@@ -89,7 +89,7 @@ public class UserController {
         // Return a token or session information upon successful login
         return new ResponseEntity<>("Login successful", HttpStatus.OK);
     }
-    
+
 
     /**
      * Handles the HTTP GET request to show the login page.
@@ -264,7 +264,7 @@ public class UserController {
     public ResponseEntity<String> deleteUser(@PathVariable(value = "id") long userId){
         try {
             userService.deleteUser(userId);
-            return ResponseEntity.ok("User deleted successfully.");
+            return ResponseEntity.ok("Shipment deleted successfully");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with the provided id doesn't exist");
         }

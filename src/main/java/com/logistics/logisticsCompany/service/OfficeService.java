@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface OfficeService {
 
 	
-	void createOffice(OfficeDTO officeDTO);
+	Office createOffice(OfficeDTO officeDTO);
 	
 	List<Office> getAllOffices();
 

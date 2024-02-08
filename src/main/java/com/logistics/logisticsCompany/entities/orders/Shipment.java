@@ -128,7 +128,7 @@ public class Shipment {
 	 * It is a many-to-one relationship between shipment and office.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "receiver_office_id", nullable = true)
+	@JoinColumn(name = "receiver_office_id", nullable = false)
 	private Office receiverOffice;
 
 	/**
@@ -136,7 +136,7 @@ public class Shipment {
 	 * It is a many-to-one relationship between shipment and customer.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "receiver_customer_id", nullable = true)
+	@JoinColumn(name = "receiver_customer_id", nullable = false)
 	private Customer receiverCustomer;
 
 	/**
@@ -153,7 +153,7 @@ public class Shipment {
 	 * The set of status histories of the shipment.
 	 * It is a one-to-many relationship between shipment and shipment status history.
 	 */
-	@OneToMany(mappedBy = "shipment",cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "shipment")
 	private List<ShipmentStatusHistory> statusHistories = new ArrayList<>();//todo: think whether List or Set? (caki)
 
 	/**

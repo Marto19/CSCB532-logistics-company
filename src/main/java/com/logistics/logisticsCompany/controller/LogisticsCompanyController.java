@@ -60,12 +60,11 @@ public class LogisticsCompanyController {
      * @return a ResponseEntity with the status and a message
      */
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> createLogisticsCompany(@Valid @RequestBody LogisticsCompanyDTO logisticsCompanyDTO) {
-            logisticsCompanyService.createLogisticsCompany(logisticsCompanyDTO);
-
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Logistics company created successfully");
+            LogisticsCompany logisticsCompany = EntityDtoMapper.convertLogisticsCompanyDtoToEntity(logisticsCompanyDTO);
+            
+            logisticsCompanyService.createLogisticsCompany(logisticsCompany);
+            return ResponseEntity.status(HttpStatus.CREATED).body("LogisticsCompany created successfully");
     }
 
     /**

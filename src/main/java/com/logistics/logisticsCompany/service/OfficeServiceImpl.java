@@ -37,7 +37,7 @@ public class OfficeServiceImpl implements OfficeService {
     
     @Transactional
     @Override
-    public void createOffice(OfficeDTO officeDTO) {
+    public Office createOffice(OfficeDTO officeDTO) {
         
         if (officeRepository.existsByAddress(officeDTO.getAddress())) {
             throw new IllegalArgumentException("Office with the provided address already exists.");
@@ -48,7 +48,7 @@ public class OfficeServiceImpl implements OfficeService {
         office.setLogisticsCompany(logisticsCompanyRepository.getLogisticsCompanyById(companyId)
                 .orElseThrow(() -> new EntityNotFoundException("Logistics company not found for user ID: " + officeDTO.getCompanyId())));
         
-        officeRepository.save(office);
+        return officeRepository.save(office);
     }
 
     /**

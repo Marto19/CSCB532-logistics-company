@@ -50,17 +50,10 @@ public class EmployeeDTO {
     @Digits(integer = 10, fraction = 0, message = "Company id must be a number")
     private String companyId;  //company must
     
-    @JsonProperty("companyName")
-    private String companyName;
-    
     @JsonProperty("currentOfficeId")
     @NotBlank
     @Digits(integer = 10, fraction = 0, message = "Office id must be a number")
     private String currentOfficeId;  //office id
-    
-    
-
-    
     
     /**
      * Default constructor for the {@code EmployeeDTO} class.
@@ -80,10 +73,11 @@ public class EmployeeDTO {
         this.firstName = employee.getFirstName();
         this.secondName = employee.getSecondName();
 
-  
+        // If you want to include the current office name in the DTO
         if (employee.getCurrentOffice() != null) {
             this.currentOfficeName = employee.getCurrentOffice().getOfficeName();
         }
+        // Add other fields as needed
     }
 
     /**
@@ -100,14 +94,6 @@ public class EmployeeDTO {
 
     // Getters and setters for the DTO fields
     
-    
-    public String getCompanyName() {
-        return companyName;
-    }
-    
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
     
     public void setUserId(String userId) {
         this.userId = userId;

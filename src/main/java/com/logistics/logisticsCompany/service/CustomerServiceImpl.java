@@ -2,12 +2,15 @@ package com.logistics.logisticsCompany.service;
 
 import com.logistics.logisticsCompany.DTO.CustomerDTO;
 import com.logistics.logisticsCompany.DTO.EntityDtoMapper;
+import com.logistics.logisticsCompany.customExceptions.CustomerExistsException;
 import com.logistics.logisticsCompany.customExceptions.EntityNotFoundException;
 import com.logistics.logisticsCompany.entities.users.Customer;
 import com.logistics.logisticsCompany.entities.users.User;
 import com.logistics.logisticsCompany.repository.CustomerRepository;
 import com.logistics.logisticsCompany.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -57,10 +60,11 @@ public class CustomerServiceImpl implements CustomerService {
      * Create a new customer based on the provided DTO.
      *
      * @param customerDTO The DTO containing customer information.
+     * @return The created customer entity.
      * @throws EntityNotFoundException If a customer with the provided phone number already exists.
      */
     @Override
-    public void createCustomer(CustomerDTO customerDTO) {
+    public Customer createCustomer(CustomerDTO customerDTO) {
         if (existsByPhone(customerDTO.getPhone())) {
             throw new EntityNotFoundException("Customer with the " + customerDTO.getPhone() + " phone number already exists");
         }
@@ -79,7 +83,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setUsers(user); // Link the customer to the user if found
         customer.setBalance(BigDecimal.ZERO); // Initialize balance to zero for new customers
         
-        customerRepository.save(customer);
+        return customerRepository.save(customer);
     }
 
     /**
@@ -144,15 +148,11 @@ public class CustomerServiceImpl implements CustomerService {
      * @throws EntityNotFoundException If no customer exists with the provided ID.
      */
     @Override
-    public void deleteCustomer(Long customerId) {
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new EntityNotFoundException("Customer not found with id: " + customerId));
-        
-        customer.getSentShipments().forEach(shipment -> shipment.setSenderCustomer(null));
-        customer.getReceivedShipments().forEach(shipment -> shipment.setReceiverCustomer(null));
-        customerRepository.save(customer); // Save the state if necessary
-        
-        customerRepository.delete(customer);
+    public void deleteCustomer(long customerId) {
+        if (!customerRepository.existsById(customerId)){
+            throw new EntityNotFoundException("Customer with the provided id doesn't exist");
+        }
+        customerRepository.deleteById(customerId);
     }
 
     /**

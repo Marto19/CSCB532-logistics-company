@@ -141,6 +141,11 @@
                     <input type="text" class="form-control" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-default" id="officePostcode">
                 </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Company ID</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" id="companyId">
+                </div>
                 <div class="buttonSubmit w-50 d-flex justify-content-center mx-auto">
                     <button type="button" class="btn btn-primary" id="submitOffice">Submit Office</button>
                 </div>
@@ -345,13 +350,6 @@
                     <a class="nav-link" href="#viewEmployees">View Employees</a>
                 </li>
             </ul>
-        </div>
-        <div class="card-body" id="viewEmployees">
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Company ID</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="companyIdInput">
-            </div>
-            <button type="button" class="btn btn-primary" id="loadEmployees">Load Employees</button>
         </div>
     </div>
 
@@ -1184,11 +1182,13 @@
         }
     }
 
+    //TODO: FIX INPUTS
     document.getElementById('submitOffice').addEventListener('click', function () {
         const address = document.getElementById('officeAddress').value.trim();
         const city = document.getElementById('officeCity').value.trim();
         const officeName = document.getElementById('officeName').value.trim();
         const postcode = document.getElementById('officePostcode').value.trim();
+        const companyId = document.getElementById('companyId').value.trim();
 
         // Initialize toasts
         var errorToastEl = document.getElementById('errorToast');
@@ -1198,11 +1198,12 @@
         var fetchErrorToastEl = document.getElementById('fetchErrorToast');
         var fetchErrorToast = new bootstrap.Toast(fetchErrorToastEl);
 
-        if (!address || !city || !officeName || !postcode) {
+        if (!address || !city || !officeName || !postcode || !companyId) {
             errorToast.show();
         } else {
-            const data = { address, city, officeName, postcode };
+            const data = { address, city, officeName, postcode, companyId };
 
+            console.log(data);
             // API request
             fetch('http://localhost:8082/api/v1/offices', {
                 method: 'POST',
@@ -1523,7 +1524,7 @@
         const firstName = document.getElementById('employeeFirstName').value.trim();
         const secondName = document.getElementById('employeeSecondName').value.trim();
         const currentOfficeId = document.getElementById('employeeCurrentOfficeId').value.trim();
-        const logisticsCompanyId = document.getElementById('employeeLogisticsCompanyId').value.trim();
+        const companyId = document.getElementById('employeeLogisticsCompanyId').value.trim();
         const userId = document.getElementById('employeeUserId').value.trim();
 
         // Initialize toasts
@@ -1534,15 +1535,15 @@
         var fetchErrorToastEl = document.getElementById('fetchErrorToast');
         var fetchErrorToast = new bootstrap.Toast(fetchErrorToastEl);
 
-        if (!firstName || !secondName || !currentOfficeId || !logisticsCompanyId || !userId) {
+        if (!firstName || !secondName || !currentOfficeId || !companyId || !userId) {
             errorToast.show();
         } else {
             const data = {
                 firstName,
                 secondName,
-                currentOfficeId: { id: Number(currentOfficeId) }, // Convert string to Number
-                logisticsCompanyId: { id: Number(logisticsCompanyId) }, // Convert string to Number
-                userId: { id: Number(userId) }
+                currentOfficeId, // Convert string to Number
+                companyId, // Convert string to Number
+                userId
             };
             console.log(data);
 
@@ -1551,8 +1552,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                body: JSON.stringify(data)
+                }
             })
                 .then(response => {
                     if (!response.ok) {

@@ -1,6 +1,5 @@
 package com.logistics.logisticsCompany.service;
 
-import com.logistics.logisticsCompany.DTO.LogisticsCompanyDTO;
 import com.logistics.logisticsCompany.entities.logisticsCompany.LogisticsCompany;
 import com.logistics.logisticsCompany.entities.offices.Office;
 
@@ -12,7 +11,7 @@ public interface LogisticsCompanyService {
 
     List<Office> getAllOffices();
 
-    void createLogisticsCompany(LogisticsCompanyDTO logisticsCompanyDTO);
+    void createLogisticsCompany(LogisticsCompany logisticsCompany);
 
     List<LogisticsCompany> getAllLogisticsCompanies();
 
